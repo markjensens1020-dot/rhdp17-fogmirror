@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Subcontractor Portal · RHDP17</title>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600&family=Spline+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#ece8df;--card:#f8f6f0;--ink:#1c1f26;--ink2:#3a4150;--mut:#9a8f78;--gold:#b6862c;--line:#ddd6c6;--ok:#1f8b5e;--warn:#b45309}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Spline Sans',Helvetica,Arial,sans-serif;background:var(--bg);color:var(--ink);min-height:100vh;padding:22px 14px}
+.wrap{max-width:680px;margin:0 auto}
+.head{display:flex;align-items:center;gap:12px;margin-bottom:16px}
+.rh{width:44px;height:44px;background:var(--ink);border-radius:11px;display:flex;align-items:center;justify-content:center}
+.head b{font-size:14px;font-weight:600}.head span{display:block;font-size:11px;color:var(--mut);letter-spacing:1px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:20px;margin-bottom:14px}
+h1{font-family:'Fraunces',serif;font-weight:600;font-size:23px;margin-bottom:2px}
+h2{font-family:'Fraunces',serif;font-weight:600;font-size:16px;margin:0 0 12px}
+.sub{font-size:13px;color:var(--mut)}
+.ms{display:flex;justify-content:space-between;align-items:center;padding:9px 0;border-bottom:1px solid var(--line);font-size:13.5px}
+.ms:last-child{border-bottom:none}
+.pill{font-size:11px;font-weight:600;border-radius:20px;padding:2px 9px}
+.pill.pending{background:#efe9da;color:var(--ink2)}.pill.proof_submitted{background:#fff4e0;color:var(--warn)}.pill.approved{background:#e7f3ec;color:var(--ok)}.pill.paid{background:#e7f3ec;color:var(--ok)}
+label{display:block;font-size:12px;color:var(--ink2);font-weight:600;margin:10px 0 4px}
+select,input,textarea{font-family:inherit;font-size:14px;padding:10px;border:1px solid var(--line);border-radius:10px;background:#fff;color:var(--ink);width:100%}
+.btn{background:var(--ink);color:#fff;font-family:inherit;font-weight:700;font-size:14px;border:none;border-radius:11px;padding:12px;cursor:pointer;width:100%;margin-top:12px}
+.note{font-size:11.5px;color:var(--mut);margin-top:10px;line-height:1.5}
+.rule{font-size:12.5px;color:var(--ink2);background:#fbf8f0;border-left:3px solid var(--gold);padding:9px 12px;border-radius:0 8px 8px 0;margin-top:8px}
+.motto{text-align:center;font-family:'Fraunces',serif;font-style:italic;color:var(--gold);font-size:14px;margin-top:18px}
+.center{text-align:center;color:var(--mut);padding:40px 20px}
+.ok{background:#e7f3ec;border:1px solid #bfe0cd;color:var(--ok);border-radius:10px;padding:10px 12px;font-size:13px;margin-top:10px;font-weight:600}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="head"><div class="rh"><img src="./icons/logo.svg" alt="RHDP17" style="width:30px;height:30px;filter:invert(1)"></div><div><b>Richard Haro Drafting &amp; Planning</b><span>SUBCONTRACTOR PORTAL</span></div></div>
+  <div id="content"><div class="center">Loading…</div></div>
+  <div class="motto">Peace and prosperity through architecture.</div>
+</div>
+<script>
+const SUPA="https://qrwlyowdzqzkibdzvoek.supabase.co";
+const ANON="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InFyd2x5b3dkenF6a2liZHp2b2VrIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzAyNDIyODEsImV4cCI6MjA4NTgxODI4MX0.5xurzQ0HUECk4_SxlcRdKG-5KCmyQ30b4jyCiyERAoU";
+const $=id=>document.getElementById(id);
+const token=new URLSearchParams(location.search).get('j')||'';
+const esc=s=>(s==null?'':String(s)).replace(/[&<>]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[c]));
+const money=n=>'$'+Number(n||0).toLocaleString(undefined,{minimumFractionDigits:2,maximumFractionDigits:2});
+async function call(extra){
+  const r=await fetch(SUPA+"/functions/v1/portal-data",{method:'POST',headers:{'Content-Type':'application/json','apikey':ANON,'Authorization':'Bearer '+ANON},body:JSON.stringify(Object.assign({token},extra||{}))});
+  return r.json();
+}
+function render(d){
+  if(!d || d.error || d.kind!=='sub'){ $('content').innerHTML='<div class="card center">'+esc((d&&d.error)||'We couldn’t find your job. Please use the link RHDP17 sent you.')+'</div>'; return; }
+  const s=d.sub; let h='';
+  h+='<div class="card"><h1>'+esc(s.sub_name)+'</h1><div class="sub">'+esc(s.trade||'')+' &middot; Project: '+esc(s.project_name||'')+'</div></div>';
+  h+='<div class="card"><h2>Scope of work</h2><div style="font-size:14px;line-height:1.6">'+esc(s.scope||'—')+'</div>';
+  if(s.schedule_note){ h+='<div class="rule"><b>Schedule:</b> '+esc(s.schedule_note)+'</div>'; } h+='</div>';
+  // milestones
+  h+='<div class="card"><h2>Your milestones</h2>';
+  const open=[];
+  (d.milestones||[]).forEach(m=>{ const st=(m.status||'pending'); h+='<div class="ms"><div><b>'+esc(m.name)+'</b> &middot; '+money(m.amount)+'</div><span class="pill '+esc(st)+'">'+esc(st.replace("_"," "))+'</span></div>'; if(m.requires_proof && (st==='pending')) open.push(m); });
+  h+='</div>';
+  // proof submission
+  h+='<div class="card"><h2>Submit proof of work</h2><div class="rule">No payment is released without proof: minimum 5 photos + a 60-second video + the city inspection card. Email the media to your RHDP17 contact, then log the claim here.</div>';
+  if(open.length){
+    let opts=open.map(m=>'<option value="'+esc(m.id)+'">'+esc(m.name)+'</option>').join('');
+    h+='<label>Milestone</label><select id="ms">'+opts+'</select>'+
+       '<label>Photos submitted (#)</label><input id="ph" type="number" placeholder="5+">'+
+       '<label>Video walkthrough sent?</label><select id="vid"><option>Yes</option><option>Coming shortly</option></select>'+
+       '<label>City inspection card?</label><select id="insp"><option>Yes</option><option>N/A this milestone</option><option>Pending</option></select>'+
+       '<label>Notes</label><textarea id="nt" rows="2" placeholder="What was completed"></textarea>'+
+       '<button class="btn" id="submit">Submit proof claim</button><div id="done"></div>';
+  } else { h+='<div class="note">No milestones are currently awaiting proof. Check back when your next phase is complete.</div>'; }
+  h+='</div>';
+  $('content').innerHTML=h;
+  if(open.length){ $('submit').onclick=async()=>{
+    const summary='Milestone '+$('ms').selectedOptions[0].text+' — photos: '+($('ph').value||'?')+', video: '+$('vid').value+', inspection: '+$('insp').value+'. '+($('nt').value||'');
+    $('submit').textContent='Submitting…';
+    const d2=await call({action:'proof',milestone_id:$('ms').value,summary});
+    if(d2&&d2.kind==='sub'){ render(d2); setTimeout(()=>{const dn=$('done'); if(dn) dn.outerHTML='';},10); alert('Proof claim submitted. Richard or the PM will inspect, then Irma or Richard approves payment.'); }
+  }; }
+}
+if(!token){ $('content').innerHTML='<div class="card center">Please open the private link RHDP17 sent you.</div>'; }
+else call().then(render).catch(()=>{ $('content').innerHTML='<div class="card center">Something went wrong. Please try again.</div>'; });
+</script>
+<script src="./authgate.js" defer></script>
+</body>
+</html>

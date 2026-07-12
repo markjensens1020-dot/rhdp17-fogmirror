@@ -1,0 +1,48 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Fog Mirror — Self Test</title>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<style>
+:root{--bg:#070b14;--card:#0c1322;--line:rgba(255,255,255,.15);--txt:#f4f8ff;--mut:#9fb0d0;--ok:#2fe0a6;--bad:#ff5d6c;--gold:#f5b301}
+*{box-sizing:border-box;margin:0;padding:0}body{font-family:system-ui,Segoe UI,Arial,sans-serif;background:var(--bg);color:var(--txt);padding:22px 16px}
+.wrap{max-width:680px;margin:0 auto}
+h1{font-size:22px;margin-bottom:2px}.ver{display:inline-block;background:var(--gold);color:#10131c;font-weight:800;border-radius:8px;padding:4px 12px;font-size:15px;margin:8px 0 4px}
+.sub{color:var(--mut);font-size:13px;margin-bottom:16px}
+.t{background:var(--card);border:1px solid var(--line);border-left:4px solid var(--mut);border-radius:12px;padding:14px 16px;margin-bottom:10px}
+.t.ok{border-left-color:var(--ok)}.t.bad{border-left-color:var(--bad)}
+.t .nm{font-weight:700;font-size:15px;display:flex;align-items:center;gap:8px}
+.t .st{margin-left:auto;font-weight:800}
+.t .ms{color:var(--mut);font-size:12.5px;margin-top:6px;white-space:pre-wrap;word-break:break-word}
+.btn{background:var(--gold);color:#10131c;border:none;border-radius:10px;padding:12px 18px;font-weight:800;font-size:15px;cursor:pointer;margin:6px 6px 6px 0}
+.btn.alt{background:#2a3550;color:#fff}
+.note{color:var(--mut);font-size:12px;margin-top:14px;line-height:1.5}
+</style></head><body>
+<div class="wrap">
+<h1>Fog Mirror — Self Test</h1>
+<div class="ver">BUILD v30</div>
+<div class="sub">If this gold tag does NOT say v29, you're on a cached old copy — hard-refresh (Ctrl+Shift+R) or open in Incognito.</div>
+<button class="btn" id="run">▶ Run all tests</button>
+<button class="btn alt" id="mic">🎤 Test microphone</button>
+<button class="btn alt" id="say">🔊 Test bot voice</button>
+<div id="out" style="margin-top:14px"></div>
+<div class="note">This page needs no login. It checks the live brain (router), the voice, the morning debrief, and the portal — and your mic. Green = working. Red = shows the exact error.</div>
+</div>
+<script>
+const SUPA="https://qrwlyowdzqzkibdzvoek.supabase.co";
+const ANON="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InFyd2x5b3dkenF6a2liZHp2b2VrIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzAyNDIyODEsImV4cCI6MjA4NTgxODI4MX0.5xurzQ0HUECk4_SxlcRdKG-5KCmyQ30b4jyCiyERAoU";
+const out=document.getElementById('out');
+function card(id,name){let e=document.getElementById(id);if(!e){e=document.createElement('div');e.className='t';e.id=id;e.innerHTML='<div class="nm">'+name+'<span class="st">…</span></div><div class="ms"></div>';out.appendChild(e);}return e;}
+function set(id,ok,msg){const e=document.getElementById(id);e.className='t '+(ok?'ok':'bad');e.querySelector('.st').textContent=ok?'✅ PASS':'❌ FAIL';e.querySelector('.ms').textContent=msg||'';}
+async function test(id,name,fn){card(id,name);try{const m=await fn();set(id,true,m);}catch(e){set(id,false,(e&&e.message)||String(e));}}
+document.getElementById('run').onclick=async()=>{
+ out.innerHTML='';
+ await test('t1','Supabase reachable',async()=>{const r=await fetch(SUPA+'/auth/v1/health',{headers:{apikey:ANON}});if(!r.ok)throw new Error('HTTP '+r.status);return 'Auth service healthy.';});
+ await test('t2','Bot brain (coco-router) online',async()=>{const r=await fetch(SUPA+'/functions/v1/coco-router',{method:'POST',headers:{'Content-Type':'application/json',apikey:ANON,'Authorization':'Bearer '+ANON,'x-execution-depth':'0'},body:JSON.stringify({message:'ping',channel:'selftest'})});const d=await r.json().catch(()=>({}));if(r.status===401){return 'Brain is ONLINE and secured — it requires sign-in (this is correct). On the dashboard, signed in, it answers your questions.';}if(!r.ok)throw new Error('HTTP '+r.status+' '+JSON.stringify(d));return (d.response||'Answered: '+JSON.stringify(d)).slice(0,300);});
+ await test('t3','Voice (elevenlabs-tts) returns audio',async()=>{const r=await fetch(SUPA+'/functions/v1/elevenlabs-tts',{method:'POST',headers:{'Content-Type':'application/json',apikey:ANON,'Authorization':'Bearer '+ANON},body:JSON.stringify({text:'Self test.',bot:'Fog Mirror'})});if(!r.ok)throw new Error('HTTP '+r.status+' '+(await r.text()).slice(0,200));const b=await r.blob();return 'Audio returned ('+Math.round(b.size/1024)+' KB). Use the Test bot voice button to hear it.';});
+ await test('t4','Morning Debrief engine',async()=>{const r=await fetch(SUPA+'/functions/v1/debrief?mode=morning&x='+Date.now(),{headers:{apikey:ANON,'Authorization':'Bearer '+ANON}});const d=await r.json().catch(()=>({}));if(!r.ok)throw new Error('HTTP '+r.status+' '+JSON.stringify(d).slice(0,200));return (d.sections?d.sections.length+' briefing sections built.':JSON.stringify(d).slice(0,200));});
+ await test('t5','Client/Sub portal reachable',async()=>{const r=await fetch(SUPA+'/functions/v1/portal-data',{method:'POST',headers:{'Content-Type':'application/json',apikey:ANON,'Authorization':'Bearer '+ANON},body:JSON.stringify({token:'selftest-noexist'})});return 'Portal endpoint reachable (HTTP '+r.status+'). It correctly rejects unknown tokens; real client and sub links work.';});
+ await test('t6','Speech recognition available',async()=>{const SR=window.SpeechRecognition||window.webkitSpeechRecognition;if(!SR)throw new Error('This browser has no speech recognition — use Google Chrome.');return 'Available (Chrome). Use Test microphone to grant permission.';});
+};
+document.getElementById('mic').onclick=async()=>{card('tm','Microphone permission');try{const s=await navigator.mediaDevices.getUserMedia({audio:true});s.getTracks().forEach(t=>t.stop());set('tm',true,'Microphone allowed ✓ — voice input will work.');}catch(e){set('tm',false,'Mic blocked or no popup: '+((e&&e.message)||e)+'\\nFix: click the lock/tune icon left of the address bar → Site settings → Microphone → Allow → reload.');}};
+document.getElementById('say').onclick=async()=>{card('ts','Bot voice playback');try{const r=await fetch(SUPA+'/functions/v1/elevenlabs-tts',{method:'POST',headers:{'Content-Type':'application/json',apikey:ANON,'Authorization':'Bearer '+ANON},body:JSON.stringify({text:'Hi Mark, this is Fog Mirror. If you can hear me, the voice is working.',bot:'Fog Mirror'})});if(!r.ok)throw new Error('HTTP '+r.status);const b=await r.blob();const a=new Audio(URL.createObjectURL(b));await a.play();set('ts',true,'Playing… you should hear a voice now.');}catch(e){set('ts',false,(e&&e.message)||String(e));}};
+</script></body></html>

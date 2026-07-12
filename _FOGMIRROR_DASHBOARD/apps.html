@@ -1,0 +1,652 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>App Guide · Richard Haro Drafting & Planning</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;1,9..144,300;1,9..144,400&family=Spline+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    :root {
+      --ivory:       #ece8df;
+      --ivory-light: #f8f6f0;
+      --ink:         #1c1f26;
+      --ink-soft:    #3a3d45;
+      --gold:        #b6862c;
+      --gold-light:  #d4a84b;
+      --rule:        #d8d3c8;
+    }
+
+    html {
+      font-size: 16px;
+      scroll-behavior: smooth;
+    }
+
+    body {
+      background-color: var(--ivory);
+      color: var(--ink);
+      font-family: 'Spline Sans', system-ui, sans-serif;
+      font-weight: 300;
+      line-height: 1.7;
+      min-height: 100vh;
+    }
+
+    /* ─── HEADER ─────────────────────────────────────────── */
+    .site-header {
+      background-color: var(--ink);
+      color: var(--ivory-light);
+      padding: 28px 40px;
+      display: flex;
+      align-items: center;
+      gap: 20px;
+    }
+
+    .rh-mark {
+      width: 48px;
+      height: 48px;
+      border: 1.5px solid var(--gold);
+      border-radius: 4px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .rh-mark span {
+      font-family: 'Fraunces', serif;
+      font-size: 1.25rem;
+      font-weight: 400;
+      color: var(--gold);
+      letter-spacing: 0.04em;
+    }
+
+    .header-wordmark {
+      display: flex;
+      flex-direction: column;
+      gap: 1px;
+    }
+
+    .header-wordmark .firm-name {
+      font-family: 'Fraunces', serif;
+      font-size: 1rem;
+      font-weight: 400;
+      letter-spacing: 0.06em;
+      color: var(--ivory-light);
+    }
+
+    .header-wordmark .firm-since {
+      font-family: 'Spline Sans', sans-serif;
+      font-size: 0.7rem;
+      font-weight: 300;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--gold);
+    }
+
+    /* ─── HERO ────────────────────────────────────────────── */
+    .hero {
+      padding: 72px 40px 56px;
+      max-width: 780px;
+      margin: 0 auto;
+    }
+
+    .hero-label {
+      font-family: 'Spline Sans', sans-serif;
+      font-size: 0.68rem;
+      font-weight: 500;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 20px;
+    }
+
+    .hero h1 {
+      font-family: 'Fraunces', serif;
+      font-size: clamp(2rem, 5vw, 3rem);
+      font-weight: 300;
+      line-height: 1.2;
+      color: var(--ink);
+      margin-bottom: 24px;
+    }
+
+    .hero-intro {
+      font-size: 1.05rem;
+      font-weight: 300;
+      color: var(--ink-soft);
+      max-width: 600px;
+      line-height: 1.75;
+    }
+
+    /* ─── MAIN CONTENT ───────────────────────────────────── */
+    .content {
+      max-width: 860px;
+      margin: 0 auto;
+      padding: 0 24px 80px;
+    }
+
+    /* ─── TOOL CARDS ─────────────────────────────────────── */
+    .tools-grid {
+      display: flex;
+      flex-direction: column;
+      gap: 32px;
+      margin-bottom: 56px;
+    }
+
+    .tool-card {
+      background-color: var(--ivory-light);
+      border: 1px solid var(--rule);
+      border-radius: 6px;
+      padding: 40px 44px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .tool-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 3px;
+      height: 100%;
+      background-color: var(--gold);
+    }
+
+    .tool-card-header {
+      display: flex;
+      align-items: flex-start;
+      gap: 16px;
+      margin-bottom: 8px;
+    }
+
+    .tool-icon {
+      font-size: 1.4rem;
+      line-height: 1;
+      flex-shrink: 0;
+      margin-top: 3px;
+    }
+
+    .tool-number {
+      font-family: 'Spline Sans', sans-serif;
+      font-size: 0.65rem;
+      font-weight: 500;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 6px;
+    }
+
+    .tool-name {
+      font-family: 'Fraunces', serif;
+      font-size: 1.45rem;
+      font-weight: 400;
+      color: var(--ink);
+      line-height: 1.25;
+      margin-bottom: 4px;
+    }
+
+    .tool-tagline {
+      font-size: 0.92rem;
+      font-weight: 300;
+      color: var(--ink-soft);
+      font-style: italic;
+      margin-bottom: 20px;
+    }
+
+    .tool-why {
+      background-color: rgba(182, 134, 44, 0.08);
+      border-left: 2px solid var(--gold);
+      border-radius: 0 3px 3px 0;
+      padding: 12px 16px;
+      margin-bottom: 24px;
+      font-size: 0.9rem;
+      font-weight: 400;
+      color: var(--ink-soft);
+    }
+
+    .tool-why strong {
+      color: var(--gold);
+      font-weight: 500;
+    }
+
+    .tool-steps-label {
+      font-family: 'Spline Sans', sans-serif;
+      font-size: 0.65rem;
+      font-weight: 500;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--ink-soft);
+      margin-bottom: 14px;
+    }
+
+    .tool-steps {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin-bottom: 24px;
+    }
+
+    .tool-steps li {
+      display: flex;
+      gap: 14px;
+      align-items: flex-start;
+      font-size: 0.93rem;
+      font-weight: 300;
+      color: var(--ink-soft);
+      line-height: 1.6;
+    }
+
+    .step-num {
+      flex-shrink: 0;
+      width: 22px;
+      height: 22px;
+      background-color: var(--ink);
+      color: var(--ivory-light);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Spline Sans', sans-serif;
+      font-size: 0.65rem;
+      font-weight: 500;
+      margin-top: 2px;
+    }
+
+    .tool-note {
+      font-size: 0.82rem;
+      font-weight: 300;
+      color: var(--ink-soft);
+      font-style: italic;
+      margin-bottom: 24px;
+      padding-left: 36px;
+      opacity: 0.8;
+    }
+
+    .tool-btn {
+      display: inline-block;
+      padding: 11px 28px;
+      background-color: var(--ink);
+      color: var(--ivory-light);
+      font-family: 'Spline Sans', sans-serif;
+      font-size: 0.82rem;
+      font-weight: 400;
+      letter-spacing: 0.08em;
+      text-decoration: none;
+      border-radius: 3px;
+      transition: background-color 0.2s ease, color 0.2s ease;
+    }
+
+    .tool-btn:hover {
+      background-color: var(--gold);
+      color: var(--ink);
+    }
+
+    .tool-btn.gold {
+      background-color: var(--gold);
+      color: var(--ink);
+    }
+
+    .tool-btn.gold:hover {
+      background-color: var(--gold-light);
+    }
+
+    /* ─── FINANCING CALLOUT ──────────────────────────────── */
+    .financing-callout {
+      border: 1px solid var(--rule);
+      border-radius: 6px;
+      padding: 32px 40px;
+      background-color: var(--ivory-light);
+      margin-bottom: 56px;
+      display: flex;
+      gap: 20px;
+      align-items: flex-start;
+    }
+
+    .financing-icon {
+      font-size: 1.2rem;
+      flex-shrink: 0;
+      margin-top: 2px;
+      opacity: 0.7;
+    }
+
+    .financing-body {}
+
+    .financing-label {
+      font-family: 'Spline Sans', sans-serif;
+      font-size: 0.65rem;
+      font-weight: 500;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 8px;
+    }
+
+    .financing-title {
+      font-family: 'Fraunces', serif;
+      font-size: 1.1rem;
+      font-weight: 400;
+      color: var(--ink);
+      margin-bottom: 10px;
+    }
+
+    .financing-text {
+      font-size: 0.9rem;
+      font-weight: 300;
+      color: var(--ink-soft);
+      line-height: 1.7;
+    }
+
+    .financing-disclaimer {
+      font-size: 0.78rem;
+      font-weight: 300;
+      color: var(--ink-soft);
+      font-style: italic;
+      margin-top: 8px;
+      opacity: 0.75;
+    }
+
+    /* ─── CTA FOOTER ─────────────────────────────────────── */
+    .cta-section {
+      text-align: center;
+      padding: 56px 24px 48px;
+      border-top: 1px solid var(--rule);
+    }
+
+    .cta-section .cta-lead {
+      font-family: 'Fraunces', serif;
+      font-size: clamp(1.4rem, 3.5vw, 2rem);
+      font-weight: 300;
+      color: var(--ink);
+      margin-bottom: 28px;
+      line-height: 1.3;
+    }
+
+    .cta-btn {
+      display: inline-block;
+      padding: 14px 40px;
+      background-color: var(--gold);
+      color: var(--ink);
+      font-family: 'Spline Sans', sans-serif;
+      font-size: 0.9rem;
+      font-weight: 500;
+      letter-spacing: 0.08em;
+      text-decoration: none;
+      border-radius: 3px;
+      transition: background-color 0.2s ease;
+      margin-bottom: 32px;
+    }
+
+    .cta-btn:hover {
+      background-color: var(--gold-light);
+    }
+
+    .motto {
+      font-family: 'Fraunces', serif;
+      font-size: 0.9rem;
+      font-weight: 300;
+      font-style: italic;
+      color: var(--ink-soft);
+      opacity: 0.7;
+      letter-spacing: 0.04em;
+    }
+
+    /* ─── FOOTER ─────────────────────────────────────────── */
+    .site-footer {
+      background-color: var(--ink);
+      color: var(--ivory-light);
+      text-align: center;
+      padding: 28px 24px;
+    }
+
+    .site-footer p {
+      font-size: 0.75rem;
+      font-weight: 300;
+      letter-spacing: 0.08em;
+      opacity: 0.5;
+    }
+
+    /* ─── DIVIDER ─────────────────────────────────────────── */
+    .section-rule {
+      border: none;
+      border-top: 1px solid var(--rule);
+      margin: 0 0 40px;
+    }
+
+    /* ─── RESPONSIVE ─────────────────────────────────────── */
+    @media (max-width: 600px) {
+      .site-header {
+        padding: 20px 20px;
+      }
+
+      .hero {
+        padding: 48px 24px 40px;
+      }
+
+      .tool-card {
+        padding: 28px 24px 28px 28px;
+      }
+
+      .financing-callout {
+        padding: 24px 20px;
+        flex-direction: column;
+        gap: 10px;
+      }
+
+      .cta-section {
+        padding: 40px 20px 36px;
+      }
+    }
+  </style>
+<link rel="manifest" href="./manifest.webmanifest"><meta name="theme-color" content="#1c1f26"><link rel="apple-touch-icon" href="./icons/icon-192.png">
+</head>
+<body>
+<div class="fm-launch" style="max-width:700px;margin:14px auto 0;padding:0 14px;display:flex;gap:8px;flex-wrap:wrap;font-family:system-ui,Segoe UI,Arial,sans-serif"><a href="https://outlook.office.com/mail/" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:6px;text-decoration:none;background:#1c1f26;color:#fff;font-weight:700;font-size:13px;border-radius:10px;padding:9px 13px;border:1px solid rgba(255,255,255,.12)">📥 Outlook</a><a href="https://outlook.office.com/mail/deeplink/compose" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:6px;text-decoration:none;background:#1c1f26;color:#fff;font-weight:700;font-size:13px;border-radius:10px;padding:9px 13px;border:1px solid rgba(255,255,255,.12)">✉️ New Email</a><a href="https://teams.microsoft.com/" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:6px;text-decoration:none;background:#1c1f26;color:#fff;font-weight:700;font-size:13px;border-radius:10px;padding:9px 13px;border:1px solid rgba(255,255,255,.12)">💬 Teams</a><a href="https://outlook.office.com/calendar/view/week" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:6px;text-decoration:none;background:#1c1f26;color:#fff;font-weight:700;font-size:13px;border-radius:10px;padding:9px 13px;border:1px solid rgba(255,255,255,.12)">📅 Calendar</a><a href="https://to-do.office.com/tasks/" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:6px;text-decoration:none;background:#1c1f26;color:#fff;font-weight:700;font-size:13px;border-radius:10px;padding:9px 13px;border:1px solid rgba(255,255,255,.12)">✅ Tasks</a><a href="https://web.autocad.com/" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:6px;text-decoration:none;background:#1c1f26;color:#fff;font-weight:700;font-size:13px;border-radius:10px;padding:9px 13px;border:1px solid rgba(255,255,255,.12)">📐 AutoCAD</a><a href="./portals.html" style="display:inline-flex;align-items:center;gap:6px;text-decoration:none;background:#1c1f26;color:#fff;font-weight:700;font-size:13px;border-radius:10px;padding:9px 13px;border:1px solid rgba(255,255,255,.12)">🏛️ Portals</a><a href="./index.html" style="display:inline-flex;align-items:center;gap:6px;text-decoration:none;background:#1c1f26;color:#fff;font-weight:700;font-size:13px;border-radius:10px;padding:9px 13px;border:1px solid rgba(255,255,255,.12)">⌂ Dashboard</a><a href="./debrief.html" style="display:inline-flex;align-items:center;gap:6px;text-decoration:none;background:#1c1f26;color:#fff;font-weight:700;font-size:13px;border-radius:10px;padding:9px 13px;border:1px solid rgba(255,255,255,.12)">🌅 Debrief</a></div>
+
+
+  <!-- ── HEADER ─────────────────────────────────────────── -->
+  <header class="site-header">
+    <div class="rh-mark">
+      <span>RH</span>
+    </div>
+    <div class="header-wordmark">
+      <span class="firm-name">Richard Haro Drafting &amp; Planning</span>
+      <span class="firm-since">Since 1981</span>
+    </div>
+  </header>
+
+  <!-- ── HERO ───────────────────────────────────────────── -->
+  <section class="hero">
+    <p class="hero-label">Client Resource Guide</p>
+    <h1>Four simple tools to start your project.</h1>
+    <p class="hero-intro">
+      We've put together a short set of free tools that help us move faster and keep you informed at every step. Each one takes just a few minutes to set up — no technical experience needed.
+    </p>
+  </section>
+
+  <!-- ── TOOL CARDS ─────────────────────────────────────── -->
+  <main class="content">
+    <div class="tools-grid">
+
+      <!-- Tool 1: Polycam -->
+      <div class="tool-card">
+        <div class="tool-card-header">
+          <div class="tool-icon">&#9638;</div>
+          <div>
+            <p class="tool-number">Tool 01</p>
+            <h2 class="tool-name">Measure Your Home</h2>
+            <p class="tool-tagline">Polycam — free iPhone app (LiDAR-powered)</p>
+          </div>
+        </div>
+
+        <div class="tool-why">
+          <strong>Why it helps you:</strong> Your phone's camera can capture accurate room dimensions in minutes, which means we can begin drawing real plans right away — without scheduling a long measuring visit first.
+        </div>
+
+        <p class="tool-steps-label">How to use it</p>
+        <ol class="tool-steps">
+          <li>
+            <span class="step-num">1</span>
+            <span>Download <strong>Polycam</strong> free from the App Store.</span>
+          </li>
+          <li>
+            <span class="step-num">2</span>
+            <span>Walk each room slowly, pointing the phone at the walls, floor, and ceiling as you go.</span>
+          </li>
+          <li>
+            <span class="step-num">3</span>
+            <span>Tap <strong>Share</strong> inside the app and copy the link it generates.</span>
+          </li>
+          <li>
+            <span class="step-num">4</span>
+            <span>Send that link to RHDP17 — we'll take it from there.</span>
+          </li>
+        </ol>
+
+        <p class="tool-note">This gets us about 95% of the way there. Our drafters field-verify the critical dimensions before anything goes to permit.</p>
+
+        <a class="tool-btn gold" href="https://poly.cam" target="_blank" rel="noopener">Get Polycam (free)</a>
+      </div>
+
+      <!-- Tool 2: Snap & Send -->
+      <div class="tool-card">
+        <div class="tool-card-header">
+          <div class="tool-icon">&#9728;</div>
+          <div>
+            <p class="tool-number">Tool 02</p>
+            <h2 class="tool-name">Snap &amp; Send Photos</h2>
+            <p class="tool-tagline">RHDP17 easy upload — no app needed</p>
+          </div>
+        </div>
+
+        <div class="tool-why">
+          <strong>Why it helps you:</strong> Send us photos of your space, inspiration images, or paper documents in seconds — straight from your phone's camera or gallery, without downloading anything.
+        </div>
+
+        <p class="tool-steps-label">How to use it</p>
+        <ol class="tool-steps">
+          <li>
+            <span class="step-num">1</span>
+            <span>Tap the button below to open the upload page.</span>
+          </li>
+          <li>
+            <span class="step-num">2</span>
+            <span>Take photos right there or pick existing ones from your gallery. Works great as a scanner for paper documents too.</span>
+          </li>
+          <li>
+            <span class="step-num">3</span>
+            <span>Add your name so we know who sent it.</span>
+          </li>
+          <li>
+            <span class="step-num">4</span>
+            <span>Hit Send. We'll have it instantly.</span>
+          </li>
+        </ol>
+
+        <a class="tool-btn" href="./upload.html">Open Snap &amp; Send</a>
+      </div>
+
+      <!-- Tool 3: Client Portal -->
+      <div class="tool-card">
+        <div class="tool-card-header">
+          <div class="tool-icon">&#9633;</div>
+          <div>
+            <p class="tool-number">Tool 03</p>
+            <h2 class="tool-name">Your Client Portal</h2>
+            <p class="tool-tagline">Your whole project, in plain language, in one place</p>
+          </div>
+        </div>
+
+        <div class="tool-why">
+          <strong>Why it helps you:</strong> See everything — intake, design binder, material selections, and permit status — including city approvals and any corrections explained in plain English, not bureaucratic shorthand.
+        </div>
+
+        <p class="tool-steps-label">How to use it</p>
+        <ol class="tool-steps">
+          <li>
+            <span class="step-num">1</span>
+            <span>Tap the button below to open your portal.</span>
+          </li>
+          <li>
+            <span class="step-num">2</span>
+            <span>Start your project intake if you're new, or sign in to pick up where you left off.</span>
+          </li>
+        </ol>
+
+        <a class="tool-btn" href="./client.html">Open my portal</a>
+      </div>
+
+      <!-- Tool 4: CopyCat -->
+      <div class="tool-card">
+        <div class="tool-card-header">
+          <div class="tool-icon">&#9670;</div>
+          <div>
+            <p class="tool-number">Tool 04 &nbsp;·&nbsp; Free Gift</p>
+            <h2 class="tool-name">CopyCat</h2>
+            <p class="tool-tagline">A free browser tool for saving design ideas from anywhere on the web</p>
+          </div>
+        </div>
+
+        <div class="tool-why">
+          <strong>Why it helps you:</strong> When you spot a kitchen you love, a tile pattern, a color — save it in one click. Everything ends up organized in one place you can share with us instead of texting screenshots at midnight.
+        </div>
+
+        <p class="tool-steps-label">How to use it</p>
+        <ol class="tool-steps">
+          <li>
+            <span class="step-num">1</span>
+            <span>Tap the button below.</span>
+          </li>
+          <li>
+            <span class="step-num">2</span>
+            <span>Add the extension to your browser — it takes about 30 seconds.</span>
+          </li>
+          <li>
+            <span class="step-num">3</span>
+            <span>Click the CopyCat button whenever you see something you love. It saves it instantly.</span>
+          </li>
+        </ol>
+
+        <a class="tool-btn gold" href="[COPYCAT_URL]" target="_blank" rel="noopener">Get CopyCat (free)</a>
+      </div>
+
+    </div><!-- /.tools-grid -->
+
+    <!-- ── FINANCING CALLOUT ─────────────────────────────── -->
+    <div class="financing-callout">
+      <div class="financing-icon">&#9651;</div>
+      <div class="financing-body">
+        <p class="financing-label">Smart Financing</p>
+        <p class="financing-title">Plan around the right loan — and save.</p>
+        <p class="financing-text">
+          Many homeowners save money by planning their project around a renovation or investment loan rather than a construction loan. The differences in terms and timing can be significant. We'll help you design to your budget so you're working from solid numbers when you sit down with your bank.
+        </p>
+        <p class="financing-disclaimer">RHDP17 is not a lender or financial advisor. Please confirm all financing details with your lending institution.</p>
+      </div>
+    </div>
+
+    <!-- ── CTA ──────────────────────────────────────────── -->
+    <div class="cta-section">
+      <p class="cta-lead">Ready to get started?</p>
+      <a class="cta-btn" href="./client.html">Start your project &rarr;</a>
+      <p class="motto">Peace and prosperity through architecture.</p>
+    </div>
+
+  </main>
+
+  <!-- ── FOOTER ─────────────────────────────────────────── -->
+  <footer class="site-footer">
+    <p>&copy; 2026 Richard Haro Drafting &amp; Planning &nbsp;&middot;&nbsp; Licensed, Insured &nbsp;&middot;&nbsp; All rights reserved.</p>
+  </footer>
+
+<script>if('serviceWorker' in navigator){window.addEventListener('load',function(){navigator.serviceWorker.register('./sw.js').catch(function(){});});}</script>
+<script src="./fogwidget.js"></script>
+<script src="./authgate.js" defer></script>
+</body>
+</html>

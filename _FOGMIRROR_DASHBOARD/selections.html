@@ -1,0 +1,95 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Selection Board · RHDP17</title>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700;800&family=Fraunces:opsz,wght@9..144,600&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#070b14;--card:rgba(255,255,255,.06);--line:rgba(255,255,255,.16);--txt:#ffffff;--mut:#c4d2ee;--gi:1.2;--gold:#f5b301;--cyan:#3fd8ff;--green:#2fe0a6;--pink:#ff6aa6;--purple:#9b8cff}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Sora',system-ui,Arial,sans-serif;background:radial-gradient(1100px 700px at 80% -10%,rgba(63,216,255,.10),transparent 55%),radial-gradient(900px 600px at -10% 110%,rgba(155,140,255,.12),transparent 55%),var(--bg);color:var(--txt);padding:20px 16px 60px}
+.wrap{max-width:1280px;margin:0 auto}
+.fm-launch{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px}
+.fm-launch a{display:inline-flex;align-items:center;gap:6px;text-decoration:none;background:#1c1f26;color:#fff;font-weight:700;font-size:13px;border-radius:10px;padding:9px 12px;border:1px solid rgba(255,255,255,.12)}
+h1{font-family:'Fraunces',serif;font-size:30px;font-weight:600}
+.sub{color:var(--mut);font-size:14px;margin:2px 0 14px}
+.bar{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-bottom:16px}
+.bar input{background:#0a1018;border:1px solid var(--line);border-radius:11px;color:#fff;font-size:15px;padding:11px 14px;font-family:inherit;outline:none;min-width:240px}
+.btn{background:linear-gradient(135deg,var(--cyan),var(--green));color:#06121a;border:none;border-radius:11px;font-weight:800;font-size:14px;padding:12px 18px;cursor:pointer;font-family:inherit}
+.btn.alt{background:#1c2740;color:#fff;border:1px solid var(--line)}
+.glow{display:flex;gap:7px;margin-left:auto;align-items:center}
+.glow span{color:var(--mut);font-size:12.5px;font-weight:700}
+.glow button{background:#101a2e;color:#fff;border:1px solid var(--line);border-radius:9px;padding:8px 13px;font-weight:700;font-size:13px;cursor:pointer;font-family:inherit}
+.glow button.on{background:linear-gradient(135deg,var(--gold),#ff7a4d);color:#10131c;border-color:transparent}
+.grid{display:grid;grid-template-columns:repeat(5,1fr);gap:16px}
+@media(max-width:1100px){.grid{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:600px){.grid{grid-template-columns:1fr}}
+.slot{background:var(--card);border:1px solid var(--line);border-radius:18px;overflow:hidden;transition:.18s;cursor:pointer;position:relative}
+.slot:hover,.slot.sel{border-color:var(--cyan);box-shadow:0 14px 40px rgba(0,0,0,.4),0 0 calc(46px*var(--gi)) -10px var(--cyan)}
+.slot .ph{aspect-ratio:4/3;background:#0a1018 center/cover no-repeat;display:flex;align-items:center;justify-content:center;color:var(--mut);font-size:13px;border-bottom:1px solid var(--line)}
+.slot .meta{padding:12px 13px}
+.slot .cat{font-size:11px;letter-spacing:1.5px;text-transform:uppercase;color:var(--cyan);font-weight:800}
+.slot input,.slot textarea{width:100%;background:transparent;border:none;color:#fff;font-family:inherit;outline:none;padding:3px 0}
+.slot .item{font-size:17px;font-weight:800}
+.slot .vend{font-size:13px;color:var(--mut)}
+.slot .price{font-size:20px;font-weight:800;color:var(--green)}
+.slot .row{display:flex;gap:8px;align-items:baseline}
+.slot .imgbtn{position:absolute;top:8px;right:8px;background:rgba(0,0,0,.55);border:1px solid var(--line);color:#fff;border-radius:8px;font-size:11px;padding:5px 8px;cursor:pointer}
+.note{color:var(--mut);font-size:12px;margin-top:16px;line-height:1.5}
+@media print{.bar,.fm-launch,.imgbtn{display:none}body{background:#fff;color:#000}.slot{border-color:#ccc;box-shadow:none}}
+</style></head><body>
+<div class="wrap">
+<div class="fm-launch">
+  <a href="./index.html">⌂ Dashboard</a>
+  <a href="https://web.autocad.com/" target="_blank" rel="noopener">📐 AutoCAD</a>
+  <a href="./portals.html">🏛️ Portals</a>
+</div>
+<h1>Selection Board</h1>
+<div class="sub">Five big slots per page — drop a photo, the item, the vendor, and the retail price from their website. Tap a slot to highlight it for the client.</div>
+<div class="bar">
+  <input id="proj" placeholder="Project / client name…">
+  <button class="btn" onclick="addRow()">+ Add 5 more</button>
+  <button class="btn alt" onclick="window.print()">🖨️ Print board</button>
+  <div class="glow"><span>✨ Glow</span>
+    <button onclick="setGlow(0.4,this)">Dim</button>
+    <button class="on" onclick="setGlow(1.2,this)">Medium</button>
+    <button onclick="setGlow(2.4,this)">Bright</button>
+  </div>
+</div>
+<div class="grid" id="grid"></div>
+<div class="note">Photos: tap "Photo" to paste an image link from the vendor's site. Everything saves on this computer automatically. Print to hand the client a clean board.</div>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+var CATS=["Cabinets","Countertop","Flooring","Fixtures","Appliances"];
+var KEY='rhdp17_selboard';
+function load(){try{return JSON.parse(localStorage.getItem(KEY)||'null')||seed();}catch(e){return seed();}}
+function seed(){return {proj:'',slots:CATS.map(function(c){return {cat:c,img:'',item:'',vend:'',price:'',note:''};})};}
+var DATA=load();
+function save(){localStorage.setItem(KEY,JSON.stringify(DATA));}
+function esc(s){return (s==null?'':String(s)).replace(/"/g,'&quot;').replace(/</g,'&lt;');}
+function render(){
+ document.getElementById('proj').value=DATA.proj||'';
+ document.getElementById('grid').innerHTML=DATA.slots.map(function(s,i){
+  var bg=s.img?('background-image:url('+esc(s.img)+')'):'';
+  return '<div class="slot" id="s'+i+'" onclick="sel('+i+')">'
+   +'<div class="ph" style="'+bg+'">'+(s.img?'':'no photo yet')+'</div>'
+   +'<button class="imgbtn" onclick="event.stopPropagation();setImg('+i+')">📷 Photo</button>'
+   +'<div class="meta">'
+   +'<input class="cat" value="'+esc(s.cat)+'" onclick="event.stopPropagation()" oninput="upd('+i+',\'cat\',this.value)">'
+   +'<input class="item" placeholder="Item name" value="'+esc(s.item)+'" onclick="event.stopPropagation()" oninput="upd('+i+',\'item\',this.value)">'
+   +'<div class="row"><input class="vend" placeholder="Vendor" value="'+esc(s.vend)+'" onclick="event.stopPropagation()" oninput="upd('+i+',\'vend\',this.value)"></div>'
+   +'<input class="price" placeholder="$ retail" value="'+esc(s.price)+'" onclick="event.stopPropagation()" oninput="upd('+i+',\'price\',this.value)">'
+   +'<input class="vend" placeholder="Notes" value="'+esc(s.note)+'" onclick="event.stopPropagation()" oninput="upd('+i+',\'note\',this.value)">'
+   +'</div></div>';
+ }).join('');
+}
+function upd(i,k,v){DATA.slots[i][k]=v;save();}
+function setImg(i){var u=prompt('Paste the image link from the vendor website (right-click the product photo → Copy image address):',DATA.slots[i].img||'');if(u!==null){DATA.slots[i].img=u.trim();save();render();}}
+function sel(i){var el=document.getElementById('s'+i);if(el)el.classList.toggle('sel');}
+function addRow(){for(var k=0;k<5;k++)DATA.slots.push({cat:'',img:'',item:'',vend:'',price:'',note:''});save();render();}
+function setGlow(v,btn){document.documentElement.style.setProperty('--gi',v);document.querySelectorAll('.glow button').forEach(function(b){b.classList.remove('on');});if(btn)btn.classList.add('on');}
+document.getElementById('proj').addEventListener('input',function(e){DATA.proj=e.target.value;save();});
+render();
+</script>
+<script src="./fogwidget.js"></script>
+<script src="./authgate.js" defer></script>
+</body></html>

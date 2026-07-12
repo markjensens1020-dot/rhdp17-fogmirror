@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>RHDP17 · Design-Phase Retainer</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:'Inter',-apple-system,Segoe UI,sans-serif;background:#070b14;color:#e8edf6;padding:18px 20px 60px;font-weight:400}
+  .wrap{max-width:1040px;margin:0 auto}
+  h1{font-size:20px;font-weight:600;letter-spacing:.3px}
+  h1 small{display:block;font-weight:400;color:#7c89a4;font-size:12px;margin-top:3px}
+  .grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:16px}
+  @media(max-width:860px){.grid{grid-template-columns:1fr}}
+  .card{background:#0c1322;border:1px solid #1c2840;border-radius:14px;padding:16px 18px}
+  .card h2{font-size:13px;font-weight:600;color:#8aa0c8;text-transform:uppercase;letter-spacing:.6px;margin-bottom:12px}
+  label{display:block;font-size:12px;color:#8aa0c8;margin:10px 0 4px;font-weight:400}
+  input[type=text],input[type=number]{width:100%;background:#0a101d;border:1px solid #233050;color:#e8edf6;border-radius:8px;padding:9px 11px;font-size:14px;font-family:inherit}
+  .fee-row{display:flex;gap:10px;align-items:flex-end}
+  .fee-row>div{flex:1}
+  .quick{display:flex;gap:6px;margin-top:8px;flex-wrap:wrap}
+  .quick button{background:#132038;border:1px solid #24406a;color:#bcd2f0;border-radius:7px;padding:6px 10px;font-size:12px;cursor:pointer;font-family:inherit}
+  .quick button:hover{background:#1b2f4f}
+  .ms{border:1px solid #1c2840;border-radius:10px;padding:11px 12px;margin-bottom:9px;background:#0a1020}
+  .ms .top{display:flex;gap:10px;align-items:center}
+  .ms .top input.lbl{flex:1;font-size:13px}
+  .ms .top input.pct{width:74px;text-align:right}
+  .ms .amt{margin-top:7px;font-size:20px;font-weight:600;color:#54e08a}
+  .ms .pctbar{height:5px;background:#15203a;border-radius:3px;margin-top:8px;overflow:hidden}
+  .ms .pctbar i{display:block;height:100%;background:#2f80ed;border-radius:3px}
+  .sum{display:flex;justify-content:space-between;align-items:center;margin-top:6px;font-size:13px;padding:8px 4px}
+  .sum b{font-weight:600}
+  .warn{color:#ffb84d}
+  .ok{color:#54e08a}
+  .agreement{background:#fff;color:#111;border-radius:12px;padding:26px 28px;font-size:13px;line-height:1.6}
+  .agreement h3{font-size:16px;margin-bottom:2px}
+  .agreement .lic{font-size:11px;color:#555;margin-bottom:14px}
+  .agreement table{width:100%;border-collapse:collapse;margin:12px 0}
+  .agreement td{padding:7px 4px;border-bottom:1px solid #e6e6e6;font-size:12.5px}
+  .agreement td.r{text-align:right;font-weight:600}
+  .agreement .tot td{border-top:2px solid #333;border-bottom:none;font-weight:700;font-size:13.5px}
+  .agreement p{margin:9px 0}
+  .agreement .sig{display:flex;gap:30px;margin-top:26px}
+  .agreement .sig div{flex:1;border-top:1px solid #333;padding-top:5px;font-size:11px;color:#555}
+  .actions{margin-top:14px;display:flex;gap:9px}
+  .actions button{background:#2f80ed;border:none;color:#fff;border-radius:9px;padding:11px 18px;font-size:14px;font-weight:500;cursor:pointer;font-family:inherit}
+  .actions button.sec{background:#132038;border:1px solid #24406a;color:#bcd2f0}
+  .hint{font-size:11.5px;color:#6a7691;margin-top:8px;font-weight:300}
+  @media print{body{background:#fff;padding:0}.wrap>h1,.card,.actions,.hint{display:none!important}.agreement{border:none}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>Design-Phase Retainer<small>Richard Haro Drafting &amp; Planning, Inc. · License #704179 · adjustable payment schedule</small></h1>
+
+  <div class="grid">
+    <div class="card">
+      <h2>1 · Job &amp; fee</h2>
+      <label>Client name</label><input type="text" id="client" value="" placeholder="Client full name" oninput="render()">
+      <label>Project address</label><input type="text" id="addr" value="" placeholder="Project address" oninput="render()">
+      <label>Total plan / drawing fee (USD)</label>
+      <div class="fee-row"><div><input type="number" id="fee" value="10000" min="0" step="500" oninput="render()"></div></div>
+      <div class="quick">
+        <button onclick="setFee(5000)">$5k min</button>
+        <button onclick="setFee(10000)">$10k avg</button>
+        <button onclick="setFee(15000)">$15k</button>
+        <button onclick="setFee(25000)">$25k high</button>
+      </div>
+      <p class="hint">Typical plans run $5k–$25k. Retainer to begin is usually ~25%.</p>
+
+      <h2 style="margin-top:20px">2 · Payment schedule <span style="text-transform:none;font-weight:400;color:#6a7691">(edit % — smallest at the end)</span></h2>
+      <div id="milestones"></div>
+      <div class="sum"><span>Schedule total</span><b id="sumpct">100%</b></div>
+      <div class="quick">
+        <button onclick="preset(25,50,25)">25 / 50 / 25 (standard)</button>
+        <button onclick="preset(30,45,25)">30 / 45 / 25</button>
+        <button onclick="preset(40,40,20)">40 / 40 / 20</button>
+        <button onclick="addMs()">+ add milestone</button>
+      </div>
+    </div>
+
+    <div>
+      <div class="agreement" id="doc"></div>
+      <div class="actions">
+        <button onclick="window.print()">🖨️ Print / Save PDF</button>
+        <button class="sec" onclick="copyText()">📋 Copy as text</button>
+      </div>
+      <p class="hint">This is a design-phase retainer for drafting/design services (a good-faith agreement to begin plans), separate from any construction contract. Construction deposits follow CSLB limits separately.</p>
+    </div>
+  </div>
+</div>
+
+<script>
+let MS=[
+ {lbl:'Phase 1 — Binder / File Open',pct:25},
+ {lbl:'Phase 2 — Permit Submittal',pct:50},
+ {lbl:'Phase 3 — Permit Issued',pct:25},
+];
+function money(n){return n.toLocaleString('en-US',{style:'currency',currency:'USD',maximumFractionDigits:0});}
+function setFee(v){document.getElementById('fee').value=v;render();}
+function preset(a,b,c){MS=[{lbl:'Phase 1 — Binder / File Open',pct:a},{lbl:'Phase 2 — Permit Submittal',pct:b},{lbl:'Phase 3 — Permit Issued',pct:c}];render();}
+function addMs(){MS.push({lbl:'Milestone',pct:0});render();}
+function render(){
+ const fee=parseFloat(document.getElementById('fee').value)||0;
+ const box=document.getElementById('milestones');box.innerHTML='';
+ let sum=0;MS.forEach((m,i)=>{sum+=Number(m.pct)||0;});
+ MS.forEach((m,i)=>{
+   const amt=fee*(Number(m.pct)||0)/100;
+   const el=document.createElement('div');el.className='ms';
+   el.innerHTML=`<div class="top">
+      <input class="lbl" type="text" value="${m.lbl.replace(/"/g,'&quot;')}" oninput="MS[${i}].lbl=this.value;render()">
+      <input class="pct" type="number" value="${m.pct}" min="0" max="100" oninput="MS[${i}].pct=parseFloat(this.value)||0;render()"> %
+     </div>
+     <div class="amt">${money(amt)}</div>
+     <div class="pctbar"><i style="width:${Math.min(100,m.pct)}%"></i></div>`;
+   box.appendChild(el);
+ });
+ const sp=document.getElementById('sumpct');sp.textContent=sum+'%';sp.className=sum===100?'ok':'warn';
+ // agreement
+ const client=document.getElementById('client').value||'________________';
+ const addr=document.getElementById('addr').value||'________________';
+ const today=new Date().toLocaleDateString('en-US',{year:'numeric',month:'long',day:'numeric'});
+ let rows=MS.map(m=>`<tr><td>${m.lbl}</td><td class="r">${(Number(m.pct)||0)}%</td><td class="r">${money(fee*(Number(m.pct)||0)/100)}</td></tr>`).join('');
+ document.getElementById('doc').innerHTML=`
+   <h3>Design-Phase Retainer &amp; Fee Schedule</h3>
+   <div class="lic">Richard Haro Drafting &amp; Planning, Inc. · License #704179 · San Jose, CA · ${today}</div>
+   <p><b>Client:</b> ${client}<br><b>Project:</b> ${addr}</p>
+   <p>This agreement authorizes Richard Haro Drafting &amp; Planning, Inc. to begin design and drafting services for the project above. It is a good-faith retainer to start the plans; it is not a construction contract. Total design/drawing fee: <b>${money(fee)}</b>.</p>
+   <table>
+     <tr><td><b>Payment</b></td><td class="r"><b>%</b></td><td class="r"><b>Amount</b></td></tr>
+     ${rows}
+     <tr class="tot"><td>Total</td><td class="r">${MS.reduce((s,m)=>s+(Number(m.pct)||0),0)}%</td><td class="r">${money(fee)}</td></tr>
+   </table>
+   <p>The retainer is due to begin work. Remaining payments are due at each milestone above. If the scope grows, the total fee and percentages may be adjusted in writing by mutual agreement, with the smallest payment reserved for final delivery to the city.</p>
+   <p>Plans and drawings remain the property of Richard Haro Drafting &amp; Planning, Inc. until paid in full. Either party may pause the design phase in writing; work completed to date is billable.</p>
+   <div class="sig"><div>Client signature &amp; date</div><div>Richard Haro Drafting &amp; Planning, Inc.</div></div>`;
+}
+function copyText(){const t=document.getElementById('doc').innerText;navigator.clipboard.writeText(t);}
+render();
+</script>
+<script src="./authgate.js" defer></script>
+</body>
+</html>

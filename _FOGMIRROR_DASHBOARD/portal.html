@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Your Project · Richard Haro Drafting & Planning</title>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600&family=Spline+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#ece8df;--card:#f8f6f0;--ink:#1c1f26;--ink2:#3a4150;--mut:#9a8f78;--gold:#b6862c;--line:#ddd6c6;--ok:#1f8b5e;--due:#b5483f}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Spline Sans',Helvetica,Arial,sans-serif;background:var(--bg);color:var(--ink);min-height:100vh;padding:22px 14px}
+.wrap{max-width:680px;margin:0 auto}
+.head{display:flex;align-items:center;gap:12px;margin-bottom:16px}
+.rh{width:44px;height:44px;background:var(--ink);border-radius:11px;display:flex;align-items:center;justify-content:center}
+.head b{font-size:14px;font-weight:600}.head span{display:block;font-size:11px;color:var(--mut);letter-spacing:1px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:20px;margin-bottom:14px}
+h1{font-family:'Fraunces',serif;font-weight:600;font-size:24px;margin-bottom:2px}
+h2{font-family:'Fraunces',serif;font-weight:600;font-size:16px;margin:0 0 12px}
+.sub{font-size:13px;color:var(--mut);margin-bottom:6px}
+.phase{display:flex;align-items:flex-start;gap:10px;padding:7px 0;border-bottom:1px solid var(--line);font-size:13.5px}
+.phase:last-child{border-bottom:none}
+.dot{width:18px;height:18px;border-radius:50%;flex-shrink:0;border:2px solid var(--line);margin-top:1px}
+.dot.done{background:var(--gold);border-color:var(--gold)}
+.dot.now{border-color:var(--gold);box-shadow:0 0 0 3px rgba(182,134,44,.2)}
+.phase.now{font-weight:700}
+table{width:100%;border-collapse:collapse;font-size:13.5px}
+td{padding:7px 4px;border-bottom:1px solid var(--line)}
+.pill{font-size:11px;font-weight:600;border-radius:20px;padding:2px 9px}
+.pill.paid{background:#e7f3ec;color:var(--ok)}.pill.due{background:#fbeceb;color:var(--due)}
+.sel{display:flex;justify-content:space-between;align-items:center;padding:7px 0;border-bottom:1px solid var(--line);font-size:13.5px}
+.chk{font-size:11px;font-weight:600}.chk.yes{color:var(--ok)}.chk.no{color:var(--mut)}
+.msg{background:#fff;border:1px solid var(--line);border-radius:12px;padding:10px 12px;margin-bottom:8px;font-size:13.5px;line-height:1.5}
+.msg.me{background:#eef2ff}
+.msg .who{font-size:10.5px;color:var(--mut);font-weight:600;letter-spacing:.5px;margin-bottom:2px}
+.row{display:flex;gap:8px;margin-top:10px}
+input,textarea{font-family:inherit;font-size:14px;padding:10px;border:1px solid var(--line);border-radius:10px;background:#fff;color:var(--ink);width:100%}
+.btn{background:var(--ink);color:#fff;font-family:inherit;font-weight:700;font-size:14px;border:none;border-radius:10px;padding:10px 16px;cursor:pointer}
+.motto{text-align:center;font-family:'Fraunces',serif;font-style:italic;color:var(--gold);font-size:14px;margin-top:18px}
+.center{text-align:center;color:var(--mut);padding:40px 20px}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="head"><div class="rh"><img src="./icons/logo.svg" alt="RHDP17" style="width:30px;height:30px;filter:invert(1)"></div><div><b>Richard Haro Drafting &amp; Planning</b><span>YOUR PROJECT PORTAL</span></div></div>
+  <div id="content"><div class="center">Loading your project…</div></div>
+  <div class="motto">Peace and prosperity through architecture.</div>
+</div>
+<script>
+const SUPA="https://qrwlyowdzqzkibdzvoek.supabase.co";
+const ANON="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InFyd2x5b3dkenF6a2liZHp2b2VrIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzAyNDIyODEsImV4cCI6MjA4NTgxODI4MX0.5xurzQ0HUECk4_SxlcRdKG-5KCmyQ30b4jyCiyERAoU";
+const $=id=>document.getElementById(id);
+const token=new URLSearchParams(location.search).get('p')||'';
+const esc=s=>(s==null?'':String(s)).replace(/[&<>]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[c]));
+const money=n=>'$'+Number(n||0).toLocaleString(undefined,{minimumFractionDigits:2,maximumFractionDigits:2});
+
+async function call(extra){
+  const r=await fetch(SUPA+"/functions/v1/portal-data",{method:'POST',headers:{'Content-Type':'application/json','apikey':ANON,'Authorization':'Bearer '+ANON},body:JSON.stringify(Object.assign({token},extra||{}))});
+  return r.json();
+}
+function render(d){
+  if(!d || d.error || d.kind!=='client'){ $('content').innerHTML='<div class="card center">'+esc((d&&d.error)||'We couldn’t find your project. Please use the link we emailed you.')+'</div>'; return; }
+  const p=d.project; const steps=Array.isArray(p.progress_steps)?p.progress_steps:[]; const cur=p.progress_step||0;
+  let h='';
+  h+='<div class="card"><h1>'+esc(p.project_name)+'</h1><div class="sub">'+esc(p.client_name||'')+' &middot; Status: <b>'+esc(p.status||'')+'</b></div></div>';
+  // phases
+  h+='<div class="card"><h2>Where your project is</h2>';
+  steps.forEach((s,i)=>{ const cls=i<cur?'done':(i===cur?'now':''); h+='<div class="phase '+(i===cur?'now':'')+'"><div class="dot '+cls+'"></div><div>'+esc(s)+'</div></div>'; });
+  h+='</div>';
+  // selections
+  if(d.selections&&d.selections.length){ h+='<div class="card"><h2>Your selections</h2>'; d.selections.forEach(s=>{ h+='<div class="sel"><div><b>'+esc(s.category)+'</b> &middot; '+esc(s.item||'—')+(s.client_notes?' <span style="color:var(--mut)">('+esc(s.client_notes)+')</span>':'')+'</div><span class="chk '+(s.is_selected?'yes':'no')+'">'+(s.is_selected?'Selected':'Open')+'</span></div>'; }); h+='</div>'; }
+  // balances
+  if(d.balances&&d.balances.length){ h+='<div class="card"><h2>Payments</h2><table>'; d.balances.forEach(b=>{ const st=(b.status||'').toLowerCase(); h+='<tr><td>'+esc(b.label)+(b.due_date?' <span style="color:var(--mut);font-size:11px">due '+esc(b.due_date)+'</span>':'')+'</td><td style="text-align:right">'+money(b.amount)+'</td><td style="text-align:right"><span class="pill '+(st==='paid'?'paid':'due')+'">'+esc(b.status||'')+'</span></td></tr>'; }); h+='</table></div>'; }
+  // appointments
+  if(d.appointments&&d.appointments.length){ h+='<div class="card"><h2>Scheduled</h2>'; d.appointments.forEach(a=>{ h+='<div class="sel"><div><b>'+esc(a.title)+'</b> &middot; '+esc(a.appt_type||'')+'</div><span style="font-size:12.5px;color:var(--mut)">'+esc((a.scheduled_for||'').replace('T',' ').slice(0,16))+'</span></div>'; }); h+='</div>'; }
+  // messages
+  h+='<div class="card"><h2>Messages</h2><div id="msgs">';
+  (d.messages||[]).forEach(m=>{ h+='<div class="msg '+(m.sender==='Client'?'me':'')+'"><div class="who">'+esc(m.sender)+'</div>'+esc(m.body)+'</div>'; });
+  h+='</div><div class="row"><input id="mbox" placeholder="Message your RHDP17 team…"><button class="btn" id="send">Send</button></div></div>';
+  $('content').innerHTML=h;
+  $('send').onclick=async()=>{ const b=$('mbox').value.trim(); if(!b)return; $('send').textContent='…'; const d2=await call({action:'message',body:b}); render(d2); };
+}
+if(!token){ $('content').innerHTML='<div class="card center">Please open the private link we emailed you.</div>'; }
+else call().then(render).catch(()=>{ $('content').innerHTML='<div class="card center">Something went wrong. Please try again.</div>'; });
+</script>
+<script src="./authgate.js" defer></script>
+</body>
+</html>

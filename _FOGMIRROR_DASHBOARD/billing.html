@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Billing · RHDP17</title>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600&family=Spline+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<style>
+:root{--bg:#ece8df;--card:#f8f6f0;--ink:#1c1f26;--ink2:#3a4150;--mut:#9a8f78;--gold:#b6862c;--line:#ddd6c6;--ok:#1f8b5e;--red:#b5483f}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Spline Sans',Helvetica,Arial,sans-serif;background:var(--bg);color:var(--ink);min-height:100vh;padding:24px 14px}
+.wrap{max-width:680px;margin:0 auto}
+.head{display:flex;align-items:center;gap:12px;margin-bottom:18px}
+.rh{width:42px;height:42px;background:var(--ink);border-radius:11px;display:flex;align-items:center;justify-content:center;color:var(--gold);font-family:'Fraunces',serif;font-weight:600;font-size:15px}
+.head b{font-size:13px;font-weight:600}.head span{display:block;font-size:11px;color:var(--mut);letter-spacing:2px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:22px;margin-bottom:16px}
+h1{font-family:'Fraunces',serif;font-weight:600;font-size:26px;margin-bottom:2px}
+.tag{font-size:12.5px;color:var(--mut);margin-bottom:16px}
+label{display:block;font-size:12px;color:var(--ink2);font-weight:600;margin:12px 0 4px}
+input,select{width:100%;font-family:inherit;font-size:15px;padding:11px 12px;border:1px solid var(--line);border-radius:10px;background:#fff;color:var(--ink)}
+.seg{display:flex;gap:8px}
+.seg button{flex:1;padding:11px;border:1px solid var(--line);border-radius:10px;background:#fff;font-family:inherit;font-weight:600;font-size:13.5px;cursor:pointer;color:var(--ink2)}
+.seg button.on{background:var(--ink);color:#fff;border-color:var(--ink)}
+.out{margin-top:14px;background:#fff;border:1px solid var(--line);border-radius:12px;padding:16px;font-size:14px;line-height:1.6;white-space:pre-wrap}
+.warn{background:#fff0ee;border:1px solid #e7c3bd;color:var(--red);border-radius:10px;padding:10px 12px;font-size:13px;margin-top:10px;font-weight:600}
+.ok{background:#eef7f1;border:1px solid #bfe0cd;color:var(--ok);border-radius:10px;padding:10px 12px;font-size:13px;margin-top:10px;font-weight:600}
+.row{display:flex;gap:12px}.row>div{flex:1}
+.btn{width:100%;background:var(--ink);color:#fff;font-family:inherit;font-weight:700;font-size:15px;border:none;border-radius:12px;padding:14px;cursor:pointer;margin-top:14px}
+.btn:hover{background:#2b303a}
+.btn.copy{background:var(--gold)}
+.note{font-size:11.5px;color:var(--mut);margin-top:10px;line-height:1.5}
+.gate{display:none;text-align:center;padding:24px}.gate a{color:var(--gold);font-weight:600}
+.rule{font-size:12px;color:var(--ink2);background:#fbf8f0;border-left:3px solid var(--gold);padding:8px 12px;border-radius:0 8px 8px 0;margin-top:10px;line-height:1.5}
+.motto{text-align:center;font-family:'Fraunces',serif;font-style:italic;color:var(--gold);font-size:14px;margin-top:18px}
+</style>
+</head>
+<body>
+<div class="wrap">
+<div class="fm-launch" style="margin:0 0 16px;display:flex;gap:8px;flex-wrap:wrap;font-family:system-ui,Segoe UI,Arial,sans-serif"><a href="https://outlook.office.com/mail/" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:6px;text-decoration:none;background:#1c1f26;color:#fff;font-weight:700;font-size:13px;border-radius:10px;padding:9px 13px;border:1px solid rgba(255,255,255,.12)">📥 Outlook</a><a href="https://outlook.office.com/mail/deeplink/compose" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:6px;text-decoration:none;background:#1c1f26;color:#fff;font-weight:700;font-size:13px;border-radius:10px;padding:9px 13px;border:1px solid rgba(255,255,255,.12)">✉️ New Email</a><a href="https://teams.microsoft.com/" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:6px;text-decoration:none;background:#1c1f26;color:#fff;font-weight:700;font-size:13px;border-radius:10px;padding:9px 13px;border:1px solid rgba(255,255,255,.12)">💬 Teams</a><a href="https://outlook.office.com/calendar/view/week" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:6px;text-decoration:none;background:#1c1f26;color:#fff;font-weight:700;font-size:13px;border-radius:10px;padding:9px 13px;border:1px solid rgba(255,255,255,.12)">📅 Calendar</a><a href="https://to-do.office.com/tasks/" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:6px;text-decoration:none;background:#1c1f26;color:#fff;font-weight:700;font-size:13px;border-radius:10px;padding:9px 13px;border:1px solid rgba(255,255,255,.12)">✅ Tasks</a><a href="https://web.autocad.com/" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:6px;text-decoration:none;background:#1c1f26;color:#fff;font-weight:700;font-size:13px;border-radius:10px;padding:9px 13px;border:1px solid rgba(255,255,255,.12)">📐 AutoCAD</a><a href="./portals.html" style="display:inline-flex;align-items:center;gap:6px;text-decoration:none;background:#1c1f26;color:#fff;font-weight:700;font-size:13px;border-radius:10px;padding:9px 13px;border:1px solid rgba(255,255,255,.12)">🏛️ Portals</a><a href="./index.html" style="display:inline-flex;align-items:center;gap:6px;text-decoration:none;background:#1c1f26;color:#fff;font-weight:700;font-size:13px;border-radius:10px;padding:9px 13px;border:1px solid rgba(255,255,255,.12)">⌂ Dashboard</a><a href="./debrief.html" style="display:inline-flex;align-items:center;gap:6px;text-decoration:none;background:#1c1f26;color:#fff;font-weight:700;font-size:13px;border-radius:10px;padding:9px 13px;border:1px solid rgba(255,255,255,.12)">🌅 Debrief</a></div>
+
+  <div class="head"><div class="rh"><img src="./icons/logo.svg" alt="RHDP17" style="width:28px;height:28px;filter:invert(1)"></div><div><b>RHDP17 Billing</b><span>FOG MIRROR · RICHARD HARO DRAFTING &amp; PLANNING</span></div></div>
+
+  <div id="app" style="display:none">
+    <div class="card">
+      <h1>Billing console</h1>
+      <p class="tag">Draft a compliant invoice or deposit without a bookkeeper. Maya's bookkeeping rules are built in. This drafts only — money out still needs Irma or Richard.</p>
+
+      <label>Contract type</label>
+      <div class="seg" id="type">
+        <button data-t="design" class="on">Design / Drafting (professional services)</button>
+        <button data-t="construction">Construction (home improvement)</button>
+      </div>
+
+      <div class="row">
+        <div><label>Total amount ($)</label><input id="amt" type="number" inputmode="decimal" placeholder="e.g. 18000" value="18000"></div>
+        <div><label>Contractor License # (required on every doc)</label><input id="lic" placeholder="CSLB #"></div>
+      </div>
+      <div class="row">
+        <div><label>Client / project</label><input id="proj" placeholder="e.g. Castro — 1640 Grand Teton Dr"></div>
+        <div><label>What this invoice is for</label><input id="desc" placeholder="e.g. Retainer at booking"></div>
+      </div>
+
+      <button class="btn" id="gen">Generate compliant draft</button>
+      <div id="result"></div>
+      <div class="note">Reminders: clients never see margins. The Contractor's License # must appear on every proposal, contract, and invoice. Anything that pays money OUT is staged for Irma or Richard — this tool never sends money.</div>
+    </div>
+  </div>
+
+  <div class="card gate" id="gate">
+    <h1>Staff sign-in</h1>
+    <p class="tag" style="margin-top:8px">Open the <a href="./index.html">Command Center</a> and sign in with your rhdpinc.com account to use Billing.</p>
+  </div>
+
+  <div class="motto">Peace and prosperity through architecture.</div>
+</div>
+
+<script>
+const SUPA="https://qrwlyowdzqzkibdzvoek.supabase.co";
+const ANON="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InFyd2x5b3dkenF6a2liZHp2b2VrIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzAyNDIyODEsImV4cCI6MjA4NTgxODI4MX0.5xurzQ0HUECk4_SxlcRdKG-5KCmyQ30b4jyCiyERAoU";
+const sb=window.supabase.createClient(SUPA,ANON);
+const $=id=>document.getElementById(id);
+let ctype="design";
+
+(async()=>{
+  const {data:{session}}=await sb.auth.getSession();
+  if(!session){ $('gate').style.display='block'; return; }
+  $('app').style.display='block';
+})();
+
+document.querySelectorAll('#type button').forEach(b=>b.onclick=()=>{
+  document.querySelectorAll('#type button').forEach(x=>x.classList.remove('on'));
+  b.classList.add('on'); ctype=b.dataset.t;
+});
+
+const money=n=>'$'+(Math.round(n*100)/100).toLocaleString(undefined,{minimumFractionDigits:2,maximumFractionDigits:2});
+
+$('gen').onclick=()=>{
+  const amt=parseFloat($('amt').value||'0');
+  const lic=($('lic').value||'').trim();
+  const proj=($('proj').value||'(project)').trim();
+  const desc=($('desc').value||'').trim();
+  const today=new Date().toLocaleDateString();
+  let html="";
+
+  if(!lic){ html+='<div class="warn">⚠ Add the Contractor License # — CSLB requires it on every proposal, contract, and invoice.</div>'; }
+
+  if(ctype==='design'){
+    const r=amt*0.25, a=amt*0.50, p=amt*0.25;
+    html+='<div class="rule">Design/drafting is billed as professional services: 25% retainer at booking, 50% at client approval, 25% after permit. (This is NOT a CSLB construction down payment.)</div>';
+    html+='<div class="out">RICHARD HARO DRAFTING & PLANNING, INC.\n2150 Mangin Way, San Jose, CA 95148 · 408-532-1755\nContractor License #: '+(lic||'__________')+'\n\nINVOICE / PROPOSAL — Design & Drafting Services\nDate: '+today+'\nProject: '+proj+'\n'+(desc?('For: '+desc+'\n'):'')+'\nTotal design fee: '+money(amt)+'\nPayment schedule (professional services):\n  • 25% retainer at booking ......... '+money(r)+'\n  • 50% at client approval .......... '+money(a)+'\n  • 25% after permit issued ......... '+money(p)+'\n\nClients are billed only for their own project. Questions: 408-532-1755.</div>';
+    html+='<div class="ok">✓ Design schedule drafted. Have Irma or Richard review before sending.</div>';
+  } else {
+    const cap=Math.min(1000, amt*0.10);
+    html+='<div class="rule">CSLB (BPC 7159.5): a home-improvement down payment cannot exceed the LESSER of $1,000 or 10%. Progress payments must track work actually done. Contract must be written + signed before work, include a Notice of Cancellation, and use 10-pt font / 10-pt bold headings.</div>';
+    html+='<div class="ok">✓ Maximum compliant deposit for '+money(amt)+': <b>'+money(cap)+'</b></div>';
+    html+='<div class="out">RICHARD HARO DRAFTING & PLANNING, INC.\n2150 Mangin Way, San Jose, CA 95148 · 408-532-1755\nContractor License #: '+(lic||'__________')+'\n\nHOME IMPROVEMENT CONTRACT / INVOICE\nDate: '+today+'\nProject: '+proj+'\n'+(desc?('For: '+desc+'\n'):'')+'\nTotal contract price: '+money(amt)+'\nDown payment (max allowed by law): '+money(cap)+'\nRemaining '+money(amt-cap)+' billed as progress payments tied to work actually performed.\n\nNOTICE OF CANCELLATION: You, the buyer, may cancel this transaction at any time prior to midnight of the third business day after the date of this transaction. (Attach the full statutory notice near the signature lines.)\n\nBoth parties must sign before any work begins.</div>';
+    html+='<div class="note">Use the CSLB sample Home Improvement Contract as your master template. Have Richard + Irma (and counsel) review before sending.</div>';
+  }
+  $('result').innerHTML=html+'<button class="btn copy" id="cp">Copy draft</button>';
+  $('cp').onclick=()=>{ const t=$('result').querySelector('.out').innerText; navigator.clipboard.writeText(t).then(()=>{$('cp').textContent='Copied ✓';}); };
+};
+</script>
+<script src="./fogwidget.js"></script>
+<script src="./authgate.js" defer></script>
+</body>
+</html>

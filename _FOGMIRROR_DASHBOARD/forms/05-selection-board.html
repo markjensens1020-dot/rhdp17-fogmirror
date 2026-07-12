@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>RHDP17 — Premium Material Selection Board & Financing Guide</title>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700;900&family=Source+Code+Pro:wght@400;600&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box;}
+:root{--gold:#C8962E;--dark:#111;--white:#fafafa;--blue:#1a3a5c;--green:#1a7a4a;--red:#c0392b;--purple:#4a1a7a;}
+body{font-family:'Montserrat',sans-serif;background:var(--white);color:var(--dark);font-size:11pt;line-height:1.6;}
+@media print{.no-print{display:none;}.page-break{page-break-before:always;}}
+.print-bar{background:var(--dark);padding:14px 40px;display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;z-index:100;}
+.print-bar span{color:var(--gold);font-size:10pt;font-weight:700;letter-spacing:2px;}
+.print-btn{background:var(--gold);color:var(--dark);border:none;padding:10px 28px;font-weight:900;font-size:12pt;cursor:pointer;border-radius:3px;}
+.cover{background:var(--dark);color:white;padding:60px;min-height:50vh;position:relative;}
+.cover::before{content:'';position:absolute;top:0;left:0;right:0;height:8px;background:var(--gold);}
+.cover-badge{background:var(--gold);color:var(--dark);display:inline-block;padding:6px 20px;font-weight:900;font-size:10pt;letter-spacing:3px;margin-bottom:20px;border-radius:3px;}
+.cover-title{font-size:42pt;font-weight:900;line-height:1;margin-bottom:12px;}
+.cover-title span{color:var(--gold);}
+.cover-sub{font-size:13pt;opacity:0.7;max-width:600px;line-height:1.6;}
+.page{max-width:900px;margin:0 auto;padding:50px 40px;}
+h2{font-size:18pt;font-weight:900;margin:40px 0 16px;padding-bottom:10px;border-bottom:3px solid var(--gold);text-transform:uppercase;letter-spacing:1px;}
+h3{font-size:13pt;font-weight:900;margin:20px 0 8px;color:var(--blue);text-transform:uppercase;letter-spacing:1px;}
+.grant-box{background:var(--green);color:white;padding:24px 28px;border-radius:8px;margin:20px 0;}
+.grant-box h3{color:white;margin-bottom:10px;}
+.grant-box p{font-size:11pt;line-height:1.7;opacity:0.95;}
+.alert{padding:16px 20px;border-radius:6px;margin:16px 0;border-left:6px solid var(--gold);background:#fff9e6;}
+.alert.red{border-color:var(--red);background:#fdf0f0;}
+.alert.blue{border-color:var(--blue);background:#f0f4fa;}
+.alert-title{font-size:9pt;font-weight:900;letter-spacing:2px;text-transform:uppercase;margin-bottom:6px;}
+/* MATERIAL TABLE */
+.mat-section{margin:24px 0;border:2px solid var(--dark);border-radius:8px;overflow:hidden;}
+.mat-header{padding:14px 20px;color:white;display:flex;justify-content:space-between;align-items:center;}
+.mat-header.kitchen{background:var(--blue);}
+.mat-header.bath{background:var(--purple);}
+.mat-header.exterior{background:#5a3a1a;}
+.mat-header.flooring{background:#1a5a3a;}
+.mat-header.energy{background:#1a3a5a;}
+.mat-header.outdoor{background:#3a5a1a;}
+.mat-header.interior{background:#5a1a3a;}
+.mat-title{font-size:14pt;font-weight:900;}
+.mat-body table{width:100%;border-collapse:collapse;}
+.mat-body th{background:#f0f0f0;padding:10px 16px;text-align:left;font-size:9pt;letter-spacing:1px;text-transform:uppercase;font-weight:900;}
+.mat-body td{padding:10px 16px;border-bottom:1px solid #eee;font-size:10pt;vertical-align:top;}
+.mat-body tr:last-child td{border-bottom:none;}
+.price-std{color:#888;}
+.price-premium{color:var(--gold);font-weight:900;}
+.price-luxury{color:var(--red);font-weight:900;}
+.brand{font-family:'Source Code Pro',monospace;font-size:9pt;color:var(--blue);}
+.change-order{background:#fff0f0;border-left:3px solid var(--red);padding:4px 8px;font-size:9pt;font-weight:700;color:var(--red);display:inline-block;margin-top:4px;}
+/* FINANCING */
+.finance-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin:20px 0;}
+.finance-card{border:2px solid var(--dark);border-radius:6px;overflow:hidden;}
+.finance-header{padding:12px 16px;font-weight:900;font-size:12pt;color:white;}
+.finance-header.boa{background:#e31837;}
+.finance-header.wf{background:#d71e28;}
+.finance-header.cu{background:var(--blue);}
+.finance-header.nc{background:var(--green);}
+.finance-body{padding:14px 16px;font-size:10pt;line-height:1.7;}
+/* STEP BY STEP */
+.step{display:flex;gap:16px;margin-bottom:16px;padding:16px;border:2px solid #ddd;border-radius:6px;}
+.step-num{font-size:28pt;font-weight:900;color:var(--gold);line-height:1;min-width:40px;flex-shrink:0;}
+.step-title{font-size:12pt;font-weight:900;margin-bottom:4px;}
+.step-desc{font-size:10pt;color:#444;line-height:1.6;}
+.code{background:#111;color:#a8ff78;font-family:'Source Code Pro',monospace;font-size:9pt;padding:12px 16px;border-radius:4px;margin:8px 0;line-height:1.6;}
+.summary-table{width:100%;border-collapse:collapse;margin:20px 0;}
+.summary-table th{background:var(--dark);color:white;padding:12px 16px;text-align:left;font-size:10pt;letter-spacing:1px;text-transform:uppercase;}
+.summary-table td{padding:12px 16px;border-bottom:1px solid #ddd;font-size:11pt;}
+.summary-table tr:nth-child(even) td{background:#f5f5f5;}
+.total-row td{background:var(--dark)!important;color:var(--gold);font-weight:900;font-size:13pt;}
+.footer{margin-top:50px;padding-top:16px;border-top:2px solid var(--dark);font-size:9pt;color:#888;font-family:'Source Code Pro',monospace;display:flex;justify-content:space-between;}
+p{margin-bottom:10px;}
+</style>
+</head>
+<body>
+<div class="print-bar no-print">
+  <span>RHDP17 — PREMIUM MATERIAL SELECTION & FINANCING — JUNE 2026</span>
+  <button class="print-btn" onclick="window.print()">PRINT</button>
+</div>
+
+<div class="cover">
+  <div class="cover-badge">RHDP17 — CLIENT INVESTMENT GUIDE — JUNE 2026</div>
+  <div class="cover-title">Premium Material<br><span>Selection Board</span><br>& Financing Guide</div>
+  <div class="cover-sub">High-end product specifications with real 2026 pricing. Grants, loans, and financing options for Bay Area and Triangle NC clients. Start at the top — let clients decide where to save.</div>
+</div>
+
+<div class="page">
+
+  <h2>Grants & Financing — Know Before You Design</h2>
+
+  <div class="grant-box">
+    <h3>💰 ADU &amp; home grants — ask us what's currently available</h3>
+    <p>Grants and down-payment programs change often, so we never promise one that isn't funded. The CalHFA $40,000 ADU Grant has been <strong>closed/exhausted since December 2023</strong>, with no 2026 round open. CalHFA does run other programs (e.g., Dream For All down-payment assistance), and North Carolina has NCHFA programs. <strong>We verify what's actually available for your address before you count on it</strong> — and RHDP17 prepares all the plans a program may require.</p>
+  </div>
+
+  <div class="alert blue">
+    <div class="alert-title">Programs change — we verify before promising</div>
+    Always confirm current availability at calhfa.ca.gov (CA) or nchfa.com (NC) before relying on any grant or program. RHDP17 checks status and never advertises a grant that isn't currently funded.
+  </div>
+
+  <h3>Additional California Grants & Programs</h3>
+  <div class="finance-grid">
+    <div class="finance-card">
+      <div class="finance-header boa">Bank of America — CA</div>
+      <div class="finance-body">Community Homeownership Commitment — down payment grants up to $17,500 for qualifying buyers. Construction loans available. Approach as a business partner — refer clients, earn relationship. Target: San Jose + Bay Area branches.</div>
+    </div>
+    <div class="finance-card">
+      <div class="finance-header wf">Wells Fargo — CA & NC</div>
+      <div class="finance-body">LIFT program — down payment assistance up to $15,000 in select markets. Home renovation loans (FHA 203k). Construction-to-permanent loans. Present as business investment — multiple client referrals = relationship banking.</div>
+    </div>
+    <div class="finance-card">
+      <div class="finance-header cu">Credit Unions — Bay Area</div>
+      <div class="finance-body">Target: Bay Federal CU, Patelco CU, ACMG CU. Better rates than banks for construction loans (typically 0.5–1% lower). ADU-specific loan products. Pitch RHDP17 as preferred contractor — exclusive preferred rates for our clients.</div>
+    </div>
+    <div class="finance-card">
+      <div class="finance-header nc">North Carolina Programs</div>
+      <div class="finance-body">NC Housing Finance Agency — MCC tax credit, NC Home Advantage. Triangle area: SunTrust/Truist, First Citizens Bank. First-time buyer programs in Wake, Durham, Orange counties. Same business partner approach — refer clients, get preferred rates.</div>
+    </div>
+  </div>
+
+  <div class="alert">
+    <div class="alert-title">RHDP17 Financing Strategy</div>
+    Position RHDP17 as the one-stop shop: "We design it, permit it, AND connect you to financing and grants." Client brings their address → our app shows available grants → we connect them to the right lender → we design the project → we build it. Full pipeline. Maximum margin.
+  </div>
+
+  <h2>Premium Material Selection Board — Start at the Top</h2>
+  <p style="margin-bottom:20px;"><strong>Strategy:</strong> Always spec the premium/luxury option first. Clients who want to save money can downgrade — that becomes a credit. Clients who add more → change order. Your margin is protected either way.</p>
+
+  <!-- KITCHEN -->
+  <div class="mat-section">
+    <div class="mat-header kitchen">
+      <div class="mat-title">🍳 Kitchen — Appliances & Fixtures</div>
+      <div style="font-size:10pt;opacity:0.8;">Default spec: Premium tier</div>
+    </div>
+    <div class="mat-body">
+      <table>
+        <tr><th>Item</th><th>Premium Spec (Default)</th><th>Brand</th><th>Price Range</th><th>Budget Option</th></tr>
+        <tr><td><strong>Range / Cooktop</strong></td><td>48" Pro Range, 6 burners + griddle</td><td class="brand">Wolf / Thermador</td><td class="price-luxury">$8,000–$18,000</td><td class="price-std">Samsung/GE: $1,500–$3,000</td></tr>
+        <tr><td><strong>Refrigerator</strong></td><td>Built-in 48" counter depth</td><td class="brand">Sub-Zero</td><td class="price-luxury">$8,000–$14,000</td><td class="price-std">LG/Samsung: $1,800–$3,500</td></tr>
+        <tr><td><strong>Dishwasher</strong></td><td>Fully integrated panel-ready</td><td class="brand">Miele / Bosch 800</td><td class="price-premium">$1,500–$2,500</td><td class="price-std">Whirlpool: $700–$1,200</td></tr>
+        <tr><td><strong>Range Hood</strong></td><td>Wall mount 48" 1200 CFM</td><td class="brand">Zephyr / Vent-A-Hood</td><td class="price-premium">$1,500–$4,000</td><td class="price-std">Broan: $300–$800</td></tr>
+        <tr><td><strong>Kitchen Faucet</strong></td><td>Pull-down touchless, brushed gold</td><td class="brand">Brizo / Kohler</td><td class="price-premium">$500–$1,500</td><td class="price-std">Moen: $200–$400</td></tr>
+        <tr><td><strong>Sink</strong></td><td>36" farmhouse single basin fireclay</td><td class="brand">Kohler / Rohl</td><td class="price-premium">$800–$2,000</td><td class="price-std">Kraus: $300–$600</td></tr>
+        <tr><td><strong>Countertops</strong></td><td>3cm Quartzite or book-matched marble</td><td class="brand">Local fabricator</td><td class="price-luxury">$85–$200/sq ft installed</td><td class="price-std">Quartz: $55–$90/sq ft</td></tr>
+        <tr><td><strong>Cabinets</strong></td><td>Full overlay, soft close, dovetail box</td><td class="brand">Kraftmaid / Custom</td><td class="price-luxury">$800–$1,500/linear ft</td><td class="price-std">IKEA/Stock: $150–$400/lf</td></tr>
+        <tr><td><strong>Backsplash</strong></td><td>Full height slab or hand-made tile</td><td class="brand">Ann Sacks / Walker</td><td class="price-premium">$25–$75/sq ft</td><td class="price-std">Home Depot tile: $5–$15/sf</td></tr>
+      </table>
+    </div>
+  </div>
+
+  <!-- BATHROOM -->
+  <div class="mat-section">
+    <div class="mat-header bath">
+      <div class="mat-title">🛁 Bathrooms — Fixtures & Finishes</div>
+      <div style="font-size:10pt;opacity:0.8;">Per bathroom — multiply by count</div>
+    </div>
+    <div class="mat-body">
+      <table>
+        <tr><th>Item</th><th>Premium Spec (Default)</th><th>Brand</th><th>Price Range</th><th>Budget Option</th></tr>
+        <tr><td><strong>Shower System</strong></td><td>Thermostatic, rain head + 4 body sprays</td><td class="brand">Kohler / Brizo</td><td class="price-luxury">$2,000–$6,000</td><td class="price-std">Delta: $400–$800</td></tr>
+        <tr><td><strong>Heated Floor</strong></td><td>Electric radiant under tile, thermostat</td><td class="brand">Nuheat / Warmup</td><td class="price-premium">$12–$20/sq ft installed</td><td class="price-std">Basic: $8–$12/sq ft</td></tr>
+        <tr><td><strong>Heated Towel Rack</strong></td><td>Electric hydronic, brushed nickel</td><td class="brand">Amba / Mr. Steam</td><td class="price-premium">$400–$1,200</td><td class="price-std">Basic electric: $150–$300</td></tr>
+        <tr><td><strong>Toilet</strong></td><td>Wall-hung, auto flush, bidet seat</td><td class="brand">Toto / Kohler</td><td class="price-luxury">$1,500–$4,000</td><td class="price-std">American Standard: $300–$600</td></tr>
+        <tr><td><strong>Vanity</strong></td><td>Custom floating, quartz top, soft close</td><td class="brand">Custom / RH</td><td class="price-luxury">$1,500–$5,000</td><td class="price-std">Home Depot: $400–$800</td></tr>
+        <tr><td><strong>Bathroom Tile</strong></td><td>Large format 24x48 porcelain or marble</td><td class="brand">Porcelanosa / MSI</td><td class="price-premium">$15–$45/sq ft</td><td class="price-std">Standard: $3–$10/sq ft</td></tr>
+        <tr><td><strong>Freestanding Tub</strong></td><td>Acrylic soaking tub, floor mount filler</td><td class="brand">Kohler / MTI</td><td class="price-luxury">$2,000–$6,000</td><td class="price-std">Basic: $600–$1,200</td></tr>
+        <tr><td><strong>Mirror / Medicine</strong></td><td>Lighted frameless, anti-fog, dimmable</td><td class="brand">Robern / Electric Mirror</td><td class="price-premium">$600–$2,000</td><td class="price-std">Basic: $150–$400</td></tr>
+      </table>
+    </div>
+  </div>
+
+  <!-- FLOORING -->
+  <div class="mat-section">
+    <div class="mat-header flooring">
+      <div class="mat-title">🪵 Flooring — Per Square Foot Installed</div>
+    </div>
+    <div class="mat-body">
+      <table>
+        <tr><th>Type</th><th>Premium Spec</th><th>Brand</th><th>Installed Price</th><th>Budget Option</th></tr>
+        <tr><td><strong>Hardwood</strong></td><td>5" wide plank white oak, wire brushed</td><td class="brand">Provenza / Mirage</td><td class="price-luxury">$12–$22/sq ft</td><td class="price-std">$6–$10/sq ft</td></tr>
+        <tr><td><strong>LVP</strong></td><td>12mm thick, waterproof, 9" plank</td><td class="brand">Shaw / Karndean</td><td class="price-premium">$6–$10/sq ft</td><td class="price-std">$3–$5/sq ft</td></tr>
+        <tr><td><strong>Tile (interior)</strong></td><td>Large format 24x48 matte porcelain</td><td class="brand">Daltile / Porcelanosa</td><td class="price-premium">$12–$25/sq ft</td><td class="price-std">$5–$10/sq ft</td></tr>
+        <tr><td><strong>Carpet</strong></td><td>80 oz cut pile, luxury pad</td><td class="brand">Shaw / Mohawk</td><td class="price-premium">$5–$9/sq ft</td><td class="price-std">$2–$4/sq ft</td></tr>
+        <tr><td><strong>Concrete</strong></td><td>Polished + sealed, custom color</td><td class="brand">Local contractor</td><td class="price-premium">$8–$15/sq ft</td><td class="price-std">$4–$7/sq ft</td></tr>
+      </table>
+    </div>
+  </div>
+
+  <!-- EXTERIOR & ENERGY -->
+  <div class="mat-section">
+    <div class="mat-header energy">
+      <div class="mat-title">⚡ Energy & Exterior — Premium Specs</div>
+    </div>
+    <div class="mat-body">
+      <table>
+        <tr><th>Item</th><th>Premium Spec (Default)</th><th>Brand</th><th>Price Range</th><th>Notes</th></tr>
+        <tr><td><strong>Solar Roof</strong></td><td>Full Tesla Solar Roof replacement</td><td class="brand">Tesla</td><td class="price-luxury">$65,000–$110,000</td><td>30% federal tax credit — check current availability 2026</td></tr>
+        <tr><td><strong>Solar Panels</strong></td><td>Standard panels + Powerwall battery</td><td class="brand">Tesla / SunPower</td><td class="price-premium">$25,000–$45,000</td><td>Better ROI than solar roof for most homes</td></tr>
+        <tr><td><strong>Tesla Powerwall</strong></td><td>2x Powerwall 3 units</td><td class="brand">Tesla</td><td class="price-premium">$18,000–$22,000</td><td>Required for full home backup</td></tr>
+        <tr><td><strong>EV Charger</strong></td><td>Tesla Wall Connector or J1772 Level 2</td><td class="brand">Tesla / ChargePoint</td><td class="price-std">$800–$2,500 installed</td><td>240V 50A dedicated circuit required</td></tr>
+        <tr><td><strong>Stucco</strong></td><td>3-coat system + elastomeric paint</td><td class="brand">La Habra / Parex</td><td class="price-premium">$10–$18/sq ft</td><td>Smooth: $12–$18 / Orange peel: $10–$14 / Knockdown: $11–$16</td></tr>
+        <tr><td><strong>Roofing</strong></td><td>Class A Concrete tile or standing seam metal</td><td class="brand">Boral / ATAS</td><td class="price-premium">$12–$22/sq ft</td><td>Asphalt shingle budget: $5–$9/sq ft</td></tr>
+        <tr><td><strong>Fireplace</strong></td><td>Linear gas fireplace, tile surround</td><td class="brand">Napoleon / Ortal</td><td class="price-luxury">$4,000–$12,000 installed</td><td>Electric option: $1,500–$3,000</td></tr>
+        <tr><td><strong>Sliding Doors</strong></td><td>20' multi-panel pocket sliding system</td><td class="brand">LaCantina / Marvin</td><td class="price-luxury">$15,000–$35,000</td><td>Standard patio door: $2,000–$5,000</td></tr>
+      </table>
+    </div>
+  </div>
+
+  <!-- INTERIOR FINISHES -->
+  <div class="mat-section">
+    <div class="mat-header interior">
+      <div class="mat-title">🎨 Interior Finishes & Hardware</div>
+    </div>
+    <div class="mat-body">
+      <table>
+        <tr><th>Item</th><th>Premium Spec</th><th>Brand</th><th>Price</th></tr>
+        <tr><td><strong>Interior Paint</strong></td><td>Premium zero-VOC, 2 coats + primer</td><td class="brand">Farrow & Ball / Benjamin Moore Aura</td><td class="price-premium">$4–$8/sq ft labor+material</td></tr>
+        <tr><td><strong>Trim & Baseboards</strong></td><td>5.25" craftsman MDF, painted</td><td class="brand">Local millwork</td><td class="price-premium">$8–$14/linear ft installed</td></tr>
+        <tr><td><strong>Interior Doors</strong></td><td>8' solid core, flat panel</td><td class="brand">TruStile / Masonite Architectural</td><td class="price-premium">$500–$1,200/door installed</td></tr>
+        <tr><td><strong>Door Hardware</strong></td><td>Brushed gold or matte black lever</td><td class="brand">Emtek / Rocky Mountain</td><td class="price-premium">$150–$400/set</td></tr>
+        <tr><td><strong>Light Fixtures</strong></td><td>Statement fixtures per room</td><td class="brand">Visual Comfort / Arteriors</td><td class="price-premium">$200–$2,000/fixture</td></tr>
+        <tr><td><strong>Ceiling Fans</strong></td><td>56" DC motor, remote, 5 blade</td><td class="brand">Hunter / Big Ass Fans</td><td class="price-premium">$300–$800 installed</td></tr>
+      </table>
+    </div>
+  </div>
+
+  <!-- OUTDOOR -->
+  <div class="mat-section">
+    <div class="mat-header outdoor">
+      <div class="mat-title">🌿 Outdoor & Landscape</div>
+    </div>
+    <div class="mat-body">
+      <table>
+        <tr><th>Item</th><th>Premium Spec</th><th>Price Range</th></tr>
+        <tr><td><strong>Concrete/Flatwork</strong></td><td>Stamped or broom finish, colored</td><td class="price-premium">$12–$20/sq ft</td></tr>
+        <tr><td><strong>Patio/Deck</strong></td><td>Composite decking or pavers</td><td class="price-premium">$15–$35/sq ft</td></tr>
+        <tr><td><strong>Landscape</strong></td><td>Design + install, drought tolerant</td><td class="price-premium">$10,000–$50,000+</td></tr>
+        <tr><td><strong>Artificial Turf</strong></td><td>70 oz, 2" pile, pet friendly</td><td class="price-premium">$12–$20/sq ft installed</td></tr>
+        <tr><td><strong>Fence / Gate</strong></td><td>Cedar board-on-board or vinyl</td><td class="price-premium">$35–$75/linear ft</td></tr>
+        <tr><td><strong>Garage Door</strong></td><td>8-panel carriage style, insulated</td><td class="price-premium">$1,800–$4,500 installed</td></tr>
+      </table>
+    </div>
+  </div>
+
+  <h2>Preliminary Budget Summary — Typical Projects</h2>
+  <table class="summary-table">
+    <tr><th>Project Type</th><th>Budget Tier</th><th>Premium Tier</th><th>Luxury Tier</th></tr>
+    <tr><td><strong>Kitchen Remodel</strong></td><td>$45,000–$75,000</td><td>$75,000–$150,000</td><td>$150,000–$300,000+</td></tr>
+    <tr><td><strong>Bathroom (per bath)</strong></td><td>$20,000–$35,000</td><td>$35,000–$75,000</td><td>$75,000–$150,000</td></tr>
+    <tr><td><strong>Full Home Remodel</strong></td><td>$150,000–$300,000</td><td>$300,000–$600,000</td><td>$600,000–$1.5M+</td></tr>
+    <tr><td><strong>ADU (800 sq ft)</strong></td><td>$180,000–$250,000</td><td>$250,000–$400,000</td><td>$400,000–$600,000</td></tr>
+    <tr><td><strong>Room Addition</strong></td><td>$80,000–$150,000</td><td>$150,000–$300,000</td><td>$300,000–$500,000</td></tr>
+    <tr><td><strong>New Construction</strong></td><td>$400/sq ft</td><td>$600/sq ft</td><td>$900+/sq ft</td></tr>
+  </table>
+
+  <div class="alert red">
+    <div class="alert-title">Change Order Policy — Protect Your Margin</div>
+    All selections are made BEFORE construction begins and signed by the client. Any upgrade from the signed selection board = change order with 15% markup minimum. Any downgrade = client credit minus 10% restocking. No exceptions. BookkeeperBot tracks all change orders automatically.
+  </div>
+
+  <h2>System Connection — How This Wires Into RHDP17</h2>
+
+  <div class="step">
+    <div class="step-num">1</div>
+    <div>
+      <div class="step-title">Client enters address in Bay Area or Triangle Investment App</div>
+      <div class="step-desc">App pulls available grants for that address (CalHFA ADU, city programs, first-time buyer). Shows estimated home value increase from project. Shows available financing options from partner banks/credit unions.</div>
+    </div>
+  </div>
+
+  <div class="step">
+    <div class="step-num">2</div>
+    <div>
+      <div class="step-title">Client fills out intake form — project type + budget range</div>
+      <div class="step-desc">Morpheus assigns project type. ScheduleBot books a discovery call. CassieBot sends the selection board for the relevant project type (kitchen, bath, ADU, etc.).</div>
+    </div>
+  </div>
+
+  <div class="step">
+    <div class="step-num">3</div>
+    <div>
+      <div class="step-title">Client selects materials from this board</div>
+      <div class="step-desc">Default = premium tier. Client checks what they want to upgrade or downgrade. All selections saved in Supabase. BookkeeperBot calculates preliminary budget automatically.</div>
+    </div>
+  </div>
+
+  <div class="step">
+    <div class="step-num">4</div>
+    <div>
+      <div class="step-title">RichardHaro Bot generates preliminary contract</div>
+      <div class="step-desc">Based on selections + square footage + project type. Contract includes material allowances, labor estimates, timeline, and payment schedule tied to milestones. Client signs → project starts.</div>
+    </div>
+  </div>
+
+  <div class="step">
+    <div class="step-num">5</div>
+    <div>
+      <div class="step-title">ScheduleBot assigns subcontractors + orders materials</div>
+      <div class="step-desc">Based on the selection board, ScheduleBot knows which subs are needed (plumber, electrician, tile setter, painter, etc.). Materials ordered from approved vendors. Timeline built. All in Outlook calendar.</div>
+    </div>
+  </div>
+
+  <div class="footer">
+    <span>RHDP17 — PREMIUM MATERIAL SELECTION BOARD — JUNE 2026</span>
+    <span>CONFIDENTIAL — FOR INTERNAL AND CLIENT USE</span>
+  </div>
+</div>
+</</body>
+</html>

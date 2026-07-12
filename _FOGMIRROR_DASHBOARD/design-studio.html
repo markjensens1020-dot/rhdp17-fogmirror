@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Fog Mirror · Design Studio</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:'Inter',-apple-system,Segoe UI,sans-serif;color:#e8edf6;font-weight:400;-webkit-font-smoothing:antialiased;padding:16px 20px 70px;
+       background:radial-gradient(1200px 620px at 12% -12%,#13233f 0,transparent 55%),radial-gradient(1000px 520px at 100% -5%,#1b1136 0,transparent 52%),#04060c}
+  a{color:inherit;text-decoration:none}
+  .top{display:flex;align-items:center;gap:14px;background:rgba(13,20,36,.72);backdrop-filter:blur(14px);border:1px solid #22304e;border-radius:14px;padding:13px 18px;margin-bottom:14px;flex-wrap:wrap;box-shadow:0 8px 32px rgba(0,0,0,.45)}
+  .brand{font-weight:600;letter-spacing:1px;font-size:17px;white-space:nowrap;background:linear-gradient(90deg,#5ec8f0,#a78bfa);-webkit-background-clip:text;background-clip:text;color:transparent;text-shadow:0 0 20px rgba(120,150,255,.4)}
+  .brand small{display:block;font-weight:500;color:#566280;font-size:9.5px;letter-spacing:2.5px}
+  select{background:#0a101d;color:#dfe7f3;border:1px solid #233050;border-radius:9px;padding:10px 13px;font-size:13.5px;font-family:inherit}
+  .acts{display:flex;gap:8px;flex-wrap:wrap;margin-left:auto}
+  .acts button{border:1px solid #233050;border-radius:9px;background:rgba(15,24,48,.7);backdrop-filter:blur(6px);color:#cdd8ea;font-weight:500;font-size:12.5px;padding:10px 13px;cursor:pointer;transition:.2s;font-family:inherit}
+  .acts button:hover{background:#16264a;border-color:#4a7bd0;box-shadow:0 0 16px rgba(74,123,208,.5);color:#fff;transform:translateY(-1px)}
+  .acts a.home{border:1px solid #24406a;border-radius:9px;background:#132038;color:#bcd2f0;font-weight:500;font-size:12.5px;padding:10px 13px;display:inline-block}
+
+  .hero{display:flex;gap:14px;flex-wrap:wrap;align-items:center;background:rgba(12,19,34,.7);backdrop-filter:blur(10px);border:1px solid #20304e;border-radius:14px;padding:15px 18px;margin-bottom:16px}
+  .hero .pj{flex:1;min-width:220px}
+  .hero .pj h2{font-size:19px;font-weight:600}
+  .hero .pj p{font-size:12.5px;color:#7c89a4;margin-top:3px;font-weight:300}
+  .hero .phase{font-size:12px;color:#8aa0c8;margin-top:9px;font-weight:300}
+  .hero .phase b{color:#bcd2f0;font-weight:500}
+  .mini{display:flex;gap:10px;flex-wrap:wrap}
+  .card{background:rgba(10,16,32,.8);border:1px solid #22324e;border-radius:11px;padding:9px 14px;min-width:118px}
+  .card .k{font-size:9.5px;letter-spacing:1.5px;color:#566280;font-weight:500}
+  .card .v{font-size:15px;font-weight:500;margin-top:4px}
+  .card .v.big{font-size:30px;font-weight:600;color:#7c9cff;text-shadow:0 0 22px rgba(124,156,255,.5)}
+
+  .robots{display:flex;gap:10px;overflow-x:auto;padding:4px 2px 12px}
+  .bot{flex:0 0 auto;width:128px;background:rgba(13,20,36,.7);backdrop-filter:blur(10px);border:1px solid #1c2840;border-radius:14px;padding:11px 8px;text-align:center;cursor:pointer;transition:.18s}
+  .bot:hover{transform:translateY(-4px);border-color:#3a5a90;box-shadow:0 0 26px rgba(90,140,230,.4)}
+  .bot .av{width:60px;height:60px;border-radius:50%;margin:0 auto;display:flex;align-items:center;justify-content:center;font-size:20px;font-weight:600;background:#0e1830}
+  .bot .nm{font-weight:500;font-size:12.5px;margin-top:6px}
+  .bot .rl{font-size:10px;color:#7c89a4;margin-top:2px;font-weight:300}
+
+  .barwrap{position:relative;margin:6px 0 8px}
+  .obar{height:6px;background:rgba(255,255,255,.06);border-radius:4px;overflow:visible;position:relative}
+  .obar i{display:block;height:100%;border-radius:4px;background:linear-gradient(90deg,#38bdf8,#7c3aed)}
+  .obar .mk{position:absolute;top:-16px;transform:translateX(-50%);font-size:12px;font-weight:600;color:#9fb4ff;white-space:nowrap;text-shadow:0 0 10px rgba(124,156,255,.6)}
+  .stagelbl{font-size:11px;color:#8aa0c8;text-transform:uppercase;letter-spacing:.6px;margin:14px 0 6px;font-weight:500}
+  .track{display:flex;gap:0;border-radius:10px}
+  .cell{position:relative;flex:1;min-height:86px;cursor:pointer;padding:9px 9px;display:flex;flex-direction:column;justify-content:space-between;transition:.14s;border-right:1px solid rgba(0,0,0,.28)}
+  .cell:first-child{border-radius:10px 0 0 10px}.cell:last-child{border-radius:0 10px 10px 0;border-right:none}
+  .cell:hover{filter:brightness(1.2) saturate(1.1);transform:translateY(-2px);z-index:30}
+  .cell.cur{box-shadow:0 0 0 2px #fff,0 0 22px rgba(124,156,255,.7);z-index:20}
+  .cell .top2{display:flex;justify-content:space-between;font-size:10.5px;font-weight:600}
+  .cell .lab{font-size:11.5px;font-weight:500;line-height:1.2}
+  .cell .money{font-size:9.5px;font-weight:600;margin-top:2px}
+  .fly{display:none;position:absolute;left:-1px;top:calc(100% + 7px);width:220px;background:#0c1426;border:1px solid #2a3b5e;border-radius:12px;box-shadow:0 16px 40px rgba(0,0,0,.6);padding:11px 13px;z-index:60;font-size:12px}
+  .cell:hover .fly{display:block}
+  .fly div{margin:3px 0;color:#cdd8ea}
+  .fly b{color:#8aa0c8;font-weight:500}
+  .handoff{margin-top:12px;text-align:center;font-size:12px;color:#8aa0c8;font-weight:300}
+  .handoff b{color:#54e08a;font-weight:500}
+
+  .panels{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:11px;margin-top:22px}
+  .panel{background:rgba(12,19,34,.7);backdrop-filter:blur(8px);border:1px solid #20304e;border-radius:12px;padding:14px;cursor:pointer;transition:.15s}
+  .panel:hover{border-color:#3a5a90;box-shadow:0 0 18px rgba(90,140,230,.25);transform:translateY(-2px)}
+  .panel .ic{font-size:20px}
+  .panel .t{font-weight:500;font-size:13.5px;margin-top:7px}
+  .panel .s{font-size:11px;color:#7c89a4;margin-top:2px;font-weight:300}
+  .note{margin-top:20px;font-size:12px;color:#7c89a4;font-weight:300;line-height:1.6;background:rgba(12,19,34,.5);border:1px solid #1c2840;border-radius:10px;padding:12px 14px}
+  .note b{color:#bcd2f0;font-weight:500}
+  #toast{position:fixed;left:50%;bottom:26px;transform:translateX(-50%) translateY(40px);background:#13203a;border:1px solid #2a3b5e;color:#fff;padding:12px 18px;border-radius:11px;font-size:13px;font-weight:400;opacity:0;transition:.25s;z-index:300}
+  #toast.on{opacity:1;transform:translateX(-50%) translateY(0)}
+  .permitrev{background:rgba(12,19,34,.7);backdrop-filter:blur(10px);border:1px solid #20304e;border-left:3px solid #38bdf8;border-radius:12px;padding:12px 16px;margin:2px 0 16px}
+  .permitrev .h{display:flex;align-items:center;gap:10px;flex-wrap:wrap;font-size:13.5px;font-weight:500}
+  .permitrev .st{margin-left:auto;font-size:11.5px;color:#8aa0c8;font-weight:300}
+  .permitrev .rounds{display:flex;gap:6px;flex-wrap:wrap;margin-top:10px;font-size:11px}
+  .permitrev .rounds span{padding:4px 9px;border-radius:999px;background:#0a1424;border:1px solid #1c2840;color:#9fb0cc}
+  .permitrev .rounds span.done{border-color:#22c55e;color:#54e08a}
+  .permitrev .rounds span.cur{border-color:#38bdf8;color:#9fd0ff;box-shadow:0 0 12px rgba(56,189,248,.4)}
+  .permitrev button{margin-top:11px;background:#132038;border:1px solid #24406a;color:#bcd2f0;border-radius:9px;padding:9px 14px;font-size:12.5px;cursor:pointer;font-family:inherit}
+  .permitrev button:hover{background:#1b2f4f;border-color:#4a7bd0}
+  .navbar{display:flex;gap:8px;flex-wrap:wrap;margin:-4px 0 16px}
+  .navbar a{background:rgba(15,24,48,.7);backdrop-filter:blur(6px);border:1px solid #233050;border-radius:9px;color:#cdd8ea;font-size:12.5px;font-weight:500;padding:9px 14px;transition:.2s}
+  .navbar a:hover{background:#16264a;border-color:#4a7bd0;box-shadow:0 0 14px rgba(74,123,208,.45);color:#fff;transform:translateY(-1px)}
+  .navbar a.on{background:#1b2f4f;border-color:#4a7bd0;color:#fff}
+</style>
+</head>
+<body><div id="fmClientBox" style="display:flex;align-items:center;gap:9px;flex-wrap:wrap;margin:10px 0 6px;padding:9px 13px;background:#0e1b31;border:1px solid #2a4a7a;border-radius:10px;max-width:600px"><span style="font-size:12px;font-weight:800;color:#9fb8e6;letter-spacing:.4px">📁 CLIENT</span><input id="fmClientSel" list="fmClientList" placeholder="Type a client name…" autocomplete="off" style="flex:1;min-width:180px;background:#0a101d;color:#dfe7f3;border:1px solid #4a7bd0;border-radius:8px;padding:8px 11px;font-size:13px"><datalist id="fmClientList"></datalist><a href="#" onclick="fmPickClient('All Projects');return false;" style="font-size:11px;color:#8aa0c8;text-decoration:none">show all</a><span id="fmClientNote" style="font-size:11.5px;color:#9fb0cc;font-weight:600"></span></div><script>window._fmProjects=window._fmProjects||[];function fmMatch(v){var names=(window._fmProjects||[]).map(function(p){return p.name;});if(!v||v.toLowerCase()==="all projects")return "All Projects";var m=names.filter(function(n){return n.toLowerCase()===v.toLowerCase();});if(!m.length)m=names.filter(function(n){return n.toLowerCase().indexOf(v.toLowerCase())>=0;});return m.length?m[0]:v;}function fmStat(name){var n=document.getElementById("fmClientNote");if(!n)return;if(name==="All Projects"||!name){n.textContent="all customers";return;}var r=(window._fmProjects||[]).filter(function(p){return p.name===name;});n.textContent=name+(r.length?(" · "+(r[0].phase||"")+" · "+(r[0].pct||0)+"%"):"");}function fmPickClient(v){var ap=fmMatch(v);var inp=document.getElementById("fmClientSel");if(inp)inp.value=(ap==="All Projects")?"":ap;fmStat(ap);}(function(){var A="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InFyd2x5b3dkenF6a2liZHp2b2VrIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzAyNDIyODEsImV4cCI6MjA4NTgxODI4MX0.5xurzQ0HUECk4_SxlcRdKG-5KCmyQ30b4jyCiyERAoU";var sel=document.getElementById("fmClientSel");if(!sel)return;var ap=(function(){try{return localStorage.getItem("rhdp17_active_project")||"All Projects";}catch(e){return "All Projects";}})();if(ap!=="All Projects")sel.value=ap;fetch("https://qrwlyowdzqzkibdzvoek.supabase.co/functions/v1/dashboard-data",{headers:{apikey:A,Authorization:"Bearer "+A}}).then(function(r){return r.json();}).then(function(d){if(!d||!d.projects)return;window._fmProjects=d.projects;var names=Array.from(new Set(d.projects.map(function(p){return p.name;}))).sort();var dl=document.getElementById("fmClientList");if(dl)dl.innerHTML=names.map(function(n){return "<option value=\""+n+"\">";}).join("");fmStat(ap);}).catch(function(){});sel.addEventListener("change",function(){fmPickClient(sel.value);});sel.addEventListener("keydown",function(e){if(e.key==="Enter"){fmPickClient(sel.value);}});})();</script>
+
+<div class="top">
+  <div class="brand">FOG MIRROR<small>DESIGN STUDIO</small></div>
+  <select id="proj" onchange="pick()">
+    <option>Castro Residence · 1640 Grand Teton Dr, Milpitas</option>
+    <option>Chung · 2131 San Rafael Ave</option>
+    <option>Haraguchi · 3208 Bluebird</option>
+    <option>Orquidea Negrete · JADU</option>
+  </select>
+  <div class="acts">
+    <a class="home" href="dashboard.html">◀ Main</a>
+    <button onclick="toast('Team view — all design projects & files')">👥 Team view</button>
+    <button onclick="toast('Customer view — this client sees only their slice')">🔑 Customer view</button>
+  </div>
+</div>
+
+<div class="navbar">
+  <a href="dashboard.html">🏠 Main</a>
+  <a class="on" href="design-studio.html">🎨 Design Studio</a>
+  <a href="construction.html">🏗️ Construction</a>
+  <a href="selectionboard.html">🎯 Selection Board</a>
+  <a href="clients.html">👥 Clients</a>
+  <a href="bidmanager.html">📋 Bid Manager</a>
+</div>
+
+<div class="hero">
+  <div class="pj">
+    <h2 id="pjname">Castro Residence</h2>
+    <p id="pjaddr">1640 Grand Teton Dr, Milpitas · Milpitas B-BP26-0056</p>
+    <div class="phase">Current stage: <b id="pjstage">Construction Documents</b> · working drawings in progress</div>
+  </div>
+  <div class="mini">
+    <div class="card"><div class="k">DESIGN COMPLETE</div><div class="v big" id="pjpct">74%</div></div>
+    <div class="card"><div class="k">DESIGN FEE</div><div class="v">$12,000</div></div>
+    <div class="card"><div class="k">COLLECTED</div><div class="v">$9,000 (75%)</div></div>
+    <div class="card"><div class="k">NEXT</div><div class="v">Permit submittal</div></div>
+  </div>
+</div>
+
+<div class="robots" id="robots"></div>
+
+<div class="permitrev">
+  <div class="h">🏛️ Permit Review — Plan Check &amp; Corrections
+    <span class="st">Milpitas · B-BP26-0056 · in review</span></div>
+  <div class="rounds">
+    <span class="done">Original ✓</span><span class="done">Resub 1 ✓</span><span class="done">Resub 2 ✓</span><span class="done">Resub 3 ✓</span><span class="cur">Resub 4 · in review</span><span>Resub 5</span><span>Permit Issued</span>
+  </div>
+  <button onclick="toast('Richard AI — Eyes: reading the city redline PDF and returning a plain-English correction list + fixes')">🔍 Review city corrections (Richard's Eyes)</button>
+</div>
+
+<div class="barwrap">
+  <div class="obar"><i id="ofill" style="width:74%"></i><span class="mk" id="omk" style="left:74%">74% design</span></div>
+</div>
+<div class="stagelbl">Design phase — Intake → Permit (hands off to construction)</div>
+<div class="track" id="track"></div>
+<div class="handoff">At <b>Permit Submittal</b> the baton passes to <b>Fog Mirror (Construction)</b> — Demo → Foundation → Framing → … → Final. No overlap.</div>
+
+<div class="panels" id="panels"></div>
+
+<div class="note">
+  <b>Same layout, two scopes.</b> Team view = every design project + all files + billing detail. Customer view = this client's stage, their Selection Board, their docs, read-only dates, their balance (25% / 50% / 25%), and the message thread — access by email. Live version reads Supabase <b>project_milestones</b>.
+</div>
+
+<div id="toast"></div>
+
+<script>
+const BOTS=[
+ {nm:'Cassie AI',rl:'Intake / Admin',ini:'CA',img:'cassie',c:'#a855f7'},
+ {nm:'Richard AI',rl:'Master Drafter',ini:'RI',img:'richard',c:'#ef4444'},
+ {nm:'Jesus AI',rl:'Drafter / Asst PM',ini:'JE',img:'jesus',c:'#2dd4bf'},
+ {nm:'Irma AI',rl:'Sales / Contracts',ini:'IR',img:'irma',c:'#f59e0b'},
+ {nm:'Raymond AI',rl:'Structural / Field',ini:'RA',img:'raymond',c:'#22c55e'},
+];
+document.getElementById('robots').innerHTML=BOTS.map(b=>`<div class="bot" onclick="toast('Talking to ${b.nm} — ${b.rl}')"><div class="av" style="border:2px solid ${b.c};overflow:hidden"><img src="${b.img}.jpg" alt="${b.nm}" style="width:100%;height:100%;object-fit:cover;display:block"></div><div class="nm">${b.nm}</div><div class="rl">${b.rl}</div></div>`).join('');
+
+const STAGES=[
+ {n:'Intake & Booking',money:'Retainer 25%',bot:'Cassie',binder:'Intake Binder',pct:100},
+ {n:'Site Check',money:'',bot:'Richard',binder:'Intake Binder',pct:100},
+ {n:'Schematic / Concept',money:'',bot:'Richard + Jesus',binder:'Design Set',pct:100},
+ {n:'Design Development',money:'',bot:'Richard',binder:'Design Set',pct:100},
+ {n:'Selection Board',money:'',bot:'Cassie + client',binder:'Selection Board',pct:100},
+ {n:'Client Approval',money:'50% due',bot:'Irma',binder:'Design Set',pct:100},
+ {n:'Construction Docs',money:'',bot:'Richard + Jesus',binder:'Permit Set',pct:70},
+ {n:'Structural / Title 24',money:'eng fee (pass-thru)',bot:'Raymond + partners',binder:'Consultants',pct:0},
+ {n:'Permit Submittal',money:'Final 25% after permit',bot:'Richard',binder:'Permit Set',pct:0},
+];
+function renderTrack(){
+ const n=STAGES.length, cur=STAGES.findIndex(s=>s.pct>0&&s.pct<100);
+ document.getElementById('track').innerHTML=STAGES.map((s,i)=>{
+   const done=s.pct===100, isCur=i===cur;
+   const L=done?52:(isCur?48:20), sat=done?70:(isCur?70:35);
+   const hue=Math.round(200-(i/(n-1))*70);
+   const bg=`hsl(${hue},${sat}%,${L}%)`;
+   const tc=L>45?'#0a1020':'hsl('+hue+',30%,80%)';
+   const chk=done?'✓':(isCur?s.pct+'%':'');
+   const money=s.money?`<div class="money" style="color:${done||isCur?'#ffe08a':'#8aa0c8'}">${s.money}</div>`:'';
+   return `<div class="cell ${isCur?'cur':''}" style="background:${bg};color:${tc}">
+     <div class="top2"><span>${i+1}</span><span>${chk}</span></div>
+     <div><div class="lab">${s.n}</div>${money}</div>
+     <div class="fly"><div><b>Lead:</b> ${s.bot}</div><div><b>Files:</b> ${s.binder}</div>${s.money?'<div><b>Money:</b> '+s.money+'</div>':''}<div><b>Status:</b> ${done?'Complete':(isCur?s.pct+'% done':'Upcoming')}</div></div>
+   </div>`;
+ }).join('');
+}
+renderTrack();
+const PANELS=[{ic:'\U0001F4CB',t:'Overview',s:'Stage, %, who is on it'},{ic:'\U0001F3AF',t:'Selection Board',s:'Client finish picks'},{ic:'\U0001F4D0',t:'Docs',s:'DWG + PDF plan sets'},{ic:'\U0001F4C5',t:'Schedule',s:'Expected dates (read-only)'},{ic:'\U0001F4B5',t:'Billing',s:'25% / 50% / 25%'},{ic:'✉️',t:'Messages',s:'Client back-and-forth'}];
+document.getElementById('panels').innerHTML=PANELS.map(p=>`<div class="panel" onclick="toast('Opening ${p.t}')"><div class="ic">${p.ic}</div><div class="t">${p.t}</div><div class="s">${p.s}</div></div>`).join('');
+function toast(m){const t=document.getElementById('toast');t.textContent=m;t.classList.add('on');clearTimeout(window._t);window._t=setTimeout(()=>t.classList.remove('on'),2400);}
+function pick(){toast('Loading '+document.getElementById('proj').value.split(' ·')[0]+' — live version pulls their milestones');}
+</script>
+<script src="./authgate.js" defer></script>
+</body>
+</html>

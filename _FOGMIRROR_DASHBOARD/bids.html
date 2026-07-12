@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Bid Command Center · RHDP17</title>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600&family=Spline+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<style>
+:root{--bg:#ece8df;--card:#f8f6f0;--ink:#1c1f26;--ink2:#3a4150;--mut:#9a8f78;--gold:#b6862c;--line:#ddd6c6;--ok:#1f8b5e;--red:#b5483f}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Spline Sans',Helvetica,Arial,sans-serif;background:var(--bg);color:var(--ink);min-height:100vh;padding:24px 14px}
+.wrap{max-width:860px;margin:0 auto}
+.head{display:flex;align-items:center;gap:12px;margin-bottom:18px}
+.rh{width:42px;height:42px;background:var(--ink);border-radius:11px;display:flex;align-items:center;justify-content:center;color:var(--gold);font-family:'Fraunces',serif;font-weight:600;font-size:15px}
+.head b{font-size:13px;font-weight:600}.head span{display:block;font-size:11px;color:var(--mut);letter-spacing:2px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:20px;margin-bottom:16px}
+h1{font-family:'Fraunces',serif;font-weight:600;font-size:26px;margin-bottom:2px}
+h2{font-family:'Fraunces',serif;font-weight:600;font-size:18px;margin:4px 0 10px}
+.tag{font-size:12.5px;color:var(--mut);margin-bottom:14px}
+table{width:100%;border-collapse:collapse;font-size:13px}
+th{text-align:left;color:#fff;background:var(--ink);padding:8px 9px;font-size:11px;font-weight:600}
+td{padding:8px 9px;border-bottom:1px solid var(--line);vertical-align:top}
+tr:nth-child(even) td{background:#fbf9f3}
+.reg{display:inline-block;font-weight:600;font-size:11px;color:#fff;background:var(--gold);border-radius:6px;padding:4px 8px;text-decoration:none}
+.pill{font-size:10px;color:var(--ink2);background:#efe9da;border-radius:20px;padding:2px 8px}
+.cap{background:#fff;border:1px solid var(--line);border-radius:12px;padding:14px;font-size:13px;line-height:1.6;white-space:pre-wrap}
+.btn{background:var(--ink);color:#fff;font-family:inherit;font-weight:700;font-size:13.5px;border:none;border-radius:10px;padding:10px 14px;cursor:pointer}
+.btn.gold{background:var(--gold)}
+.row{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
+input,select{font-family:inherit;font-size:14px;padding:9px 10px;border:1px solid var(--line);border-radius:9px;background:#fff;color:var(--ink)}
+.trk td{font-size:12.5px}
+.del{color:var(--red);cursor:pointer;font-weight:700;border:none;background:none;font-size:14px}
+.due{font-weight:600}.due.soon{color:var(--red)}
+.note{font-size:11.5px;color:var(--mut);margin-top:10px;line-height:1.5}
+.gate{display:none;text-align:center;padding:24px}.gate a{color:var(--gold);font-weight:600}
+.motto{text-align:center;font-family:'Fraunces',serif;font-style:italic;color:var(--gold);font-size:14px;margin-top:18px}
+</style>
+</head>
+<body>
+<div class="wrap">
+<div class="fm-launch" style="margin:0 0 16px;display:flex;gap:8px;flex-wrap:wrap;font-family:system-ui,Segoe UI,Arial,sans-serif"><a href="https://outlook.office.com/mail/" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:6px;text-decoration:none;background:#1c1f26;color:#fff;font-weight:700;font-size:13px;border-radius:10px;padding:9px 13px;border:1px solid rgba(255,255,255,.12)">📥 Outlook</a><a href="https://outlook.office.com/mail/deeplink/compose" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:6px;text-decoration:none;background:#1c1f26;color:#fff;font-weight:700;font-size:13px;border-radius:10px;padding:9px 13px;border:1px solid rgba(255,255,255,.12)">✉️ New Email</a><a href="https://teams.microsoft.com/" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:6px;text-decoration:none;background:#1c1f26;color:#fff;font-weight:700;font-size:13px;border-radius:10px;padding:9px 13px;border:1px solid rgba(255,255,255,.12)">💬 Teams</a><a href="https://outlook.office.com/calendar/view/week" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:6px;text-decoration:none;background:#1c1f26;color:#fff;font-weight:700;font-size:13px;border-radius:10px;padding:9px 13px;border:1px solid rgba(255,255,255,.12)">📅 Calendar</a><a href="https://to-do.office.com/tasks/" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:6px;text-decoration:none;background:#1c1f26;color:#fff;font-weight:700;font-size:13px;border-radius:10px;padding:9px 13px;border:1px solid rgba(255,255,255,.12)">✅ Tasks</a><a href="https://web.autocad.com/" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:6px;text-decoration:none;background:#1c1f26;color:#fff;font-weight:700;font-size:13px;border-radius:10px;padding:9px 13px;border:1px solid rgba(255,255,255,.12)">📐 AutoCAD</a><a href="./portals.html" style="display:inline-flex;align-items:center;gap:6px;text-decoration:none;background:#1c1f26;color:#fff;font-weight:700;font-size:13px;border-radius:10px;padding:9px 13px;border:1px solid rgba(255,255,255,.12)">🏛️ Portals</a><a href="./index.html" style="display:inline-flex;align-items:center;gap:6px;text-decoration:none;background:#1c1f26;color:#fff;font-weight:700;font-size:13px;border-radius:10px;padding:9px 13px;border:1px solid rgba(255,255,255,.12)">⌂ Dashboard</a><a href="./debrief.html" style="display:inline-flex;align-items:center;gap:6px;text-decoration:none;background:#1c1f26;color:#fff;font-weight:700;font-size:13px;border-radius:10px;padding:9px 13px;border:1px solid rgba(255,255,255,.12)">🌅 Debrief</a></div>
+
+  <div class="head"><div class="rh"><img src="./icons/logo.svg" alt="RHDP17" style="width:28px;height:28px;filter:invert(1)"></div><div><b>RHDP17 Bid Command Center</b><span>FOG MIRROR · GOV / CITY / COUNTY DRAFTING BIDS</span></div></div>
+
+  <div id="app" style="display:none">
+    <div class="card">
+      <h1>Where the drawing jobs are</h1>
+      <p class="tag">Register once on each portal under Architectural / Design / Drafting / Engineering categories → matching RFPs auto-notify you. Start with the ⭐ ones.</p>
+      <div style="overflow-x:auto">
+      <table id="agencies"><thead><tr><th>Region</th><th>Agency</th><th>Platform</th><th>Register</th></tr></thead><tbody></tbody></table>
+      </div>
+      <p class="note">For public-building work, confirm each RFP's licensing/stamp requirement — RHDP teams with the licensed engineer (and architect where required) for stamped scopes and bids the design/drafting/production role.</p>
+    </div>
+
+    <div class="card">
+      <h2>Firm capabilities statement (paste into registrations & SOQs)</h2>
+      <div class="cap" id="cap">Richard Haro Drafting and Planning, Inc. (RHDP17) is a residential design, drafting, and permit-processing firm with 45 years of experience serving the San Francisco Bay Area and the North Carolina Triangle. Founded by master drafter and designer Richard Haro, the firm delivers permit-ready construction documents, plan-check correction response, and design development for residential additions, remodels, ADUs, and community projects. RHDP17 partners with licensed structural engineers — and licensed architects where required — for stamped and engineered scopes, and pairs decades of hands-on drafting expertise with an in-house AI production platform for fast, accurate, code-current deliverables. Office: 2150 Mangin Way, San Jose, CA 95148 · 408-532-1755.</div>
+      <div class="row"><button class="btn gold" id="copycap">Copy capabilities statement</button></div>
+    </div>
+
+    <div class="card">
+      <h2>Opportunity tracker</h2>
+      <p class="tag">Add an RFP you find. Due dates turn red inside 7 days. Saved on this device.</p>
+      <div class="row">
+        <input id="t_ag" placeholder="Agency" style="flex:1;min-width:120px">
+        <input id="t_ti" placeholder="RFP title / #" style="flex:2;min-width:160px">
+        <input id="t_due" type="date" title="Due date">
+        <input id="t_link" placeholder="Link (optional)" style="flex:1;min-width:120px">
+        <button class="btn" id="t_add">+ Add</button>
+      </div>
+      <div style="overflow-x:auto;margin-top:12px">
+      <table class="trk" id="track"><thead><tr><th>Due</th><th>Agency</th><th>RFP</th><th>Status</th><th></th></tr></thead><tbody></tbody></table>
+      </div>
+    </div>
+  </div>
+
+  <div class="card gate" id="gate">
+    <h1>Staff sign-in</h1>
+    <p class="tag" style="margin-top:8px">Open the <a href="./index.html">Command Center</a> and sign in with your rhdpinc.com account to use the Bid Command Center.</p>
+  </div>
+  <div class="motto">Peace and prosperity through architecture.</div>
+</div>
+
+<script>
+const SUPA="https://qrwlyowdzqzkibdzvoek.supabase.co";
+const ANON="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InFyd2x5b3dkenF6a2liZHp2b2VrIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzAyNDIyODEsImV4cCI6MjA4NTgxODI4MX0.5xurzQ0HUECk4_SxlcRdKG-5KCmyQ30b4jyCiyERAoU";
+const sb=window.supabase.createClient(SUPA,ANON);
+const $=id=>document.getElementById(id);
+
+const AGENCIES=[
+ ["⭐ Bay Area","City of San José","Biddingo","https://www.biddingo.com/sanjose"],
+ ["⭐ Bay Area","County of Santa Clara","Biddingo / County Procurement","https://prc.santaclaracounty.gov/view-opportunities-and-active-contracts/view-current-solicitations"],
+ ["Bay Area","City of Santa Clara","City Finance / Purchasing","https://www.santaclaraca.gov/our-city/departments-a-f/finance/purchasing/bid-opportunities"],
+ ["⭐ Bay Area","City of Sunnyvale","PlanetBids","https://www.sunnyvale.ca.gov/business-and-development/bid-on-city-projects"],
+ ["⭐ Bay Area","City of Palo Alto","OpenGov Procurement","https://procurement.opengov.com/portal/palo-alto-ca"],
+ ["Bay Area","City of Milpitas","City Finance / Purchasing","https://www.milpitas.gov/264/Bid-Opportunities"],
+ ["Bay Area","City of Mountain View","City Purchasing (confirm portal)","https://www.mountainview.gov/"],
+ ["Bay Area","Town of Los Altos Hills","Town site (Santa Clara Co.)","https://www.losaltoshills.ca.gov/"],
+ ["Bay Area","County of San Mateo","OpenGov Procurement","https://www.smcgov.org/ceo/procurement"],
+ ["Bay Area","Metro aggregator","DemandStar","https://www.demandstar.com/"],
+ ["⭐ Triangle NC","State of NC (all agencies)","NC eVP","https://evp.nc.gov/"],
+ ["⭐ Triangle NC","Wake County","Bonfire","https://www.wake.gov/departments-government/finance/current-business-opportunities"],
+ ["Triangle NC","City of Raleigh","Raleigh Supplier Connection","https://raleighnc.gov/services/doing-business/become-city-vendor-or-supplier"]
+];
+const CATS="Architectural · Design · Drafting · Engineering";
+
+(async()=>{
+  const {data:{session}}=await sb.auth.getSession();
+  if(!session){ $('gate').style.display='block'; return; }
+  $('app').style.display='block';
+  render(); renderTrack();
+})();
+
+function render(){
+  const tb=$('agencies').querySelector('tbody'); tb.innerHTML='';
+  AGENCIES.forEach(a=>{
+    const tr=document.createElement('tr');
+    tr.innerHTML='<td>'+a[0]+'</td><td><b>'+a[1]+'</b><br><span class="pill">'+CATS+'</span></td><td>'+a[2]+'</td><td><a class="reg" href="'+a[3]+'" target="_blank" rel="noopener">Register →</a></td>';
+    tb.appendChild(tr);
+  });
+}
+$('copycap').onclick=()=>{ navigator.clipboard.writeText($('cap').innerText).then(()=>{$('copycap').textContent='Copied ✓';}); };
+
+const KEY='rhdp17_bids';
+const load=()=>{try{return JSON.parse(localStorage.getItem(KEY)||'[]')}catch(_){return[]}};
+const save=a=>localStorage.setItem(KEY,JSON.stringify(a));
+$('t_add').onclick=()=>{
+  const ag=$('t_ag').value.trim(), ti=$('t_ti').value.trim(), due=$('t_due').value, link=$('t_link').value.trim();
+  if(!ag||!ti){ return; }
+  const a=load(); a.push({ag,ti,due,link,status:'Watching'}); save(a);
+  $('t_ag').value='';$('t_ti').value='';$('t_due').value='';$('t_link').value='';
+  renderTrack();
+};
+function renderTrack(){
+  const tb=$('track').querySelector('tbody'); tb.innerHTML='';
+  const a=load().sort((x,y)=>(x.due||'9999').localeCompare(y.due||'9999'));
+  if(!a.length){ tb.innerHTML='<tr><td colspan="5" style="color:#9a8f78">No opportunities tracked yet — add one above.</td></tr>'; return; }
+  const now=Date.now();
+  a.forEach((o,i)=>{
+    const soon=o.due && (new Date(o.due).getTime()-now)<7*864e5;
+    const tr=document.createElement('tr');
+    tr.innerHTML='<td class="due'+(soon?' soon':'')+'">'+(o.due||'—')+'</td>'
+      +'<td>'+o.ag+'</td>'
+      +'<td>'+(o.link?'<a href="'+o.link+'" target="_blank" rel="noopener">'+o.ti+'</a>':o.ti)+'</td>'
+      +'<td><select data-i="'+i+'" class="st"><option>Watching</option><option>Drafting bid</option><option>Submitted</option><option>Won</option><option>Lost</option><option>Skip</option></select></td>'
+      +'<td><button class="del" data-d="'+i+'">✕</button></td>';
+    tb.appendChild(tr);
+    tr.querySelector('.st').value=o.status||'Watching';
+  });
+  tb.querySelectorAll('.del').forEach(b=>b.onclick=e=>{const a=load();a.splice(+e.target.dataset.d,1);save(a);renderTrack();});
+}
+renderTrack();
+</script>
+<script src="./fogwidget.js"></script>
+<script src="./authgate.js" defer></script>
+</body>
+</html>
