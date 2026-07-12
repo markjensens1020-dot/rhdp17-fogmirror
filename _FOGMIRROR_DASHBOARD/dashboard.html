@@ -361,6 +361,10 @@ document.getElementById('rows').innerHTML='<div class="pbar">'+['Intake','Design
 // All 15 customers wired to their real OneDrive Desktop folders (the live files).
 // Clicking copies the exact folder path and attempts to open it. Browsers block file:// from an
 // https page, so the path is copied to the clipboard for pasting into File Explorer as a fallback.
+// SharePoint = single source of truth. Paste the SharePoint library URL whose subfolders
+// are the customer folders (names must match CUSTFOLDER below). When set, the cards open
+// the shared SharePoint folder for the WHOLE TEAM. Leave "" to fall back to the local path.
+const SP_SITE="https://richardharodraftingand.sharepoint.com/sites/AllProjectsAlert";  // team SharePoint site = source of truth. Cards open a site-scoped search for the customer (robust to folder names). Set "" to fall back to the local path.
 const CUSTBASE="C:\\Users\\MarkJensen\\OneDrive - Richard Haro Drafting and Planning\\Desktop\\Christine Contract files\\Customers\\";
 const CUSTFOLDER={
  "Castro":"Castro","Chung":"Chung","Haraguchi":"Haraguchi","Bocian":"Bocian",
@@ -375,6 +379,7 @@ function custFileUrl(folder){
 function openCust(name){
  var folder=CUSTFOLDER[name];
  if(!folder){toast("No folder mapped for "+name);return;}
+ if(SP_SITE){window.open(SP_SITE.replace(/\/+$/,"")+"/_layouts/15/search.aspx/?q="+encodeURIComponent(name),"_blank");toast("Opening SharePoint \u00b7 "+name);return;}
  var winPath=CUSTBASE+folder;
  if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(winPath).catch(function(){});}
  try{window.open(custFileUrl(folder),"_blank");}catch(e){}

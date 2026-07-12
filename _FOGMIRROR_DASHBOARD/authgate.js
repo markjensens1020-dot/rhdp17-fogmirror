@@ -1,4 +1,4 @@
-/* RHDP17 · Fog Mirror — shared auth gate (v1)
+/* RHDP17 · Fog Mirror — shared auth gate (v1 + v98 token wiring)
    Include once per internal page, before </body>:  <script src="./authgate.js" defer></script>
    Reuses the existing Supabase Microsoft (azure) sign-in from index.html.
    Idempotent: no-ops on any page that already has its own #gate (e.g. index.html).
@@ -9,6 +9,27 @@
   if(document.getElementById('gate')) return;               // page self-gates already
   var SUPA="https://qrwlyowdzqzkibdzvoek.supabase.co";
   var ANON="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InFyd2x5b3dkenF6a2liZHp2b2VrIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzAyNDIyODEsImV4cCI6MjA4NTgxODI4MX0.5xurzQ0HUECk4_SxlcRdKG-5KCmyQ30b4jyCiyERAoU";
+
+  // v98 — route Supabase Edge Function calls through the signed-in user's access token
+  // when present (falls back to the anon key). Non-breaking today; the moment the edge
+  // functions require a real user JWT server-side, the whole dashboard keeps working with
+  // zero further page edits. See RHDP17_LOCKDOWN_STEP1.md.
+  (function(){
+    if(window.__fmFetchWrapped) return; window.__fmFetchWrapped=1;
+    var _f=window.fetch;
+    window.fetch=function(input,init){
+      try{
+        var url=(typeof input==='string')?input:((input&&input.url)||'');
+        if(url.indexOf('qrwlyowdzqzkibdzvoek.supabase.co/functions/')>=0){
+          init=init||{}; var h=new Headers(init.headers||{});
+          h.set('apikey',ANON);
+          h.set('Authorization','Bearer '+(window.__authToken||ANON));
+          init.headers=h;
+        }
+      }catch(e){}
+      return _f.call(this,input,init);
+    };
+  })();
 
   function loadSDK(cb){ var s=document.createElement('script'); s.src='https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2'; s.onload=cb; s.onerror=cb; document.head.appendChild(s); }
 
@@ -46,7 +67,7 @@
     window.signIn=function(){ sb.auth.signInWithOAuth({provider:'azure',options:{scopes:'email openid profile',redirectTo:location.origin+location.pathname}}).catch(function(){ alert('Sign-in could not start. Please try again.'); }); };
     window.signOut=function(){ sb.auth.signOut().catch(function(){}).then(function(){ location.replace(location.pathname); }); };
     function apply(session){
-      if(!session){ showGate(true); showChip(''); document.getElementById('achip').style.display='none'; return; }
+      if(!session){ showGate(true); var c=document.getElementById('achip'); if(c) c.style.display='none'; return; }
       var email=((session.user&&session.user.email)||'').toLowerCase();
       window.__authToken=session.access_token; window.__authEmail=email;
       showGate(false); showChip(email);
