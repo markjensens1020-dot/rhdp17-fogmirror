@@ -358,33 +358,10 @@ document.getElementById('rows').innerHTML='<div class="pbar">'+['Intake','Design
    </div></div>`;
 }).join('');
 
-// All 15 customers wired to their real OneDrive Desktop folders (the live files).
-// Clicking copies the exact folder path and attempts to open it. Browsers block file:// from an
-// https page, so the path is copied to the clipboard for pasting into File Explorer as a fallback.
-// SharePoint = single source of truth. Paste the SharePoint library URL whose subfolders
-// are the customer folders (names must match CUSTFOLDER below). When set, the cards open
-// the shared SharePoint folder for the WHOLE TEAM. Leave "" to fall back to the local path.
-const SP_SITE="https://richardharodraftingand.sharepoint.com/sites/AllProjectsAlert";  // team SharePoint site = source of truth. Cards open a site-scoped search for the customer (robust to folder names). Set "" to fall back to the local path.
-const CUSTBASE="C:\\Users\\MarkJensen\\OneDrive - Richard Haro Drafting and Planning\\Desktop\\Christine Contract files\\Customers\\";
-const CUSTFOLDER={
- "Castro":"Castro","Chung":"Chung","Haraguchi":"Haraguchi","Bocian":"Bocian",
- "Sanchez":"Sanchez","Balcunas":"Balcunas","Tolentino":"Tolentino","Hsieh":"Hsieh",
- "Orquidea Negrete":"Orquidea_Negrete","Buddhist Temple":"Buddhist_Temple_Huyen_Khong",
- "Tavares":"Tavares_Uvas_Rd","Chang":"Chang","Eckinger":"Eckinger",
- "Loukanov":"Loukanov","Kurt Apen":"Kurt_Apen"
-};
-function custFileUrl(folder){
- return "file:///C:/Users/MarkJensen/OneDrive%20-%20Richard%20Haro%20Drafting%20and%20Planning/Desktop/Christine%20Contract%20files/Customers/"+encodeURIComponent(folder);
-}
-function openCust(name){
- var folder=CUSTFOLDER[name];
- if(!folder){toast("No folder mapped for "+name);return;}
- if(SP_SITE){window.open(SP_SITE.replace(/\/+$/,"")+"/_layouts/15/search.aspx/?q="+encodeURIComponent(name),"_blank");toast("Opening SharePoint \u00b7 "+name);return;}
- var winPath=CUSTBASE+folder;
- if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(winPath).catch(function(){});}
- try{window.open(custFileUrl(folder),"_blank");}catch(e){}
- toast("\uD83D\uDCC1 "+name+" \u2014 folder path copied. Paste into File Explorer if it didn't open.");
-}
+// Paste each customer's real OneDrive "Copy link" URL here for direct folder jumps.
+const CUSTLINK={"Castro": "https://richardharodraftingand.sharepoint.com/sites/AllProjectsAlert/Shared Documents/RHDP DRAFTING PROJECTS 2025/Castro-Grand Teton 2025", "Chang": "https://richardharodraftingand.sharepoint.com/sites/AllProjectsAlert/Shared Documents/RHDP DRAFTING PROJECTS 2025/Chang-Sheraton 2025", "Bocian": "https://richardharodraftingand.sharepoint.com/sites/AllProjectsAlert/Shared Documents/RHDP DRAFTING PROJECTS 2025/1.NEW LEAD - Paul Bocian 2025", "Balcunas": "https://richardharodraftingand.sharepoint.com/sites/AllProjectsAlert/Shared Documents/RHDP DRAFTING PROJECTS 2025/Balcunas-O'Toole 2025", "Tolentino": "https://richardharodraftingand.sharepoint.com/sites/AllProjectsAlert/Shared Documents/RHDP DRAFTING PROJECTS 2025/Tolentino-S.Union 2025", "Orquidea Negrete": "https://richardharodraftingand.sharepoint.com/sites/AllProjectsAlert/Shared Documents/RHDP DRAFTING PROJECTS 2025/Negrete-Pittsfield 2025", "Buddhist Temple": "https://richardharodraftingand.sharepoint.com/sites/AllProjectsAlert/Shared Documents/RHDP DRAFTING PROJECTS 2025/Temple, Buddhist Church-Story Rd 2025"};
+const CUSTHOME="https://richardharodraftingand.sharepoint.com/sites/AllProjectsAlert/Shared Documents/RHDP DRAFTING PROJECTS 2025";
+function openCust(name){var u=CUSTLINK[name]||("https://richardharodraftingand.sharepoint.com/sites/AllProjectsAlert/_layouts/15/search.aspx/?q="+encodeURIComponent(name));window.open(u,"_blank");toast("Opening SharePoint · "+name);}
 const CUST=[
  ['Castro','1640 Grand Teton Dr, San Jose'],['Chung','2131 San Rafael Ave'],['Haraguchi','San Jose'],
  ['Bocian','Paseo Olivos Ct, Saratoga'],['Sanchez','Lanai Ave, San Jose'],['Balcunas','OToole Ave'],
