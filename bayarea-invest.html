@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Bay Area Investment</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:'Inter',system-ui,sans-serif;background:#070b14;color:#e8edf6;-webkit-font-smoothing:antialiased;padding:24px 16px 60px}
+  .card{max-width:640px;margin:0 auto;background:#0c1322;border:1px solid #1c2840;border-radius:18px;overflow:hidden;box-shadow:0 20px 60px rgba(0,0,0,.5)}
+  .hero{padding:24px;background:linear-gradient(135deg,#4f46e5,#0ea5a4);color:#fff}
+  .hero .k{font-size:11px;letter-spacing:.2em;text-transform:uppercase;opacity:.85}
+  .hero h2{font-size:24px;font-weight:600;margin-top:4px}
+  .hero p{font-size:13.5px;opacity:.92;margin-top:3px}
+  .cities{display:flex;flex-wrap:wrap;gap:6px;margin-top:14px}
+  .cities span{background:rgba(255,255,255,.16);padding:4px 11px;border-radius:999px;font-size:11.5px;backdrop-filter:blur(4px)}
+  .body{padding:22px;display:flex;flex-direction:column;gap:20px}
+  label{font-size:12.5px;color:#9fb0cc;font-weight:500;display:block;margin-bottom:6px}
+  .req{color:#f87171}
+  input[type=text],input[type=email],textarea{width:100%;background:#0a101d;border:1px solid #233050;color:#e8edf6;border-radius:9px;padding:10px 12px;font-size:14px;font-family:inherit}
+  textarea{resize:vertical}
+  .two{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+  @media(max-width:520px){.two{grid-template-columns:1fr}}
+  .sliderrow{display:flex;justify-content:space-between;align-items:baseline}
+  .sliderrow .v{font-size:14px;font-weight:600;font-variant-numeric:tabular-nums}
+  input[type=range]{width:100%;margin-top:10px;accent-color:#6366f1}
+  .projects{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+  @media(max-width:520px){.projects{grid-template-columns:1fr}}
+  .proj{display:flex;justify-content:space-between;align-items:center;border:1px solid #243150;background:#0a101d;border-radius:10px;padding:11px 12px;cursor:pointer;font-size:13.5px;transition:.15s}
+  .proj:hover{border-color:#3a4d78}
+  .proj.on{background:#4f46e5;border-color:transparent;color:#fff}
+  .proj .c{font-size:12px;opacity:.8;font-variant-numeric:tabular-nums}
+  .styles{display:flex;flex-wrap:wrap;gap:7px}
+  .sty{border:1px solid #243150;background:#0a101d;border-radius:999px;padding:6px 13px;font-size:12px;cursor:pointer;transition:.15s}
+  .sty:hover{border-color:#3a4d78}
+  .sty.on{background:#4f46e5;border-color:transparent;color:#fff}
+  .sep{height:1px;background:#1c2840;margin:2px 0}
+  .report{background:#0a1424;border:1px solid #1c2840;border-radius:14px;padding:18px}
+  .report .rh{display:flex;align-items:center;gap:7px;font-size:11px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:#8aa0c8}
+  .stats{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:14px}
+  .stat .l{font-size:11.5px;color:#8aa0c8}
+  .stat .v{font-size:19px;font-weight:600;margin-top:2px;font-variant-numeric:tabular-nums}
+  .stat .v.hl{color:#54e08a}
+  .abadge{display:inline-block;margin-top:14px;background:#132038;border:1px solid #24406a;color:#9fb0cc;font-size:11.5px;padding:5px 11px;border-radius:999px}
+  .submit{width:100%;background:#4f46e5;border:none;color:#fff;font-weight:600;font-size:15px;padding:14px;border-radius:12px;cursor:pointer;transition:.2s;font-family:inherit}
+  .submit:hover{background:#4338ca}
+  .submit:disabled{opacity:.6;cursor:default}
+  .foot{display:flex;align-items:center;justify-content:center;gap:6px;font-size:11.5px;color:#64748b}
+  .err{color:#f87171;font-size:12.5px}
+  .done{padding:44px 24px;text-align:center}
+  .done .chk{width:52px;height:52px;border-radius:50%;background:#4f46e5;display:flex;align-items:center;justify-content:center;margin:0 auto;font-size:26px}
+  .done h3{font-size:22px;font-weight:600;margin-top:16px}
+  .done p{font-size:13.5px;color:#9fb0cc;margin-top:8px}
+  .done .ref{font-size:12px;color:#64748b;margin-top:14px}
+</style>
+</head>
+<body>
+<div class="card" id="card">
+  <div class="hero">
+    <div class="k">BayVest Investment App</div>
+    <h2>Bay Area Investment</h2>
+    <p>San Francisco · Oakland · San Jose · Peninsula</p>
+    <div class="cities"><span>San Francisco</span><span>Oakland</span><span>San Jose</span><span>Berkeley</span><span>Palo Alto</span><span>Marin</span></div>
+  </div>
+  <div class="body">
+    <div class="two">
+      <div><label>Property ZIP</label><input type="text" id="zip" maxlength="12" placeholder="94110"></div>
+      <div><label>Email <span class="req">*</span></label><input type="email" id="email" maxlength="255" placeholder="you@email.com"></div>
+    </div>
+
+    <div>
+      <div class="sliderrow"><label style="margin:0">Current property value</label><span class="v" id="pvOut"></span></div>
+      <input type="range" id="pv" min="600000" max="4000000" step="25000" value="1450000">
+    </div>
+    <div>
+      <div class="sliderrow"><label style="margin:0">Square footage</label><span class="v" id="sfOut"></span></div>
+      <input type="range" id="sf" min="600" max="6000" step="50" value="2200">
+    </div>
+
+    <div>
+      <label>Project scope <span class="req">*</span></label>
+      <div class="projects" id="projects"></div>
+    </div>
+    <div>
+      <label>Cultural &amp; design styles</label>
+      <div class="styles" id="styles"></div>
+    </div>
+    <div>
+      <label>Tell us about your vision</label>
+      <textarea id="notes" rows="3" maxlength="2000" placeholder="Inspiration, must-haves, cultural elements, materials, timeline…"></textarea>
+    </div>
+
+    <div class="sep"></div>
+
+    <div class="report">
+      <div class="rh">📈 Hidden value report</div>
+      <div class="stats">
+        <div class="stat"><div class="l">Investment</div><div class="v" id="s_cost"></div></div>
+        <div class="stat"><div class="l">Projected value</div><div class="v hl" id="s_val"></div></div>
+        <div class="stat"><div class="l">Equity gain</div><div class="v" id="s_eq"></div></div>
+        <div class="stat"><div class="l">ROI</div><div class="v" id="s_roi"></div></div>
+        <div class="stat"><div class="l">5-yr appreciation</div><div class="v" id="s_5yr"></div></div>
+        <div class="stat"><div class="l">Est. monthly rent</div><div class="v" id="s_rent"></div></div>
+      </div>
+      <div class="abadge">Based on Bay Area avg 7.4% YoY appreciation</div>
+    </div>
+
+    <div id="err" class="err"></div>
+    <button class="submit" id="submit">Get my full Bay Area report →</button>
+    <p class="foot">🏠 BayVest · Bay Area Investment App</p>
+  </div>
+</div>
+
+<script>
+const SB_URL='https://qrwlyowdzqzkibdzvoek.supabase.co';
+const SB_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InFyd2x5b3dkenF6a2liZHp2b2VrIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzAyNDIyODEsImV4cCI6MjA4NTgxODI4MX0.5xurzQ0HUECk4_SxlcRdKG-5KCmyQ30b4jyCiyERAoU';
+const CFG={appreciation:7.4,rentMultiplier:0.0048};
+const PROJECTS=[{id:'kitchen',label:'Kitchen Remodel',uplift:0.85,cost:85000},{id:'bath',label:'Bath Remodel',uplift:0.7,cost:38000},{id:'adu',label:'ADU / In-law Unit',uplift:1.25,cost:280000},{id:'addition',label:'Addition / 2nd Story',uplift:1.1,cost:240000},{id:'outdoor',label:'Outdoor / Landscape',uplift:0.55,cost:45000},{id:'seismic',label:'Seismic Retrofit',uplift:0.35,cost:22000}];
+const STYLES=['Spanish Colonial','Mediterranean','Mid-Century Modern','Craftsman','Victorian','Japanese Zen','Modern Farmhouse','Contemporary','Coastal / Beach','Industrial Loft','Moroccan','Italian Villa','French Country','Scandinavian'];
+let selected=['kitchen','bath'], styles=[];
+const money=n=>n.toLocaleString('en-US',{style:'currency',currency:'USD',maximumFractionDigits:0});
+function calc(){const pv=+document.getElementById('pv').value, sf=+document.getElementById('sf').value;
+ const totalCost=selected.reduce((s,id)=>s+(PROJECTS.find(p=>p.id===id)?.cost||0),0);
+ const upliftPct=selected.reduce((s,id)=>s+(PROJECTS.find(p=>p.id===id)?.uplift||0),0)/10;
+ const valueAfter=pv*(1+upliftPct)+sf*18;
+ const equityGain=valueAfter-pv-totalCost;
+ const roi=totalCost>0?(equityGain/totalCost)*100:0;
+ const fiveYr=valueAfter*Math.pow(1+CFG.appreciation/100,5)-pv;
+ const monthlyRent=valueAfter*CFG.rentMultiplier;
+ return {pv,sf,totalCost,valueAfter,equityGain,roi,fiveYr,monthlyRent};}
+function render(){const r=calc();
+ document.getElementById('pvOut').textContent=money(r.pv);
+ document.getElementById('sfOut').textContent=r.sf.toLocaleString()+' sqft';
+ document.getElementById('s_cost').textContent=money(r.totalCost);
+ document.getElementById('s_val').textContent=money(r.valueAfter);
+ document.getElementById('s_eq').textContent=money(r.equityGain);
+ document.getElementById('s_roi').textContent=r.roi.toFixed(1)+'%';
+ document.getElementById('s_5yr').textContent=money(r.fiveYr);
+ document.getElementById('s_rent').textContent=money(r.monthlyRent);}
+document.getElementById('projects').innerHTML=PROJECTS.map(p=>`<div class="proj${selected.includes(p.id)?' on':''}" data-id="${p.id}"><span>${p.label}</span><span class="c">${money(p.cost)}</span></div>`).join('');
+document.getElementById('styles').innerHTML=STYLES.map(s=>`<div class="sty${styles.includes(s)?' on':''}" data-s="${s}">${s}</div>`).join('');
+document.getElementById('projects').addEventListener('click',e=>{const el=e.target.closest('.proj');if(!el)return;const id=el.dataset.id;selected=selected.includes(id)?selected.filter(x=>x!==id):[...selected,id];el.classList.toggle('on');render();});
+document.getElementById('styles').addEventListener('click',e=>{const el=e.target.closest('.sty');if(!el)return;const s=el.dataset.s;styles=styles.includes(s)?styles.filter(x=>x!==s):[...styles,s];el.classList.toggle('on');});
+document.getElementById('pv').addEventListener('input',render);
+document.getElementById('sf').addEventListener('input',render);
+render();
+
+document.getElementById('submit').addEventListener('click',async()=>{
+ const email=document.getElementById('email').value.trim(), zip=document.getElementById('zip').value.trim(), notes=document.getElementById('notes').value.trim();
+ const err=document.getElementById('err');err.textContent='';
+ if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)){err.textContent='Enter a valid email.';return;}
+ if(selected.length===0){err.textContent='Select at least one project type.';return;}
+ const r=calc();const btn=document.getElementById('submit');btn.disabled=true;btn.textContent='Sending…';
+ const id=crypto.randomUUID();
+ const body={id,source_app:'bayvest',region:'bay',email,zip:zip||null,notes:notes||null,property_value:r.pv,square_footage:r.sf,project_types:selected,cultural_styles:styles,estimate:{totalCost:r.totalCost,valueAfter:r.valueAfter,equityGain:r.equityGain,roiPct:r.roi,fiveYrAppreciation:r.fiveYr,estMonthlyRent:r.monthlyRent,appreciationRate:CFG.appreciation}};
+ try{const res=await fetch(SB_URL+'/rest/v1/intake_submissions',{method:'POST',headers:{'apikey':SB_KEY,'Authorization':'Bearer '+SB_KEY,'Content-Type':'application/json','Prefer':'return=minimal'},body:JSON.stringify(body)});
+  if(!res.ok)throw new Error('HTTP '+res.status);
+  document.getElementById('card').innerHTML='<div class="done"><div class="chk">✓</div><h3>Thank you!</h3><p>Your Bay Area property analysis has been sent. We\'ll follow up within 1 business day.</p><p class="ref">Reference: '+id.slice(0,8)+'</p></div>';
+ }catch(e){btn.disabled=false;btn.textContent='Get my full Bay Area report →';err.textContent='Submission failed — please try again.';}
+});
+</script>
+<script src="./authgate.js" defer></script>
+</body>
+</html>

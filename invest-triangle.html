@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>RHDP17 · Triangle Investment Studio</title>
+<meta name="robots" content="noindex,nofollow"/>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600&family=Spline+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<style>
+:root{--bg:#ece8df;--card:#f8f6f0;--ink:#1c1f26;--ink2:#3a4150;--mut:#9a8f78;--gold:#b6862c;--line:#ddd6c6;--teal:#1f6f63;--ok:#1f8b5e;--red:#b5483f}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Spline Sans',Helvetica,Arial,sans-serif;background:var(--bg);color:var(--ink);line-height:1.55;padding:24px 14px}
+.wrap{max-width:680px;margin:0 auto}
+.head{display:flex;align-items:center;gap:12px;margin-bottom:18px}
+.rh{width:42px;height:42px;background:var(--ink);border-radius:11px;display:flex;align-items:center;justify-content:center;color:var(--gold);font-family:'Fraunces',serif;font-weight:600;font-size:16px}
+.head b{font-size:13px;font-weight:600}.head span{display:block;font-size:11px;color:var(--mut);letter-spacing:2px}
+.eyebrow{font-size:11px;font-weight:600;letter-spacing:2.5px;color:var(--gold);text-transform:uppercase;margin-bottom:10px}
+h1{font-family:'Fraunces',serif;font-weight:600;font-size:30px;line-height:1.14;letter-spacing:-.4px;margin-bottom:10px}
+.lead{font-size:16px;color:var(--ink2);margin-bottom:8px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:22px;margin:16px 0}
+.card h2{font-family:'Fraunces',serif;font-size:21px;margin-bottom:4px}
+.card .k{font-size:11px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;color:var(--gold);margin-bottom:8px}
+.offer{background:#fff8e8;border:1px solid #e7d9ad;border-radius:14px;padding:18px;margin:16px 0}
+.offer b{color:#6b5a2e}
+.offer .small{font-size:13px;color:#6b5a2e;margin-top:6px}
+label{display:block;font-size:12.5px;font-weight:600;margin:14px 0 6px}
+input,select,textarea{width:100%;font-family:inherit;font-size:15px;color:var(--ink);background:#fff;border:1px solid var(--line);border-radius:11px;padding:13px 14px;outline:none}
+input:focus,select:focus,textarea:focus{border-color:var(--gold)}
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:6px}
+.chip{border:1px solid var(--line);background:#fff;border-radius:999px;padding:9px 14px;font-size:14px;cursor:pointer;user-select:none}
+.chip.on{background:var(--ink);color:#fff;border-color:var(--ink)}
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+@media(max-width:560px){.row2{grid-template-columns:1fr}h1{font-size:25px}}
+.btn{display:inline-block;width:100%;text-align:center;background:var(--gold);color:#fffaf0;font-family:inherit;font-weight:700;font-size:16px;border:none;border-radius:13px;padding:16px;cursor:pointer;margin-top:18px}
+.btn:disabled{opacity:.5;cursor:default}
+.btn.dark{background:var(--ink)}
+.parcel{background:#fff;border:1px solid var(--line);border-radius:12px;padding:14px;margin-top:10px;font-size:14px;display:none}
+.parcel .g{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.parcel .lbl{font-size:11px;color:var(--mut);text-transform:uppercase;letter-spacing:1px}
+.note{font-size:12.5px;color:var(--mut);margin-top:10px;line-height:1.5}
+.status{margin-top:14px;font-size:14px;text-align:center;min-height:20px}
+.status.ok{color:var(--ok);font-weight:600}.status.err{color:var(--red)}
+.disc{background:var(--card);border:1px solid var(--line);border-left:4px solid var(--gold);border-radius:12px;padding:14px 16px;font-size:13px;color:var(--ink2);margin:16px 0}
+.lender{display:flex;align-items:center;gap:10px;border:1px solid var(--line);background:#fff;border-radius:11px;padding:12px;margin-top:8px;cursor:pointer}
+.lender.on{border-color:var(--gold);background:#fffaf0}
+.lender input{width:auto}
+.motto{text-align:center;font-family:'Fraunces',serif;font-style:italic;color:var(--gold);font-size:16px;margin:22px 0 8px}
+</style>
+<link rel="manifest" href="./manifest.webmanifest"><meta name="theme-color" content="#1c1f26"><link rel="apple-touch-icon" href="./icons/icon-192.png">
+</head>
+<body>
+<div class="wrap">
+  <div class="head"><div class="rh">RH</div><div><b>Richard Haro Drafting &amp; Planning</b><span id="regionlabel">TRIANGLE INVESTMENT STUDIO</span></div></div>
+
+  <div class="eyebrow" id="serves">Cary · Raleigh · Apex · Holly Springs · Durham</div>
+  <h1>See your ADU or addition — before you build it.</h1>
+  <p class="lead">Enter your address and tell us your dream. We pull your lot's zoning, design what's possible, and help you fund it the smart way.</p>
+  <div style="display:flex;flex-wrap:wrap;gap:6px;margin:10px 0 2px;font-size:13px;font-weight:600;color:var(--ink)"><span>1 · Your address</span><span style="color:var(--mut)">→</span><span>2 · Your dream</span><span style="color:var(--mut)">→</span><span>3 · See it in 3D</span></div>
+  <div style="font-size:12.5px;color:var(--mut)">45 years · San Jose &amp; the Triangle · engineer-stamped structural · your info stays private</div>
+
+  <div class="offer">
+    <b>✨ 2 free 3D renderings</b> of your proposed ADU or addition — so you can <i>see</i> it before a wall ever moves.
+    <div class="small">After you send your project, <b>our team designs your 2 free renderings</b> (custom to your home) and reaches out — usually within a few days. Additional renderings, options &amp; full walkthroughs are <b>at-cost</b> (our actual cost, no markup).</div>
+  </div>
+
+  <!-- ADDRESS / PARCEL -->
+  <div class="card">
+    <div class="k">Step 1 · Your property</div>
+    <h2>Check what's possible at your address</h2>
+    <label for="addr">Property address</label>
+    <input id="addr" type="text" placeholder="123 Main St, Cary, NC 27511" autocomplete="street-address"/>
+    <button class="btn dark" id="lookup" type="button">Check my lot</button>
+    <div class="parcel" id="parcel"></div>
+    <div class="note" id="parcelnote"></div>
+  </div>
+
+  <!-- ONBOARDING -->
+  <div class="card">
+    <div class="k">Step 2 · Tell us your project</div>
+    <h2>Start your design intake</h2>
+    <div class="row2">
+      <div><label for="name">Your name</label><input id="name" type="text" placeholder="Jane Smith" autocomplete="name"/></div>
+      <div><label for="email">Email *</label><input id="email" type="email" placeholder="jane@email.com" autocomplete="email"/></div>
+    </div>
+    <div class="row2">
+      <div><label for="phone">Phone</label><input id="phone" type="tel" placeholder="(919) 555-0100" autocomplete="tel"/></div>
+      <div><label for="zip">ZIP</label><input id="zip" type="text" placeholder="27511"/></div>
+    </div>
+    <label>What are you dreaming of? (tap all that fit)</label>
+    <div class="chips" id="ptypes">
+      <span class="chip" data-v="ADU">ADU / backyard cottage</span>
+      <span class="chip" data-v="Addition">Home addition</span>
+      <span class="chip" data-v="Remodel">Remodel</span>
+      <span class="chip" data-v="New Build">New build</span>
+    </div>
+    <div class="row2">
+      <div><label for="pval">Approx. property value</label><input id="pval" type="text" inputmode="numeric" placeholder="$650,000"/></div>
+      <div><label for="sqft">Project size (sq ft)</label><input id="sqft" type="text" inputmode="numeric" placeholder="800"/></div>
+    </div>
+    <label for="notes">Anything else you want us to know?</label>
+    <textarea id="notes" rows="3" placeholder="Tell us about your vision, timeline, must-haves…"></textarea>
+  </div>
+
+  <!-- PRE-QUAL (safe handoff, no bank account/SSN stored) -->
+  <div class="card">
+    <div class="k">Step 3 · Funding (optional)</div>
+    <h2>Want help funding it?</h2>
+    <p class="lead" style="font-size:14.5px">Many additions &amp; ADUs are funded more affordably with a renovation or equity loan than a construction loan. Pick a lender you'd like us to connect you with — <b>no account numbers needed here.</b></p>
+    <p class="lead" style="font-size:13px;color:var(--mut)">We're a design firm, not a lender — we connect you to good local lenders and <b>state programs</b> (NC Housing Finance Agency) and design your project to be fundable. Ask us about owner-occupant "house-hack" options. Programs vary by area &amp; change — we verify what's current for you.</p>
+    <div id="lenders"></div>
+    <label class="lender" style="margin-top:12px"><input type="checkbox" id="consent"><span>Yes — RHDP17 may share my intake with the lender I picked so they can reach out about estimating my project buying power.</span></label>
+  </div>
+
+  <div class="card">
+    <div class="k">The play · investment models we design around</div>
+    <h2>Ways smart owners build value</h2>
+    <div style="font-size:14px;color:var(--ink2);line-height:1.6">
+      <p style="margin:6px 0"><b style="color:var(--ink)">House-Hack ADU.</b> Live in one space, rent the other — qualify as an owner-occupant (often less down, better rate).</p>
+      <p style="margin:6px 0"><b style="color:var(--ink)">Add-Value Remodel / Addition.</b> "Forced appreciation" — improve the home to raise its value on your terms, not the market's.</p>
+      <p style="margin:6px 0"><b style="color:var(--ink)">BRRRR.</b> Add value → refinance → reinvest into the next property.</p>
+      <p style="margin:6px 0" id="entryline"><b style="color:var(--ink)">Lower-entry Triangle.</b> Comparable homes here run ~70% less than the Bay Area — a friendlier place to start a portfolio.</p>
+      <p style="margin:6px 0" id="localline"><b style="color:var(--ink)">Local support.</b> Many NC cities, counties &amp; the state back new owners, ADUs &amp; property improvements — we check what's current for your address.</p>
+    </div>
+    <p class="note">General education — not financial, tax, or legal advice. Your lender, CPA &amp; attorney confirm what fits you.</p>
+  </div>
+  <div class="card">
+    <div class="k">Work with us · consulting</div>
+    <h2>Not sure where to start?</h2>
+    <p class="lead" style="font-size:14.5px">Book an <b>Opportunity Call — $250 (1 hr)</b>: we check what your lot allows, show what's possible, and map your next steps. Go further with a <b>Project Blueprint</b> (design concept + 2 free renderings + your business plan) or an <b>Investor Roadmap</b> (multi-property phasing + a house-hack strategy designed to your lot).</p>
+    <p class="note">Design, drafting, feasibility &amp; education — we connect the money, tax &amp; legal pieces to your licensed pros.</p>
+  </div>
+  <div class="card">
+    <div class="k">Optional · Investor track</div>
+    <h2>Thinking bigger than one project?</h2>
+    <label class="lender"><input type="checkbox" id="investor"><span>Yes — I want to build a rental portfolio (add value → refinance → repeat). Send me the free business plan.</span></label>
+    <div id="investorbox" style="display:none">
+      <p class="lead" style="font-size:14px;margin-top:12px">Smart move. Many investors use a <b>DSCR loan</b> (qualifies on the property's rental income, not your paycheck) plus the <b>BRRRR</b> approach — and we design the value-add that makes it work.</p>
+      <a class="btn dark" href="./RHDP17_Real_Estate_Plan.pdf" target="_blank" rel="noopener" style="width:auto;padding:13px 20px;text-decoration:none;display:inline-block">⬇ Download my business plan (PDF)</a>
+      <p class="note">RHDP17 is a design firm — not a lender, CPA, or attorney. Your professionals confirm the financing &amp; entity.</p>
+    </div>
+  </div>
+  <button class="btn" id="submit">Send my intake to RHDP17</button>
+  <div class="status" id="status"></div>
+
+  <div class="disc"><b>Important:</b> Richard Haro Drafting &amp; Planning provides residential <b>drafting, design, and project-planning services and general educational content only</b>. We are <b>not</b> a lender, mortgage broker, financial or investment advisor, CPA, attorney, or licensed general contractor. Nothing here is financial, tax, legal, or investment advice, and no result or return is promised. Real estate values can go down as well as up; grants &amp; programs change and may not be available in your area. Zoning/setback results are preliminary and verified by our team. Renderings beyond the 2 free are at-cost. Always confirm your situation with your own licensed professionals.</div>
+  <div class="motto">Peace and prosperity through architecture.</div>
+</div>
+
+<script>
+const SUPA="https://qrwlyowdzqzkibdzvoek.supabase.co";
+const ANON="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InFyd2x5b3dkenF6a2liZHp2b2VrIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzAyNDIyODEsImV4cCI6MjA4NTgxODI4MX0.5xurzQ0HUECk4_SxlcRdKG-5KCmyQ30b4jyCiyERAoU";
+// ===== REGION CONFIG (clone this file + change only this block for Bay Area) =====
+const REGION={
+  key:"triangle",
+  label:"Triangle Investment Studio",
+  serves:"Cary · Raleigh · Apex · Holly Springs · Durham",
+  region_name:"Triangle (NC)",
+  county_gis:"https://maps.raleighnc.gov/iMAPS/",
+  lenders:["State Employees' Credit Union (SECU)","Coastal Credit Union","Bank of America","Wells Fargo"]
+};
+// ================================================================================
+const sb=window.supabase.createClient(SUPA,ANON);
+const $=id=>document.getElementById(id);
+// region text
+$('regionlabel').textContent=REGION.label.toUpperCase();
+$('serves').textContent=REGION.serves;
+document.title='RHDP17 · '+REGION.label;
+
+// lenders -> single-pick list
+$('lenders').innerHTML=REGION.lenders.map(n=>`<label class="lender"><input type="radio" name="lender" value="${String(n).replace(/"/g,'&quot;')}"><span>${n}</span></label>`).join('');
+document.querySelectorAll('#lenders .lender input').forEach(inp=>inp.onchange=()=>{
+ document.querySelectorAll('#lenders .lender').forEach(l=>l.classList.remove('on'));
+ if(inp.checked) inp.closest('.lender').classList.add('on');
+});
+
+// project-type chips (multi-select)
+const picks=new Set();
+document.querySelectorAll('#ptypes .chip').forEach(c=>c.onclick=()=>{
+ c.classList.toggle('on');
+ const v=c.dataset.v; if(c.classList.contains('on'))picks.add(v); else picks.delete(v);
+});
+
+// investor track toggle
+$('investor').onchange=e=>{ $('investorbox').style.display=e.target.checked?'block':'none'; };
+
+// "Check my lot" -> open the county GIS (full parcel automation lands later)
+$('lookup').onclick=()=>{
+ const a=($('addr').value||'').trim();
+ const p=$('parcel'); p.style.display='block';
+ p.innerHTML='<b>Opening your county map…</b><div class="lbl" style="margin-top:6px">Our team pulls your exact zoning &amp; setbacks when we design your free renderings.</div>';
+ $('parcelnote').textContent=a?('Address noted: '+a):'Tip: type your address first for the fastest turnaround.';
+ if(REGION.county_gis) window.open(REGION.county_gis,'_blank','noopener');
+};
+
+// helpers
+function money(v){const n=parseFloat(String(v||'').replace(/[^0-9.]/g,''));return isFinite(n)?n:null;}
+function intify(v){const n=parseInt(String(v||'').replace(/[^0-9]/g,''),10);return isFinite(n)?n:null;}
+
+// submit -> intake_submissions (anon insert allowed)
+$('submit').onclick=async()=>{
+ const email=($('email').value||'').trim();
+ const st=$('status');
+ if(!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)){ st.className='status err'; st.textContent='Please enter a valid email so we can send your 2 free renderings.'; $('email').focus(); return; }
+ const lender=(document.querySelector('#lenders .lender input:checked')||{}).value||'';
+ const noteParts=[];
+ if($('name').value.trim())noteParts.push('Name: '+$('name').value.trim());
+ if($('phone').value.trim())noteParts.push('Phone: '+$('phone').value.trim());
+ if(lender)noteParts.push('Lender pick: '+lender+($('consent').checked?' (consented to share)':' (no share consent)'));
+ if($('investor').checked)noteParts.push('Investor track: wants rental-portfolio plan');
+ if($('notes').value.trim())noteParts.push($('notes').value.trim());
+ const payload={
+  source_app:'invest-'+REGION.key,
+  region:REGION.region_name,
+  email:email,
+  zip:($('zip').value||'').trim()||null,
+  property_value:money($('pval').value),
+  square_footage:intify($('sqft').value),
+  project_types:[...picks],
+  cultural_styles:[],
+  notes:noteParts.join(' | ')||null,
+  estimate:{lender:lender,consent:!!$('consent').checked,investor:!!$('investor').checked},
+  status:'new'
+ };
+ st.className='status'; st.textContent='Sending…'; $('submit').disabled=true;
+ try{
+  const r=await fetch(SUPA+'/rest/v1/intake_submissions',{method:'POST',
+   headers:{'Content-Type':'application/json','apikey':ANON,'Authorization':'Bearer '+ANON,'Prefer':'return=minimal'},
+   body:JSON.stringify(payload)});
+  if(!r.ok)throw new Error('HTTP '+r.status);
+  st.className='status ok'; st.textContent='✓ Sent! Our team will design your 2 free renderings and reach out within a few days.';
+  $('submit').textContent='Sent ✓';
+ }catch(e){
+  st.className='status err'; st.textContent='Something went wrong sending your intake — please email us directly and we\'ll jump on it.'; $('submit').disabled=false;
+ }
+};
+</script>
+<script src="./authgate.js" defer></script>
+</body>
+</html>

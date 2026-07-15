@@ -1,0 +1,987 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>RHDP17 — Customer Onboarding</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --gold: #c8973a;
+  --gold-light: #f0d080;
+  --dark: #0d0d0d;
+  --surface: #141414;
+  --surface2: #1e1e1e;
+  --surface3: #282828;
+  --border: rgba(200,151,58,0.2);
+  --text: #f0ede8;
+  --text-muted: #888;
+  --green: #2d6a4f;
+  --green-light: #52b788;
+  --red: #c0392b;
+  --blue: #1a3a5c;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  font-family: 'DM Sans', sans-serif;
+  background: var(--dark);
+  color: var(--text);
+  min-height: 100vh;
+  position: relative;
+  overflow-x: hidden;
+}
+
+body::before {
+  content: '';
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: 
+    radial-gradient(ellipse at 20% 20%, rgba(200,151,58,0.06) 0%, transparent 60%),
+    radial-gradient(ellipse at 80% 80%, rgba(26,58,92,0.08) 0%, transparent 60%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* HEADER */
+.header {
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+  padding: 0 40px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 70px;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.logo {
+  font-family: 'DM Serif Display', serif;
+  font-size: 18pt;
+  color: var(--gold);
+  letter-spacing: 2px;
+}
+
+.logo span {
+  color: var(--text);
+  font-size: 11pt;
+  font-family: 'DM Sans', sans-serif;
+  font-weight: 300;
+  letter-spacing: 4px;
+  text-transform: uppercase;
+  margin-left: 12px;
+  opacity: 0.6;
+}
+
+.header-right {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.form-status {
+  font-family: 'DM Mono', monospace;
+  font-size: 9pt;
+  color: var(--gold);
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  background: rgba(200,151,58,0.1);
+  padding: 6px 14px;
+  border-radius: 20px;
+  border: 1px solid var(--border);
+}
+
+/* HERO */
+.hero {
+  padding: 60px 40px 40px;
+  max-width: 900px;
+  margin: 0 auto;
+  position: relative;
+  z-index: 1;
+}
+
+.hero-eyebrow {
+  font-family: 'DM Mono', monospace;
+  font-size: 9pt;
+  color: var(--gold);
+  letter-spacing: 4px;
+  text-transform: uppercase;
+  margin-bottom: 16px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.hero-eyebrow::before {
+  content: '';
+  width: 30px;
+  height: 1px;
+  background: var(--gold);
+}
+
+.hero h1 {
+  font-family: 'DM Serif Display', serif;
+  font-size: 42pt;
+  line-height: 1.05;
+  margin-bottom: 16px;
+  color: var(--text);
+}
+
+.hero h1 em {
+  color: var(--gold);
+  font-style: italic;
+}
+
+.hero p {
+  font-size: 13pt;
+  color: var(--text-muted);
+  line-height: 1.7;
+  max-width: 560px;
+}
+
+/* PROGRESS */
+.progress-bar {
+  max-width: 900px;
+  margin: 0 auto 40px;
+  padding: 0 40px;
+  position: relative;
+  z-index: 1;
+}
+
+.progress-steps {
+  display: flex;
+  gap: 0;
+  position: relative;
+}
+
+.progress-steps::before {
+  content: '';
+  position: absolute;
+  top: 18px;
+  left: 18px;
+  right: 18px;
+  height: 1px;
+  background: var(--surface3);
+}
+
+.progress-step {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  position: relative;
+}
+
+.progress-dot {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: var(--surface2);
+  border: 2px solid var(--surface3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'DM Mono', monospace;
+  font-size: 11pt;
+  font-weight: 500;
+  color: var(--text-muted);
+  position: relative;
+  z-index: 1;
+  transition: all 0.3s;
+}
+
+.progress-step.active .progress-dot {
+  background: var(--gold);
+  border-color: var(--gold);
+  color: var(--dark);
+  box-shadow: 0 0 20px rgba(200,151,58,0.4);
+}
+
+.progress-step.done .progress-dot {
+  background: var(--green);
+  border-color: var(--green);
+  color: white;
+}
+
+.progress-label {
+  font-size: 9pt;
+  color: var(--text-muted);
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  text-align: center;
+  font-family: 'DM Mono', monospace;
+}
+
+.progress-step.active .progress-label { color: var(--gold); }
+
+/* FORM */
+.form-container {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 0 40px 80px;
+  position: relative;
+  z-index: 1;
+}
+
+.form-section {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  margin-bottom: 24px;
+  overflow: hidden;
+  transition: border-color 0.3s;
+}
+
+.form-section:focus-within {
+  border-color: rgba(200,151,58,0.5);
+}
+
+.section-header {
+  padding: 24px 28px 20px;
+  border-bottom: 1px solid var(--surface3);
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.section-icon {
+  width: 40px;
+  height: 40px;
+  border-radius: 8px;
+  background: rgba(200,151,58,0.1);
+  border: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18pt;
+  flex-shrink: 0;
+}
+
+.section-title {
+  font-family: 'DM Serif Display', serif;
+  font-size: 16pt;
+  color: var(--text);
+}
+
+.section-sub {
+  font-size: 10pt;
+  color: var(--text-muted);
+  margin-top: 2px;
+}
+
+.section-body {
+  padding: 28px;
+}
+
+.field-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+}
+
+.field-grid.three {
+  grid-template-columns: 1fr 1fr 1fr;
+}
+
+.field-grid.full {
+  grid-template-columns: 1fr;
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.field.span2 {
+  grid-column: span 2;
+}
+
+.field label {
+  font-family: 'DM Mono', monospace;
+  font-size: 9pt;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+
+.field label .req {
+  color: var(--gold);
+  margin-left: 2px;
+}
+
+.field input,
+.field select,
+.field textarea {
+  background: var(--surface2);
+  border: 1px solid var(--surface3);
+  border-radius: 6px;
+  padding: 12px 16px;
+  color: var(--text);
+  font-family: 'DM Sans', sans-serif;
+  font-size: 11pt;
+  transition: all 0.2s;
+  outline: none;
+  width: 100%;
+}
+
+.field input:focus,
+.field select:focus,
+.field textarea:focus {
+  border-color: var(--gold);
+  background: var(--surface3);
+  box-shadow: 0 0 0 3px rgba(200,151,58,0.1);
+}
+
+.field select {
+  appearance: none;
+  cursor: pointer;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23888' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 14px center;
+  padding-right: 36px;
+}
+
+.field textarea {
+  resize: vertical;
+  min-height: 100px;
+}
+
+.field input::placeholder,
+.field textarea::placeholder {
+  color: var(--text-muted);
+  opacity: 0.5;
+}
+
+/* RADIO GROUP */
+.radio-group {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.radio-option {
+  position: relative;
+}
+
+.radio-option input {
+  position: absolute;
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.radio-option label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 18px;
+  background: var(--surface2);
+  border: 1px solid var(--surface3);
+  border-radius: 6px;
+  cursor: pointer;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 11pt;
+  color: var(--text-muted);
+  letter-spacing: 0;
+  text-transform: none;
+  transition: all 0.2s;
+}
+
+.radio-option input:checked + label {
+  background: rgba(200,151,58,0.1);
+  border-color: var(--gold);
+  color: var(--gold);
+}
+
+/* CHECKBOX GROUP */
+.check-group {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+
+.check-option {
+  position: relative;
+}
+
+.check-option input {
+  position: absolute;
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.check-option label {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 16px;
+  background: var(--surface2);
+  border: 1px solid var(--surface3);
+  border-radius: 6px;
+  cursor: pointer;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 11pt;
+  color: var(--text-muted);
+  letter-spacing: 0;
+  text-transform: none;
+  transition: all 0.2s;
+}
+
+.check-option label::before {
+  content: '';
+  width: 18px;
+  height: 18px;
+  border: 1.5px solid var(--surface3);
+  border-radius: 4px;
+  flex-shrink: 0;
+  transition: all 0.2s;
+}
+
+.check-option input:checked + label {
+  background: rgba(200,151,58,0.08);
+  border-color: var(--gold);
+  color: var(--text);
+}
+
+.check-option input:checked + label::before {
+  background: var(--gold);
+  border-color: var(--gold);
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='10' viewBox='0 0 12 10'%3E%3Cpath d='M1 5l3.5 3.5L11 1' stroke='%230d0d0d' stroke-width='2' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: center;
+}
+
+/* DIVIDER */
+.field-divider {
+  grid-column: 1 / -1;
+  height: 1px;
+  background: var(--surface3);
+  margin: 8px 0;
+}
+
+/* SIGNATURE AREA */
+.signature-area {
+  border: 2px dashed var(--surface3);
+  border-radius: 8px;
+  height: 120px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  gap: 8px;
+  cursor: pointer;
+  transition: all 0.2s;
+  background: var(--surface2);
+}
+
+.signature-area:hover {
+  border-color: var(--gold);
+  background: rgba(200,151,58,0.05);
+}
+
+.signature-area .icon { font-size: 24pt; }
+.signature-area p { font-size: 10pt; color: var(--text-muted); }
+
+/* SUBMIT AREA */
+.submit-area {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 28px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 20px;
+}
+
+.submit-note {
+  font-size: 10pt;
+  color: var(--text-muted);
+  line-height: 1.6;
+  max-width: 400px;
+}
+
+.submit-note strong {
+  color: var(--text);
+  display: block;
+  margin-bottom: 4px;
+  font-size: 11pt;
+}
+
+.btn-group {
+  display: flex;
+  gap: 12px;
+  flex-shrink: 0;
+}
+
+.btn {
+  padding: 14px 28px;
+  border-radius: 6px;
+  font-family: 'DM Sans', sans-serif;
+  font-weight: 700;
+  font-size: 11pt;
+  cursor: pointer;
+  border: none;
+  letter-spacing: 1px;
+  transition: all 0.2s;
+}
+
+.btn-secondary {
+  background: var(--surface2);
+  color: var(--text-muted);
+  border: 1px solid var(--surface3);
+}
+
+.btn-secondary:hover {
+  border-color: var(--gold);
+  color: var(--gold);
+}
+
+.btn-primary {
+  background: var(--gold);
+  color: var(--dark);
+  font-weight: 900;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+}
+
+.btn-primary:hover {
+  background: var(--gold-light);
+  transform: translateY(-1px);
+  box-shadow: 0 8px 24px rgba(200,151,58,0.3);
+}
+
+/* SUCCESS STATE */
+.success-banner {
+  display: none;
+  background: rgba(45,106,79,0.15);
+  border: 1px solid var(--green-light);
+  border-radius: 12px;
+  padding: 28px;
+  text-align: center;
+  margin-bottom: 24px;
+}
+
+.success-banner.show { display: block; }
+.success-banner .icon { font-size: 36pt; margin-bottom: 12px; }
+.success-banner h3 { font-family: 'DM Serif Display', serif; font-size: 20pt; color: var(--green-light); margin-bottom: 8px; }
+.success-banner p { color: var(--text-muted); font-size: 11pt; }
+
+/* FIELD HINT */
+.field-hint {
+  font-size: 9pt;
+  color: var(--text-muted);
+  opacity: 0.7;
+  margin-top: 2px;
+}
+
+@media (max-width: 700px) {
+  .field-grid, .field-grid.three { grid-template-columns: 1fr; }
+  .field.span2 { grid-column: span 1; }
+  .hero h1 { font-size: 28pt; }
+  .submit-area { flex-direction: column; }
+  .check-group { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="logo">RHDP17 <span>Client Portal</span></div>
+  <div class="header-right">
+    <div class="form-status">New Client Intake</div>
+  </div>
+</div>
+
+<div class="hero">
+  <div class="hero-eyebrow">Customer Onboarding Form</div>
+  <h1>Welcome to<br><em>Richard Haro</em><br>Drafting & Planning</h1>
+  <p>Tell us about your project and yourself. This takes about 5 minutes and gives Richard everything he needs to start your project right.</p>
+</div>
+
+<div class="progress-bar">
+  <div class="progress-steps">
+    <div class="progress-step active">
+      <div class="progress-dot">1</div>
+      <div class="progress-label">Client Info</div>
+    </div>
+    <div class="progress-step">
+      <div class="progress-dot">2</div>
+      <div class="progress-label">Project</div>
+    </div>
+    <div class="progress-step">
+      <div class="progress-dot">3</div>
+      <div class="progress-label">Details</div>
+    </div>
+    <div class="progress-step">
+      <div class="progress-dot">4</div>
+      <div class="progress-label">Budget</div>
+    </div>
+    <div class="progress-step">
+      <div class="progress-dot">5</div>
+      <div class="progress-label">Sign</div>
+    </div>
+  </div>
+</div>
+
+<div class="form-container">
+
+  <div class="success-banner" id="successBanner">
+    <div class="icon">✅</div>
+    <h3>You're All Set!</h3>
+    <p>Your onboarding form has been submitted. Richard will review your project details and contact you within 24 hours. A copy has been sent to Haroinc@rhdpinc.com.</p>
+  </div>
+
+  <form id="onboardingForm" onsubmit="handleSubmit(event)">
+
+    <!-- SECTION 1: CLIENT INFO -->
+    <div class="form-section">
+      <div class="section-header">
+        <div class="section-icon">👤</div>
+        <div>
+          <div class="section-title">Client Information</div>
+          <div class="section-sub">Your personal and contact details</div>
+        </div>
+      </div>
+      <div class="section-body">
+        <div class="field-grid">
+          <div class="field">
+            <label>First Name <span class="req">*</span></label>
+            <input type="text" placeholder="Joel" required>
+          </div>
+          <div class="field">
+            <label>Last Name <span class="req">*</span></label>
+            <input type="text" placeholder="Castro" required>
+          </div>
+          <div class="field">
+            <label>Phone Number <span class="req">*</span></label>
+            <input type="tel" placeholder="(408) 555-0000" required>
+          </div>
+          <div class="field">
+            <label>Email Address <span class="req">*</span></label>
+            <input type="email" placeholder="joel@email.com" required>
+          </div>
+          <div class="field">
+            <label>Best Time to Call</label>
+            <select>
+              <option value="">Select a time</option>
+              <option>Morning (8 AM – 12 PM)</option>
+              <option>Afternoon (12 PM – 5 PM)</option>
+              <option>Evening (5 PM – 8 PM)</option>
+              <option>Anytime</option>
+            </select>
+          </div>
+          <div class="field">
+            <label>Preferred Contact Method</label>
+            <div class="radio-group">
+              <div class="radio-option">
+                <input type="radio" name="contact" id="c1" value="phone">
+                <label for="c1">📞 Phone</label>
+              </div>
+              <div class="radio-option">
+                <input type="radio" name="contact" id="c2" value="text" checked>
+                <label for="c2">💬 Text</label>
+              </div>
+              <div class="radio-option">
+                <input type="radio" name="contact" id="c3" value="email">
+                <label for="c3">📧 Email</label>
+              </div>
+            </div>
+          </div>
+          <div class="field span2">
+            <label>Property Address <span class="req">*</span></label>
+            <input type="text" placeholder="1640 Grand Teton Drive, Milpitas, CA 95035" required>
+          </div>
+          <div class="field">
+            <label>City <span class="req">*</span></label>
+            <input type="text" placeholder="Milpitas" required>
+          </div>
+          <div class="field">
+            <label>Jurisdiction / Permit Office</label>
+            <input type="text" placeholder="City of Milpitas Building Dept.">
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SECTION 2: PROJECT TYPE -->
+    <div class="form-section">
+      <div class="section-header">
+        <div class="section-icon">🏗️</div>
+        <div>
+          <div class="section-title">Project Type</div>
+          <div class="section-sub">What are we building or designing?</div>
+        </div>
+      </div>
+      <div class="section-body">
+        <div class="field-grid full">
+          <div class="field">
+            <label>Project Type <span class="req">*</span></label>
+            <div class="radio-group">
+              <div class="radio-option"><input type="radio" name="ptype" id="p1" value="adu"><label for="p1">🏠 ADU</label></div>
+              <div class="radio-option"><input type="radio" name="ptype" id="p2" value="addition"><label for="p2">➕ Addition</label></div>
+              <div class="radio-option"><input type="radio" name="ptype" id="p3" value="remodel"><label for="p3">🔨 Remodel</label></div>
+              <div class="radio-option"><input type="radio" name="ptype" id="p4" value="newbuild"><label for="p4">🏗️ New Build</label></div>
+              <div class="radio-option"><input type="radio" name="ptype" id="p5" value="commercial"><label for="p5">🏢 Commercial</label></div>
+              <div class="radio-option"><input type="radio" name="ptype" id="p6" value="other"><label for="p6">📋 Other</label></div>
+            </div>
+          </div>
+          <div class="field-divider"></div>
+          <div class="field">
+            <label>Project Description <span class="req">*</span></label>
+            <textarea placeholder="Describe your project in detail. What do you want to build? What problem does it solve? Any special requirements?" required></textarea>
+          </div>
+          <div class="field-divider"></div>
+          <div class="field">
+            <label>Scope of Work — Check All That Apply</label>
+            <div class="check-group">
+              <div class="check-option"><input type="checkbox" id="s1"><label for="s1">Construction Drawings</label></div>
+              <div class="check-option"><input type="checkbox" id="s2"><label for="s2">Structural Engineering</label></div>
+              <div class="check-option"><input type="checkbox" id="s3"><label for="s3">Permit Filing</label></div>
+              <div class="check-option"><input type="checkbox" id="s4"><label for="s4">Title 24 / Energy Calcs</label></div>
+              <div class="check-option"><input type="checkbox" id="s5"><label for="s5">Site Plan</label></div>
+              <div class="check-option"><input type="checkbox" id="s6"><label for="s6">Construction Admin</label></div>
+              <div class="check-option"><input type="checkbox" id="s7"><label for="s7">Material Selection</label></div>
+              <div class="check-option"><input type="checkbox" id="s8"><label for="s8">3D LiDAR Scan (Twindo)</label></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SECTION 3: PROJECT DETAILS -->
+    <div class="form-section">
+      <div class="section-header">
+        <div class="section-icon">📐</div>
+        <div>
+          <div class="section-title">Project Details</div>
+          <div class="section-sub">Size, timeline, and existing conditions</div>
+        </div>
+      </div>
+      <div class="section-body">
+        <div class="field-grid three">
+          <div class="field">
+            <label>Estimated Square Footage</label>
+            <input type="number" placeholder="800">
+            <div class="field-hint">Approximate is fine</div>
+          </div>
+          <div class="field">
+            <label>Number of Stories</label>
+            <select>
+              <option value="">Select</option>
+              <option>1 Story</option>
+              <option>2 Stories</option>
+              <option>3+ Stories</option>
+            </select>
+          </div>
+          <div class="field">
+            <label>Number of Bedrooms</label>
+            <select>
+              <option value="">Select</option>
+              <option>Studio</option>
+              <option>1 Bedroom</option>
+              <option>2 Bedrooms</option>
+              <option>3 Bedrooms</option>
+              <option>4+ Bedrooms</option>
+              <option>N/A</option>
+            </select>
+          </div>
+          <div class="field">
+            <label>Target Start Date</label>
+            <input type="date">
+          </div>
+          <div class="field">
+            <label>Target Completion Date</label>
+            <input type="date">
+          </div>
+          <div class="field">
+            <label>Is Permit Already Filed?</label>
+            <div class="radio-group">
+              <div class="radio-option"><input type="radio" name="permit" id="pe1" value="yes"><label for="pe1">Yes</label></div>
+              <div class="radio-option"><input type="radio" name="permit" id="pe2" value="no"><label for="pe2">No</label></div>
+              <div class="radio-option"><input type="radio" name="permit" id="pe3" value="corrections"><label for="pe3">Corrections Pending</label></div>
+            </div>
+          </div>
+          <div class="field span2">
+            <label>Existing Permit Number (if any)</label>
+            <input type="text" placeholder="B-BP26-0056">
+          </div>
+          <div class="field">
+            <label>Zoning District (if known)</label>
+            <input type="text" placeholder="R-1, R-2, C-1...">
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SECTION 4: BUDGET -->
+    <div class="form-section">
+      <div class="section-header">
+        <div class="section-icon">💰</div>
+        <div>
+          <div class="section-title">Budget & Financing</div>
+          <div class="section-sub">Confidential — helps us right-size your project</div>
+        </div>
+      </div>
+      <div class="section-body">
+        <div class="field-grid">
+          <div class="field">
+            <label>Total Project Budget</label>
+            <select>
+              <option value="">Select range</option>
+              <option>Under $50,000</option>
+              <option>$50,000 – $100,000</option>
+              <option>$100,000 – $200,000</option>
+              <option>$200,000 – $500,000</option>
+              <option>$500,000 – $1,000,000</option>
+              <option>Over $1,000,000</option>
+              <option>Not sure yet</option>
+            </select>
+          </div>
+          <div class="field">
+            <label>How Are You Financing?</label>
+            <select>
+              <option value="">Select</option>
+              <option>Cash / Savings</option>
+              <option>Construction Loan</option>
+              <option>Home Equity (HELOC)</option>
+              <option>SBA Loan</option>
+              <option>ADU Loan</option>
+              <option>Still figuring it out</option>
+            </select>
+          </div>
+          <div class="field span2">
+            <label>Additional Budget Notes</label>
+            <textarea placeholder="Any constraints, phasing plans, or other financial details we should know about..." style="min-height:70px;"></textarea>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SECTION 5: HOW DID YOU FIND US -->
+    <div class="form-section">
+      <div class="section-header">
+        <div class="section-icon">🔍</div>
+        <div>
+          <div class="section-title">How Did You Find Us?</div>
+          <div class="section-sub">Optional — helps us improve our outreach</div>
+        </div>
+      </div>
+      <div class="section-body">
+        <div class="field-grid full">
+          <div class="field">
+            <label>Referral Source</label>
+            <div class="radio-group">
+              <div class="radio-option"><input type="radio" name="source" id="src1" value="referral"><label for="src1">👥 Referral</label></div>
+              <div class="radio-option"><input type="radio" name="source" id="src2" value="google"><label for="src2">🔍 Google</label></div>
+              <div class="radio-option"><input type="radio" name="source" id="src3" value="yelp"><label for="src3">⭐ Yelp</label></div>
+              <div class="radio-option"><input type="radio" name="source" id="src4" value="email"><label for="src4">📧 Email Campaign</label></div>
+              <div class="radio-option"><input type="radio" name="source" id="src5" value="social"><label for="src5">📱 Social Media</label></div>
+              <div class="radio-option"><input type="radio" name="source" id="src6" value="past"><label for="src6">🏠 Past Client</label></div>
+            </div>
+          </div>
+          <div class="field">
+            <label>Referred By (name, if applicable)</label>
+            <input type="text" placeholder="Name of person who referred you">
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SECTION 6: SIGNATURE -->
+    <div class="form-section">
+      <div class="section-header">
+        <div class="section-icon">✍️</div>
+        <div>
+          <div class="section-title">Authorization & Signature</div>
+          <div class="section-sub">Authorize RHDP17 to begin your project consultation</div>
+        </div>
+      </div>
+      <div class="section-body">
+        <div class="field-grid full">
+          <div class="field">
+            <label>I authorize Richard Haro Drafting and Planning to:</label>
+            <div class="check-group" style="grid-template-columns:1fr;">
+              <div class="check-option"><input type="checkbox" id="auth1" required><label for="auth1">Review my project details and contact me to discuss scope and fees</label></div>
+              <div class="check-option"><input type="checkbox" id="auth2" required><label for="auth2">Store my information securely in the RHDP17 system</label></div>
+              <div class="check-option"><input type="checkbox" id="auth3"><label for="auth3">Send me project updates and communications via my preferred contact method</label></div>
+            </div>
+          </div>
+          <div class="field-divider"></div>
+          <div class="field-grid">
+            <div class="field">
+              <label>Full Legal Name <span class="req">*</span></label>
+              <input type="text" placeholder="Joel Castro" required>
+            </div>
+            <div class="field">
+              <label>Date <span class="req">*</span></label>
+              <input type="date" required>
+            </div>
+            <div class="field span2">
+              <label>Digital Signature — Type your full name to sign</label>
+              <input type="text" placeholder="Type your full name here as your digital signature" style="font-style:italic;font-size:14pt;">
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SUBMIT -->
+    <div class="submit-area">
+      <div class="submit-note">
+        <strong>Ready to submit?</strong>
+        Your information goes directly to Richard and Cassie at Haroinc@rhdpinc.com. You'll hear back within 24 hours. All information is kept strictly confidential.
+      </div>
+      <div class="btn-group">
+        <button type="button" class="btn btn-secondary" onclick="window.print()">🖨️ Print</button>
+        <button type="submit" class="btn btn-primary">Submit →</button>
+      </div>
+    </div>
+
+  </form>
+</div>
+
+<script>
+function handleSubmit(e) {
+  e.preventDefault();
+  document.getElementById('successBanner').classList.add('show');
+  document.getElementById('onboardingForm').style.opacity = '0.5';
+  document.getElementById('onboardingForm').style.pointerEvents = 'none';
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+
+  // Update progress steps
+  document.querySelectorAll('.progress-step').forEach(s => {
+    s.classList.remove('active');
+    s.classList.add('done');
+    s.querySelector('.progress-dot').textContent = '✓';
+  });
+}
+
+// Progress step animation on scroll
+const sections = document.querySelectorAll('.form-section');
+const steps = document.querySelectorAll('.progress-step');
+
+function updateProgress() {
+  let current = 0;
+  sections.forEach((s, i) => {
+    if (s.getBoundingClientRect().top < window.innerHeight * 0.5) current = i;
+  });
+  steps.forEach((s, i) => {
+    s.classList.toggle('done', i < current);
+    s.classList.toggle('active', i === current);
+    if (i < current) s.querySelector('.progress-dot').textContent = '✓';
+    else s.querySelector('.progress-dot').textContent = i + 1;
+  });
+}
+
+window.addEventListener('scroll', updateProgress);
+</script>
+
+</body>
+</html>
