@@ -175,7 +175,7 @@ function renderTrack(){
  document.getElementById('track').innerHTML=STAGES.map((s,i)=>{
    const done=s.pct===100, isCur=i===cur;
    const L=done?52:(isCur?48:20), sat=done?70:(isCur?70:35);
-   const hue=Math.round(200-(i/(n-1))*70);
+   const hue=140;
    const bg=`hsl(${hue},${sat}%,${L}%)`;
    const tc=L>45?'#0a1020':'hsl('+hue+',30%,80%)';
    const chk=done?'✓':(isCur?s.pct+'%':'');
