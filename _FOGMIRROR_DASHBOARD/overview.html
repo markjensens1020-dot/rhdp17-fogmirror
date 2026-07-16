@@ -41,16 +41,16 @@ body{font-family:'Sora',system-ui,Arial,sans-serif;background:radial-gradient(11
 <script>
 var A="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InFyd2x5b3dkenF6a2liZHp2b2VrIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzAyNDIyODEsImV4cCI6MjA4NTgxODI4MX0.5xurzQ0HUECk4_SxlcRdKG-5KCmyQ30b4jyCiyERAoU";
 var PROC=[
- {name:'Design',hue:140,cur:3,pct:45,steps:['Intake','Measure/Scan','Concept','Selections','Working Dwgs','Engineering','Plan Set','Submit']},
- {name:'Selections',hue:40,cur:1,pct:20,steps:['Kickoff','Room-by-Room','Vendor Quotes','Client Approval','Ordered']},
- {name:'Bidding',hue:208,cur:0,pct:5,steps:['Scope','Invite Subs','Collect Bids','Compare','Award','Contracts']},
- {name:'Construction',hue:345,cur:-1,pct:0,steps:['Site Prep','Foundation','Framing','Rough Trades','Finishing','Inspections','Final']}
+ {name:'Design Progress',href:'./design.html',hue:140,cur:3,pct:45,steps:['Intake','Measure/Scan','Concept','Selections','Working Dwgs','Engineering','Plan Set','Submit']},
+ {name:'Selection Board Progress',href:'./selectionboard.html',hue:40,cur:1,pct:20,steps:['Kickoff','Room-by-Room','Vendor Quotes','Client Approval','Ordered']},
+ {name:'Bidding Progress',href:'./bidmanager.html',hue:208,cur:0,pct:5,steps:['Scope','Invite Subs','Collect Bids','Compare','Award','Contracts']},
+ {name:'Construction Progress',href:'./construction.html',hue:345,cur:-1,pct:0,steps:['Site Prep','Foundation','Framing','Rough Trades','Finishing','Inspections','Final']}
 ];
 function cc(state,hue){ if(state==='up')return 'hsl('+hue+',32%,22%)'; var gold=hue===40; if(state==='cur')return 'hsl('+hue+','+(gold?90:82)+'%,'+(gold?52:56)+'%)'; return 'hsl('+hue+','+(gold?88:80)+'%,'+(gold?46:50)+'%)'; }
 function render(){ document.getElementById('stack').innerHTML=PROC.map(function(p){
   var tiles=p.steps.map(function(s,i){ var st=i<p.cur?'done':(i===p.cur?'cur':'up'); var mk=st==='done'?'✓':(st==='cur'?'●':''); return '<div class="tlc '+(st==='cur'?'cur':'')+'"><div class="cell" style="background:'+cc(st,p.hue)+'">'+mk+'</div><div class="lab">'+s+'</div></div>'; }).join('');
   var started=p.cur>=0; var accent='hsl('+p.hue+','+(p.hue===40?86:70)+'%,'+(p.hue===40?52:56)+'%)';
-  return '<div class="proc" style="--c:'+accent+'"><div class="ph"><h2>'+p.name+'</h2><div class="pct">'+(started?p.pct:'—')+(started?'<small>%</small>':'')+'</div></div><div class="track">'+tiles+'</div>'+(started?'':'<div class="note">Not started yet for this customer.</div>')+'</div>';
+  return '<div class="proc" style="--c:'+accent+'"><div class="ph"><h2><a href="'+p.href+'" style="color:inherit;text-decoration:none">'+p.name+' <span style="opacity:.6;font-size:15px">↗</span></a></h2><div class="pct">'+(started?p.pct:'—')+(started?'<small>%</small>':'')+'</div></div><div class="track">'+tiles+'</div>'+(started?'':'<div class="note">Not started yet for this customer.</div>')+'</div>';
 }).join(''); }
 render();
 (function(){var sel=document.getElementById('custSel');var ap="";

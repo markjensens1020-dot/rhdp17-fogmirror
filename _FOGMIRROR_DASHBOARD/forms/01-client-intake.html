@@ -607,43 +607,43 @@ input[type="range"]::-webkit-slider-thumb {
       <div class="field">
         <label>Select All That Apply <span class="required">*</span></label>
         <div class="checkbox-group">
-          <label class="check-btn" onclick="toggleCheck(this)">
-            <input type="checkbox">
+          <label class="check-btn">
+            <input type="checkbox" onchange="syncCheck(this)">
             <div class="check-box"></div>
             🏠 Residential Remodel
           </label>
-          <label class="check-btn" onclick="toggleCheck(this)">
-            <input type="checkbox">
+          <label class="check-btn">
+            <input type="checkbox" onchange="syncCheck(this)">
             <div class="check-box"></div>
             🏗️ New Construction
           </label>
-          <label class="check-btn" onclick="toggleCheck(this)">
-            <input type="checkbox">
+          <label class="check-btn">
+            <input type="checkbox" onchange="syncCheck(this)">
             <div class="check-box"></div>
             🏢 Room Addition
           </label>
-          <label class="check-btn" onclick="toggleCheck(this)">
-            <input type="checkbox">
+          <label class="check-btn">
+            <input type="checkbox" onchange="syncCheck(this)">
             <div class="check-box"></div>
             🏠 ADU / Guest House
           </label>
-          <label class="check-btn" onclick="toggleCheck(this)">
-            <input type="checkbox">
+          <label class="check-btn">
+            <input type="checkbox" onchange="syncCheck(this)">
             <div class="check-box"></div>
             🏪 Commercial
           </label>
-          <label class="check-btn" onclick="toggleCheck(this)">
-            <input type="checkbox">
+          <label class="check-btn">
+            <input type="checkbox" onchange="syncCheck(this)">
             <div class="check-box"></div>
             🔧 Tenant Improvement
           </label>
-          <label class="check-btn" onclick="toggleCheck(this)">
-            <input type="checkbox">
+          <label class="check-btn">
+            <input type="checkbox" onchange="syncCheck(this)">
             <div class="check-box"></div>
             🏊 Pool / Hardscape
           </label>
-          <label class="check-btn" onclick="toggleCheck(this)">
-            <input type="checkbox">
+          <label class="check-btn">
+            <input type="checkbox" onchange="syncCheck(this)">
             <div class="check-box"></div>
             📋 Permit Only
           </label>
@@ -780,9 +780,8 @@ function selectRadio(el) {
   el.querySelector('input').checked = true;
 }
 
-function toggleCheck(el) {
-  el.classList.toggle('checked');
-  el.querySelector('input').checked = el.classList.contains('checked');
+function syncCheck(input) {
+  input.closest('.check-btn').classList.toggle('checked', input.checked);
 }
 
 function submitForm() {
