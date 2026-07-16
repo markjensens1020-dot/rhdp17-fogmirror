@@ -1,0 +1,34 @@
+{
+  "updated": "2026-07-16",
+  "note": "Which knowledge docs each Fog Mirror role-bot loads. Add a file here + list it below + push = the bot knows it. Served by Cloudflare; the edge function fetches these at runtime.",
+  "shared": [
+    "RHDP17_KNOWLEDGE_BASE_INDEX.md",
+    "RHDP17_How_The_System_Works.md",
+    "RHDP17_TEAM_GUIDE.md",
+    "RHDP17_Codes_and_Verification_Rule.md",
+    "RHDP17_Role_Knowledge_Map.md",
+    "_FILING_SYSTEM_GUIDE.md"
+  ],
+  "cassie": [
+    "RHDP17_Cassie_Checklist_Files_and_Subs.md",
+    "RHDP17_Subcontractor_Bid_Management.md",
+    "RHDP17_SubList_SouthBay_Castro_Bocian.md",
+    "RHDP17_Bid_Invitation_Template.md",
+    "RHDP17_Plans_to_PDF_Instructions.md"
+  ],
+  "maya": [
+    "RHDP17_Billing_With_Maya.md",
+    "RHDP17_Maya_Bookkeeping_Playbook.md",
+    "RHDP17_Contract_Standards_CSLB.md"
+  ],
+  "irma": [
+    "RHDP17_Contract_Standards_CSLB.md",
+    "RHDP17_Billing_With_Maya.md"
+  ],
+  "richard": [
+    "RHDP17_Setbacks_SantaClaraCounty.md",
+    "RHDP17_Setbacks_SanMateo_and_SF.md",
+    "RHDP17_BayArea_JobSite_Posting_Requirements.md",
+    "RHDP17_Codes_and_Verification_Rule.md"
+  ]
+}
