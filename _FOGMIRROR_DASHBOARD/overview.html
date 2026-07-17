@@ -89,6 +89,13 @@ var PROC=[
    {l:'Vendor Quotes',t:['Vendor quotes','Pricing']},
    {l:'Client Approval',t:['Client sign-off']},
    {l:'Ordered',t:['Order confirmations','Lead times']}
+ ]},
+ {name:'Bookkeeping',href:'./billing.html',hue:270,cur:-1,steps:[
+   {l:'Retainer 25%',t:['<a href="./forms.html">Invoice</a>','Fee schedule 25 / 50 / 25','Card auth form']},
+   {l:'Working Dwgs 50%',t:['Invoice (50%)','After design accepted']},
+   {l:'Permit 25%',t:['Invoice (25%)','At permit']},
+   {l:'Collections',t:['Payment reminders','Outstanding balances']},
+   {l:'Paid / Closed',t:['Record payment','Receipts','Month-end close']}
  ]}
 ];
 function cc(state,hue){ if(state==='up')return 'hsl('+hue+',30%,22%)'; var gold=hue===40; if(state==='cur')return 'hsl('+hue+','+(gold?92:84)+'%,'+(gold?54:57)+'%)'; return 'hsl('+hue+','+(gold?88:80)+'%,'+(gold?47:50)+'%)'; }
