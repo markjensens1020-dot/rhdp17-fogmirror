@@ -8,6 +8,12 @@ body{font-family:'Sora',system-ui,Arial,sans-serif;background:radial-gradient(11
 .fm-launch{display:flex;gap:12px;flex-wrap:wrap;margin-bottom:18px}
 .fm-launch a{display:inline-flex;align-items:center;gap:8px;text-decoration:none;background:#1c1f26;color:#fff;font-weight:800;font-size:15px;border-radius:13px;padding:14px 22px;border:1px solid rgba(255,255,255,.14)}
 .fm-launch a:hover{background:#2a2f3a}
+.bots{display:flex;gap:18px;flex-wrap:wrap;align-items:flex-start;margin:0 0 22px}
+.bots .lbl{width:100%;font-size:11px;letter-spacing:2px;color:#9fb8e6;font-weight:800;margin-bottom:4px}
+.bots a{text-decoration:none;text-align:center;color:#dfe7f3;width:74px}
+.bots img{width:66px;height:66px;border-radius:50%;object-fit:cover;border:2px solid rgba(255,255,255,.25);display:block;margin:0 auto 6px}
+.bots a:hover img{border-color:#5ec8f0;transform:translateY(-2px)}
+.bots span{font-size:12.5px;font-weight:700}
 .custhead{background:linear-gradient(135deg,rgba(94,200,240,.16),rgba(155,140,255,.12));border:1px solid rgba(255,255,255,.24);border-radius:18px;padding:22px 26px;margin-bottom:24px;display:flex;align-items:center;gap:20px;flex-wrap:wrap}
 .custhead .lbl{font-size:11px;letter-spacing:2.5px;color:#9fb8e6;font-weight:800}
 .custhead input{flex:1;min-width:240px;background:#0a101d;color:#fff;border:1px solid #4a7bd0;border-radius:10px;padding:14px 16px;font-size:16px;font-family:inherit}
@@ -42,6 +48,13 @@ body{font-family:'Sora',system-ui,Arial,sans-serif;background:radial-gradient(11
 <div class="wrap">
 <div class="fm-launch">
  <a href="https://outlook.office.com/mail/drafts" target="_blank" rel="noopener">📝 Drafts</a><a href="./forms.html">📋 Forms</a><a href="./mic.html">🎙️ Fog Mirror</a>
+</div>
+<div class="bots">
+ <div class="lbl">💬 TALK TO A BOT — click a face</div>
+ <a href="./mic.html?role=cassie"><img src="./cassie.jpg" alt="Cassie"><span>Cassie</span></a>
+ <a href="./mic.html?role=richard"><img src="./richard.jpg" alt="Richard"><span>Richard</span></a>
+ <a href="./mic.html?role=irma"><img src="./irma.jpg" alt="Irma"><span>Irma</span></a>
+ <a href="./mic.html?role=maya"><img src="./maya.jpg" alt="Maya"><span>Maya</span></a>
 </div>
 <div class="custhead">
   <div class="lbl">CUSTOMER</div>
