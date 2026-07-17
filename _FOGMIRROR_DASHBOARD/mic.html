@@ -121,8 +121,8 @@ async function handleTurn(msg){
   busy=true; avatar('speaking'); $('state').textContent="Thinking…"; $('note').textContent='';
   let reply="";
   try{
-    const r=await fetch(SUPA+"/functions/v1/coco-router",{ method:'POST', headers:{'Content-Type':'application/json','Authorization':'Bearer '+token,'apikey':ANON,'x-execution-depth':'0'}, body:JSON.stringify({message:msg,channel:'fog-mirror'}) });
-    const data=await r.json(); reply=data.response||data.error||'(no reply)'; if(data.agent) $('note').textContent='via '+data.agent;
+    const r=await fetch(SUPA+"/functions/v1/fog-mirror-chat",{ method:'POST', headers:{'Content-Type':'application/json','Authorization':'Bearer '+token,'apikey':ANON}, body:JSON.stringify({question:msg,role:'shared'}) });
+    const data=await r.json(); reply=data.answer||data.error||'(no reply)'; if(data.sources&&data.sources.length) $('note').innerHTML='Sources: '+data.sources.map(function(s){return '<a href="'+s.url+'" target="_blank" style="color:var(--gold)">'+(s.title||s.url)+'</a>';}).join(' &middot; ');
   }catch(err){ reply='Could not reach the brain: '+err.message; }
   $('reply').textContent=reply;
   if($('speak').checked && reply){ $('state').textContent="Speaking…"; await speak(reply); }
