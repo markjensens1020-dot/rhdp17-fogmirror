@@ -6,7 +6,7 @@
 body{font-family:'Sora',system-ui,Arial,sans-serif;background:radial-gradient(1100px 700px at 85% -12%,#1b1136,transparent 55%),radial-gradient(900px 600px at -10% 110%,rgba(94,200,240,.08),transparent 55%),#070b14;color:#fff;padding:18px 18px 90px;min-height:100vh}
 .wrap{max-width:1160px;margin:0 auto}
 .fm-launch{display:flex;gap:12px;flex-wrap:wrap;margin-bottom:18px}
-.fm-launch a{display:inline-flex;align-items:center;gap:8px;text-decoration:none;background:#1c1f26;color:#fff;font-weight:800;font-size:15px;border-radius:13px;padding:14px 22px;border:1px solid rgba(255,255,255,.14)}
+.fm-launch a{display:inline-flex;align-items:center;gap:10px;text-decoration:none;background:#1c1f26;color:#fff;font-weight:800;font-size:20px;border-radius:16px;padding:22px 34px;border:1px solid rgba(255,255,255,.14)}
 .fm-launch a:hover{background:#2a2f3a}
 .bots{display:flex;gap:18px;flex-wrap:wrap;align-items:flex-start;margin:0 0 22px}
 .bots .lbl{width:100%;font-size:11px;letter-spacing:2px;color:#9fb8e6;font-weight:800;margin-bottom:4px}
@@ -27,13 +27,14 @@ body{font-family:'Sora',system-ui,Arial,sans-serif;background:radial-gradient(11
 .proc .now{font-size:13px;color:#9fb0cc;font-weight:600}
 .proc .now b{color:var(--c)}
 /* the big color-coded status bar */
-.bar{display:flex;gap:4px;width:100%}
-.seg{flex:1;min-width:0;height:58px;border-radius:10px;position:relative;cursor:pointer;display:flex;align-items:center;justify-content:center;padding:0 6px;transition:.15s;overflow:visible}
+.pbar{height:12px;border-radius:7px;background:rgba(255,255,255,.09);overflow:hidden;margin-bottom:14px}
+.pbar i{display:block;height:100%;border-radius:7px}
+.bar{display:flex;gap:6px;width:100%}
+.seg{flex:1;min-width:0;height:76px;border-radius:13px;position:relative;cursor:pointer;display:flex;align-items:center;justify-content:center;padding:0 8px;transition:.15s;overflow:visible}
 .seg:hover{transform:translateY(-2px)}
-.seg .lab{font-size:11px;font-weight:800;color:#08101c;text-align:center;line-height:1.15;letter-spacing:.2px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;width:100%}
-.seg.up .lab{color:#aeb9d0}
+.seg .lab{font-size:14px;font-weight:800;color:#fff;text-shadow:0 1px 3px rgba(0,0,0,.55);text-align:center;line-height:1.15;letter-spacing:.2px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;width:100%}
 .seg.cur{outline:3px solid #fff;outline-offset:2px;z-index:2}
-.seg .tick{position:absolute;top:5px;left:7px;font-size:11px;font-weight:900;color:#08101c}
+.seg .tick{position:absolute;top:7px;left:9px;font-size:13px;font-weight:900;color:#fff;text-shadow:0 1px 2px rgba(0,0,0,.5)}
 /* hover popover — the tools for that step */
 .seg .pop{display:none;position:absolute;bottom:68px;left:50%;transform:translateX(-50%);width:230px;background:#0d1728;border:1px solid var(--c);border-radius:12px;padding:13px 14px;z-index:20;text-align:left;box-shadow:0 16px 40px rgba(0,0,0,.6)}
 .seg:hover .pop{display:block}
@@ -47,7 +48,7 @@ body{font-family:'Sora',system-ui,Arial,sans-serif;background:radial-gradient(11
 </style></head><body>
 <div class="wrap">
 <div class="fm-launch">
- <a href="https://outlook.office.com/mail/drafts" target="_blank" rel="noopener">📝 Drafts</a><a href="./forms.html">📋 Forms</a><a href="./mic.html">🎙️ Fog Mirror</a>
+ <a href="https://outlook.office.com/mail/drafts" target="_blank" rel="noopener">📝 Drafts</a><a href="https://teams.microsoft.com/" target="_blank" rel="noopener">💬 Teams</a><a href="https://outlook.office.com/mail/" target="_blank" rel="noopener">📥 Outlook</a><a href="https://web.autocad.com/" target="_blank" rel="noopener">📐 AutoCAD</a><a href="https://www.google.com" target="_blank" rel="noopener">🌐 Google</a><a href="./forms.html">📋 Forms</a>
 </div>
 <div class="bots">
  <div class="lbl">💬 TALK TO A BOT — click a face</div>
@@ -111,21 +112,24 @@ var PROC=[
    {l:'Paid / Closed',t:['Record payment','Receipts','Month-end close']}
  ]}
 ];
-function cc(state,hue){ if(state==='up')return 'hsl('+hue+',30%,22%)'; var gold=hue===40; if(state==='cur')return 'hsl('+hue+','+(gold?92:84)+'%,'+(gold?54:57)+'%)'; return 'hsl('+hue+','+(gold?88:80)+'%,'+(gold?47:50)+'%)'; }
+// light on the left -> darker hues to the right (across the natural process)
+function segColor(i,n,hue){ var gold=hue===40; var sat=gold?86:74; var l=Math.round(63-(i/Math.max(1,n-1))*32); return 'hsl('+hue+','+sat+'%,'+l+'%)'; }
 function render(){ document.getElementById('stack').innerHTML=PROC.map(function(p){
   var accent='hsl('+p.hue+','+(p.hue===40?86:70)+'%,'+(p.hue===40?54:58)+'%)';
-  var started=p.cur>=0;
-  var nowLabel = started ? ('On step: <b>'+p.steps[Math.min(p.cur,p.steps.length-1)].l+'</b>') : 'Not started yet';
+  var n=p.steps.length; var started=p.cur>=0;
+  var pct = started ? Math.round((p.cur/n)*100) : 0;
+  var nowLabel = started ? ('On step: <b>'+p.steps[Math.min(p.cur,n-1)].l+'</b> · '+pct+'%') : 'Not started yet';
   var segs=p.steps.map(function(s,i){
     var st=i<p.cur?'done':(i===p.cur?'cur':'up'); var mk=st==='done'?'✓':(st==='cur'?'●':'');
     var tips=s.t.map(function(x){return '<li>'+x+'</li>';}).join('');
-    return '<div class="seg '+st+'" style="background:'+cc(st,p.hue)+'">'
+    return '<div class="seg '+st+'" style="background:'+segColor(i,n,p.hue)+'">'
       +(mk?'<span class="tick">'+mk+'</span>':'')
       +'<span class="lab">'+s.l+'</span>'
       +'<div class="pop"><div class="pt">'+s.l+'</div><ul>'+tips+'</ul></div>'
     +'</div>';
   }).join('');
-  return '<div class="proc" style="--c:'+accent+'"><div class="ph"><h2><a href="'+p.href+'">'+p.name+' <span style="opacity:.55;font-size:16px">↗</span></a></h2><div class="now">'+nowLabel+'</div></div><div class="bar">'+segs+'</div></div>';
+  var bar='<div class="pbar"><i style="width:'+pct+'%;background:hsl('+p.hue+','+(p.hue===40?86:74)+'%,55%)"></i></div>';
+  return '<div class="proc" style="--c:'+accent+'"><div class="ph"><h2><a href="'+p.href+'">'+p.name+' <span style="opacity:.55;font-size:16px">↗</span></a></h2><div class="now">'+nowLabel+'</div></div>'+bar+'<div class="bar">'+segs+'</div></div>';
 }).join(''); }
 render();
 (function(){var sel=document.getElementById('custSel');var ap="";
