@@ -2,6 +2,7 @@
   "updated": "2026-07-16",
   "note": "Which knowledge docs each Fog Mirror role-bot loads. Add a file here + list it below + push = the bot knows it. Served by Cloudflare; the edge function fetches these at runtime.",
   "shared": [
+    "RHDP17_Skill_System_Brain.md",
     "RHDP17_KNOWLEDGE_BASE_INDEX.md",
     "RHDP17_How_The_System_Works.md",
     "RHDP17_New_Dashboard_Guide.md",
@@ -12,6 +13,7 @@
     "RHDP17_Codes_and_Verification_Rule.md",
     "RHDP17_Skill_Jurisdiction_Knowledge.md",
     "RHDP17_Role_Knowledge_Map.md",
+    "RHDP17_Project_Castro_ADU.md",
     "_FILING_SYSTEM_GUIDE.md"
   ],
   "cassie": [
@@ -32,6 +34,7 @@
   ],
   "richard": [
     "RHDP17_Skill_Richard_GC_Subcontractors.md",
+    "RHDP17_Skill_Richard_Read_Plans.md",
     "RHDP17_SubList_SouthBay_Castro_Bocian.md",
     "RHDP17_Subcontractor_Bid_Management.md",
     "RHDP17_Bid_Invitation_Template.md",
