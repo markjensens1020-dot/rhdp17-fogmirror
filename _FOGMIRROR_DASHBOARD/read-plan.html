@@ -36,4 +36,5 @@ document.getElementById('file').addEventListener('change',function(e){var f=e.ta
 async function go(){if(!dataUrl)return;var b=document.getElementById('go'),o=document.getElementById('out');b.disabled=true;o.textContent="Richard is reading the sheet…";try{var res=await fetch(FN,{method:'POST',headers:{'Content-Type':'application/json','apikey':ANON,'Authorization':'Bearer '+ANON},body:JSON.stringify({image:dataUrl})});var j=await res.json();o.textContent=j.answer||j.error||JSON.stringify(j);}catch(e){o.textContent="Error: "+e;}b.disabled=false;}
 </script>
 <script src="./authgate.js" defer></script>
+<script src="./readaloud.js" defer></script>
 </body></html>

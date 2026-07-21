@@ -128,7 +128,7 @@ async function handleTurn(msg){
 function clip(t){ t=t.slice(0,800); var m=t.match(/^[\s\S]*[.!?](\s|$)/); return m?m[0].trim():t; }
 function speak(text){
   return new Promise((resolve)=>{
-    fetch(SUPA+"/functions/v1/openai-tts",{ method:'POST', headers:{'Content-Type':'application/json','Authorization':'Bearer '+token,'apikey':ANON}, body:JSON.stringify({text:clip(text)}) })
+    fetch(SUPA+"/functions/v1/tts",{ method:'POST', headers:{'Content-Type':'application/json','Authorization':'Bearer '+token,'apikey':ANON}, body:JSON.stringify({text:clip(text),input:clip(text),voice:'nova'}) })
     .then(r=>r.ok?r.arrayBuffer():null).then(buf=>{ if(!buf){ resolve(); return; } if(player){ try{player.pause();}catch(_){} } player=new Audio(URL.createObjectURL(new Blob([buf],{type:'audio/mpeg'}))); player.onended=()=>resolve(); player.onerror=()=>resolve(); player.play().catch(()=>resolve()); }).catch(()=>resolve());
   });
 }
