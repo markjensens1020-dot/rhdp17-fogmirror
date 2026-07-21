@@ -44,8 +44,17 @@ Then get **3 bids per trade** before awarding. (Ratings/phones below are from se
 - Ventwerx HVAC Heating & Air — 4.7★ (203 reviews)
 - San Jose Heating & Cooling — verified license
 
+**Insulation (C-2, Title 24)**
+- Eagle Insulation Inc. — Milpitas (local), attics/walls/crawlspace — insulationmilpitasca.com
+- Greenshield Insulation — San José, CSLB licensed & bonded, energy/Title 24 — greenshieldinsulation.com
+- SDI Insulation — Bay Area, Title 24 envelope focus — sdi-insulation.com
+- _(alt: Triumph Insulation Solution — San José)_
+
 **Drywall / Plaster**
-- _(Fewer clear names surfaced — pull the top 3 from **Diamond Certified** (San José drywall avg 4.7★) or Yelp "Drywall Contractor San Jose" and verify.)_
+- Performance Drywall Inc. — San José, hang/tape/texture (also insulation/soundproofing), (408) 561-5144, Lic #1129934 — performancedrywallca.com
+- Pacific Drywall & Painting Inc. — San José, licensed & insured, texture matching — pacificdrywall.com
+- Peña Drywall — San José, residential drywall — sanjoseinteriordrywall.com
+- _(alt: DH Drywall — San José, (408) 569-2623)_
 
 **Stucco / Siding**
 - Golden 1 Lath and Plaster Inc. — San José
