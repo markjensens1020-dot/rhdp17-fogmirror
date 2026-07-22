@@ -79,7 +79,7 @@ const $=id=>document.getElementById(id);
 var BOTROLE=(new URLSearchParams(location.search).get('role')||'shared');
 (function(){var N={cassie:'Cassie',maya:'Maya',irma:'Irma',richard:'Richard'};var nm=N[BOTROLE];if(nm){var h=document.querySelector('h1');if(h)h.textContent=nm;var t=document.querySelector('.tag');if(t)t.textContent='RHDP17 · '+nm+' — your AI assistant';var rp=document.getElementById('reply');if(rp)rp.textContent="Hi — I'm "+nm+". Tap start and talk, or type below.";}})();
 let token=null, rec=null, active=false, busy=false, player=null, turnText="", silenceTimer=null;
-const SILENCE_MS=2000;
+const SILENCE_MS=4000;
 (async()=>{
   const {data:{session}}=await sb.auth.getSession();
   if(!session){ return gateOut(); }

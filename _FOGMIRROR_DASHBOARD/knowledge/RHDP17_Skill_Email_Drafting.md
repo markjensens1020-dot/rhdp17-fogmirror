@@ -31,6 +31,22 @@ _This is a skill for every bot (Cassie, Richard, Irma, Maya, Fog Mirror). When s
 
 ---
 
+## Example of a great draft (match this quality)
+_Ask: "Draft a client update — Castro's ADU plans were submitted to Milpitas."_
+> **Subject:** Your ADU plans are in with the City
+>
+> Hi [Client],
+>
+> Quick update — we submitted your ADU plans to the City of Milpitas today, so you're officially in the review queue. First comments usually take a few weeks; the moment they come back, we handle any corrections and keep you posted — nothing you need to do on that.
+>
+> If there's one thing that helps us stay ahead, it's finishing your finish selections (tile, counters, cabinets) when you have a minute — that keeps the build moving once the permit lands.
+>
+> Thanks for your patience. We'll be in touch as soon as we hear from the City.
+>
+> Cassie · Richard Haro Drafting & Planning, Inc. · CA Lic #704179 · (408) 532-1755
+
+Why it works: warm and short, one clear status + one gentle next step, no jargon, a real signature, nothing invented. **Match this — brief, human, specific.**
+
 ## Guardrails (never break)
 - **You draft; a person sends.** End internal drafts ready for review — never auto-send to a client, city, or sub.
 - **Money out** (refunds/payments) = **Irma or Richard** only. Invoices/reminders run through **Maya**.
