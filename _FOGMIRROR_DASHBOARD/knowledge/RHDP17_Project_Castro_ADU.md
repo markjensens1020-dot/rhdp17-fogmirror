@@ -1,4 +1,4 @@
-# PROJECT — Castro ADU (1640 Gran Teton Dr, Milpitas)
+# PROJECT — Castro ADU (1640 Grand Teton Dr, Milpitas)
 
 _Read from the plans (CASTRO PLANS 06162026). Bots use this to answer about Castro's scope, trades, and bidding._
 

@@ -3,7 +3,7 @@
 _Loaded into the bots so Cassie/Richard AI can answer a sub's follow-up questions on the spot instead of chasing Richard for every one. For each trade: the questions subs almost always ask, and the answer (Castro ADU where known). **Rule: if the answer isn't in the plans or the customer file, say so and get it from Richard — never make up a spec, a price, or a code number.** Structural is the engineer of record; money/terms go through the office (Irma/Richard)._
 
 ## Answers every sub asks (all trades)
-- **What's the project / where?** New 2-story, 800 sf attached ADU + alteration to the existing home, 1640 Gran Teton Dr, Milpitas (Santa Clara County). Plans attached.
+- **What's the project / where?** New 2-story, 800 sf attached ADU + alteration to the existing home, 1640 Grand Teton Dr, Milpitas (Santa Clara County). Plans attached.
 - **What are the plans / codes?** 2025 CRC/CBC/CMC/CPC/CEC/Energy/CalGreen + 2026 Milpitas Municipal Code. Type V-B, 2 stories, R-3/U, **no fire sprinkler.**
 - **When does it start / what's the timeline?** After permit issues (plans at resubmittal ~90%). Give us your own earliest availability; target start weeks are on the schedule.
 - **What do you need from me to bid?** Itemized price, inclusions/exclusions, timeline, assumptions — by the bid-due date.
