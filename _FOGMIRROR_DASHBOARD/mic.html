@@ -63,6 +63,12 @@ h1{font-family:'Fraunces',serif;font-weight:600;font-size:27px;margin-bottom:2px
     <div class="heard" id="heard"></div>
     <div class="reply" id="reply">Hey Mark &mdash; tap start and just talk. I'll stay on the line.</div>
     <div class="row" style="margin-top:12px;gap:8px"><input id="typed" placeholder="…or type your question and press Enter" style="flex:1;font-family:inherit;font-size:14px;padding:11px 13px;border:1px solid var(--line);border-radius:10px;background:#fff;color:var(--ink);outline:none"><button class="bigbtn" id="sendtyped" style="width:auto;margin-top:0;padding:11px 18px;font-size:14px">Send</button></div>
+    <div class="row" style="margin-top:10px">
+      <input type="file" id="imgfile" accept="image/*" style="display:none">
+      <button class="bigbtn" id="attachbtn" style="width:100%;margin-top:0;padding:12px;font-size:14px;background:var(--accent)">📎 Attach / drop / paste a screenshot, photo, or plan snippet</button>
+    </div>
+    <img id="imgprev" alt="" style="display:none;max-width:100%;border:1px solid var(--line);border-radius:10px;margin-top:10px">
+    <div class="note" style="margin-top:8px;color:var(--mut)">Tap the avatar or “Start conversation” to talk &middot; type below &middot; or attach an image (drag, drop, or paste a screenshot). Reading PDFs/Word docs comes with document-ingest.</div>
     <div class="note" id="note"></div>
   </div>
   <div class="card gate" id="gate">
@@ -145,6 +151,35 @@ function sendTyped(){
 (function(){
   var b=document.getElementById('sendtyped'); if(b) b.addEventListener('click',sendTyped);
   var t=document.getElementById('typed'); if(t) t.addEventListener('keydown',function(e){ if(e.key==='Enter'){ e.preventDefault(); sendTyped(); } });
+})();
+
+// --- image attach / drop / paste (screenshots, photos, plan snippets) → plan-vision reader ---
+function handleImage(dataUrl){
+  if(!dataUrl || busy) return;
+  var prev=document.getElementById('imgprev'); prev.src=dataUrl; prev.style.display='block';
+  document.getElementById('heard').innerHTML='You sent an image 🖼️';
+  document.getElementById('reply').textContent='Reading the image…';
+  document.getElementById('state').textContent='Reading…';
+  busy=true; avatar('speaking');
+  fetch(SUPA+"/functions/v1/read-plan",{ method:'POST', headers:{'Content-Type':'application/json','Authorization':'Bearer '+token,'apikey':ANON}, body:JSON.stringify({image:dataUrl}) })
+  .then(function(r){return r.json();}).then(function(d){
+    var reply=d.answer||d.error||'(no reading)';
+    document.getElementById('reply').textContent=reply;
+    if(document.getElementById('speak').checked && reply){ document.getElementById('state').textContent="Speaking…"; speak(reply); }
+    busy=false; document.getElementById('state').textContent = active ? 'Listening…' : 'Ready — type, talk, or attach an image.'; if(active) startTurn(); else avatar('');
+  }).catch(function(e){ document.getElementById('reply').textContent='Could not read the image: '+e.message; busy=false; avatar(''); });
+}
+function fileToImg(file){ if(!file||!/^image\//.test(file.type||'')) return; var r=new FileReader(); r.onload=function(){ handleImage(r.result); }; r.readAsDataURL(file); }
+(function(){
+  var btn=document.getElementById('attachbtn'), inp=document.getElementById('imgfile');
+  if(btn&&inp){ btn.addEventListener('click',function(){ inp.click(); }); inp.addEventListener('change',function(e){ fileToImg(e.target.files&&e.target.files[0]); }); }
+  var card=document.getElementById('app');
+  if(card){
+    ['dragover','dragenter'].forEach(function(ev){ card.addEventListener(ev,function(e){ e.preventDefault(); card.style.outline='2px dashed var(--accent)'; card.style.outlineOffset='6px'; }); });
+    ['dragleave','drop'].forEach(function(ev){ card.addEventListener(ev,function(e){ e.preventDefault(); card.style.outline='none'; }); });
+    card.addEventListener('drop',function(e){ var f=e.dataTransfer&&e.dataTransfer.files&&e.dataTransfer.files[0]; if(f) fileToImg(f); });
+  }
+  window.addEventListener('paste',function(e){ var items=(e.clipboardData||{}).items||[]; for(var i=0;i<items.length;i++){ if(items[i].type&&items[i].type.indexOf('image')===0){ var f=items[i].getAsFile(); if(f){ fileToImg(f); break; } } } });
 })();
 
 </script>
