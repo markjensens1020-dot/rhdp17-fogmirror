@@ -2,116 +2,129 @@
 <title>Customer Overview · RHDP17</title>
 <link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700;800&family=Fraunces:opsz,wght@9..144,600&display=swap" rel="stylesheet">
 <style>
+/* ===== FOGMIRROR-V3 — Claude-style screen per Mark's FINAL ruling 7/30/26 ===== */
 *{box-sizing:border-box;margin:0;padding:0}
-body{font-family:'Sora',system-ui,Arial,sans-serif;background:radial-gradient(1100px 700px at 85% -12%,#1b1136,transparent 55%),radial-gradient(900px 600px at -10% 110%,rgba(94,200,240,.08),transparent 55%),#070b14;color:#fff;padding:18px 18px 90px;min-height:100vh}
-.wrap{max-width:1160px;margin:0 auto}
-/* v2: shortcuts SMALL at top (Mark's layout spec) */
-.fm-launch{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px}
-.fm-launch a{display:inline-flex;align-items:center;gap:6px;text-decoration:none;background:#1c1f26;color:#fff;font-weight:700;font-size:13.5px;border-radius:10px;padding:9px 14px;border:1px solid rgba(255,255,255,.14)}
-.fm-launch a:hover{background:#2a2f3a}
-/* v2: robot faces select the bot IN-PAGE */
-.bots{display:flex;gap:18px;flex-wrap:wrap;align-items:flex-start;margin:0 0 14px}
-.bots .lbl{width:100%;font-size:11px;letter-spacing:2px;color:#9fb8e6;font-weight:800;margin-bottom:4px}
-.bots a{text-decoration:none;text-align:center;color:#dfe7f3;width:74px;cursor:pointer}
-.bots img{width:66px;height:66px;border-radius:50%;object-fit:cover;border:2px solid rgba(255,255,255,.25);display:block;margin:0 auto 6px;transition:.15s}
-.bots a:hover img{transform:translateY(-2px)}
-.bots a.sel img{border-color:var(--glow);box-shadow:0 0 18px var(--glow)}
-.bots a.sel span{color:var(--glow)}
-.bots span{font-size:12.5px;font-weight:700}
-/* ===== FOGMIRROR-CHAT-PANEL START (v2 rebuild 2026-07-30 from recorded spec) ===== */
-.chatwrap{background:rgba(12,19,34,.55);border:1px solid rgba(255,255,255,.10);border-radius:18px;padding:16px 18px;margin-bottom:22px}
-.chatlog{max-height:340px;min-height:64px;overflow-y:auto;display:flex;flex-direction:column;gap:10px;margin-bottom:12px;scroll-behavior:smooth}
-.bub{max-width:82%;padding:12px 15px;border-radius:14px;font-size:16px;line-height:1.5;white-space:pre-wrap;word-wrap:break-word}
+html,body{height:100%}
+body{font-family:'Sora',system-ui,Arial,sans-serif;background:radial-gradient(1100px 700px at 85% -12%,#1b1136,transparent 55%),radial-gradient(900px 600px at -10% 110%,rgba(94,200,240,.08),transparent 55%),#070b14;color:#fff;display:flex;flex-direction:column;overflow:hidden}
+/* thin top bar: tiny shortcuts + customer + drawer/arrange toggles */
+#topbar{display:flex;gap:6px;align-items:center;flex-wrap:wrap;padding:8px 12px;border-bottom:1px solid rgba(255,255,255,.08);background:rgba(7,11,20,.9);z-index:30}
+#topbar a,#topbar button{display:inline-flex;align-items:center;gap:5px;text-decoration:none;background:#1c1f26;color:#fff;font-weight:700;font-size:12px;border-radius:8px;padding:6px 10px;border:1px solid rgba(255,255,255,.14);cursor:pointer;font-family:inherit}
+#topbar a:hover,#topbar button:hover{background:#2a2f3a}
+#topbar .sp{flex:1}
+#custSel{background:#0a101d;color:#fff;border:1px solid #4a7bd0;border-radius:8px;padding:6px 10px;font-size:13px;font-family:inherit;width:190px}
+#topbar button.on{border-color:#7CD6FF;box-shadow:0 0 12px rgba(124,214,255,.35)}
+/* processes drawer slides under the top bar */
+#procDrawer{display:none;overflow-y:auto;max-height:52vh;padding:14px 16px;border-bottom:1px solid rgba(255,255,255,.10);background:rgba(7,11,20,.97)}
+#procDrawer.open{display:block}
+.custhead{background:linear-gradient(135deg,rgba(94,200,240,.16),rgba(155,140,255,.12));border:1px solid rgba(255,255,255,.24);border-radius:14px;padding:12px 16px;margin-bottom:14px;display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+.custhead .nm{font-family:'Fraunces',serif;font-size:24px;font-weight:600}
+.custhead small{display:block;font-size:12px;color:#9fb0cc}
+.proc{background:rgba(12,19,34,.55);border:1px solid rgba(255,255,255,.10);border-left:6px solid var(--c);border-radius:14px;padding:14px 16px;margin-bottom:12px}
+.proc .ph{display:flex;align-items:baseline;justify-content:space-between;margin-bottom:10px;gap:10px;flex-wrap:wrap}
+.proc h2{font-family:'Fraunces',serif;font-size:20px;font-weight:600;color:var(--c)}
+.proc h2 a{color:inherit;text-decoration:none}
+.proc .now{font-size:12px;color:#9fb0cc;font-weight:600}.proc .now b{color:var(--c)}
+.pbar{height:9px;border-radius:6px;background:rgba(255,255,255,.09);overflow:hidden;margin-bottom:10px}
+.pbar i{display:block;height:100%;border-radius:6px}
+.bar{display:flex;gap:5px;width:100%}
+.seg{flex:1;min-width:0;height:54px;border-radius:10px;position:relative;cursor:pointer;display:flex;align-items:center;justify-content:center;padding:0 6px}
+.seg .lab{font-size:12px;font-weight:800;color:#fff;text-shadow:0 1px 3px rgba(0,0,0,.55);text-align:center;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;width:100%}
+.seg.cur{outline:2.5px solid #fff;outline-offset:2px}
+.seg .tick{position:absolute;top:4px;left:7px;font-size:11px;font-weight:900}
+.seg .pop{display:none;position:absolute;bottom:50px;left:50%;transform:translateX(-50%);width:220px;background:#0d1728;border:1px solid var(--c);border-radius:10px;padding:11px 12px;z-index:40;text-align:left}
+.seg:hover .pop{display:block}
+.seg .pop .pt{font-size:11px;font-weight:800;color:var(--c);text-transform:uppercase;margin-bottom:6px}
+.seg .pop ul{list-style:none}.seg .pop li{font-size:12px;color:#dfe7f3;padding-left:12px;position:relative;margin-bottom:4px}
+.seg .pop li:before{content:'▸';position:absolute;left:0;color:var(--c)}
+.seg .pop a{color:#fff;text-decoration:underline;font-weight:700}
+/* main: chat fills, doc panel on the right */
+#main{flex:1;display:flex;min-height:0}
+#chatCol{flex:1;display:flex;flex-direction:column;min-width:280px;min-height:0}
+#chatLog{flex:1;overflow-y:auto;padding:18px 20px;display:flex;flex-direction:column;gap:12px;scroll-behavior:smooth;max-width:var(--chatmax,900px);width:100%;margin:0 auto}
+.bub{max-width:85%;padding:13px 16px;border-radius:15px;font-size:16px;line-height:1.55;white-space:pre-wrap;word-wrap:break-word}
 .bub.you{align-self:flex-end;background:#20304d;border:1px solid rgba(124,214,255,.35)}
 .bub.bot{align-self:flex-start;background:#101a2c;border:1px solid rgba(255,255,255,.12)}
 .bub .who{display:block;font-size:11px;letter-spacing:1.5px;font-weight:800;color:#9fb8e6;margin-bottom:4px;text-transform:uppercase}
-.bub img{max-width:100%;border-radius:10px;display:block;margin-top:6px}
-.composer{display:flex;gap:10px;align-items:flex-end}
-.composer textarea{flex:1;background:#0a101d;color:#fff;border:1px solid #4a7bd0;border-radius:12px;padding:14px 16px;font-size:16px;font-family:inherit;resize:none;min-height:56px;max-height:160px;outline:none}
+.bub img{max-width:220px;border-radius:10px;display:block;margin-top:6px;cursor:pointer;border:1px solid rgba(255,255,255,.2)}
+/* right document panel — like Claude's side panel */
+#dragV{width:6px;cursor:col-resize;background:transparent;flex:none}
+#docPanel{width:var(--panelw,0px);flex:none;border-left:1px solid rgba(255,255,255,.10);background:rgba(10,16,29,.85);display:flex;flex-direction:column;min-height:0;overflow:hidden}
+#docPanel .dhead{display:flex;align-items:center;gap:8px;padding:8px 12px;border-bottom:1px solid rgba(255,255,255,.08);font-size:12.5px;font-weight:700;color:#9fb8e6}
+#docPanel .dhead button{margin-left:auto;background:none;border:none;color:#9fb8e6;font-size:16px;cursor:pointer}
+#docBody{flex:1;overflow:auto;display:flex;align-items:flex-start;justify-content:center;padding:10px}
+#docBody img{max-width:100%;border-radius:10px}
+#docBody iframe{width:100%;height:100%;border:none;background:#fff;border-radius:8px}
+/* composer zone pinned at the bottom; faces UNDER the box per Mark */
+#dragH{height:6px;cursor:row-resize;flex:none}
+#composerZone{flex:none;padding:8px 16px 10px;border-top:1px solid rgba(255,255,255,.10);background:rgba(7,11,20,.95)}
+.composer{display:flex;gap:9px;align-items:flex-end;max-width:var(--chatmax,900px);margin:0 auto}
+.composer textarea{flex:1;background:#0a101d;color:#fff;border:1px solid #4a7bd0;border-radius:14px;padding:14px 16px;font-size:16.5px;font-family:inherit;resize:none;height:var(--comph,72px);max-height:45vh;outline:none;line-height:1.45}
 .composer textarea:focus{border-color:#7CD6FF}
-.cbtn{background:#1c1f26;color:#fff;border:1px solid rgba(255,255,255,.16);border-radius:12px;padding:0 16px;height:56px;font-size:20px;cursor:pointer;font-family:inherit}
+.cbtn{background:#1c1f26;color:#fff;border:1px solid rgba(255,255,255,.16);border-radius:12px;padding:0 14px;height:50px;font-size:19px;cursor:pointer;font-family:inherit;flex:none}
 .cbtn:hover{background:#2a2f3a}
-.sendbtn{font-size:15px;font-weight:800}
-/* the SQUIGGLE conversation button (replaces the mic icon, per Mark) */
-#squig{position:relative;width:64px;height:56px;border-radius:12px;border:1px solid rgba(255,255,255,.16);background:#101a2c;cursor:pointer;display:flex;align-items:center;justify-content:center}
-#squig svg{width:40px;height:26px}
+.cbtn.on{border-color:#8EF0C0;box-shadow:0 0 14px rgba(142,240,192,.4)}
+.sendbtn{font-size:14.5px;font-weight:800}
+#squig{position:relative;width:58px;height:50px;border-radius:12px;border:1px solid rgba(255,255,255,.16);background:#101a2c;cursor:pointer;display:flex;align-items:center;justify-content:center;flex:none}
+#squig svg{width:36px;height:23px}
 #squig .sq{fill:none;stroke:url(#aur);stroke-width:4;stroke-linecap:round}
 #squig.live{border-color:#7CD6FF;box-shadow:0 0 20px rgba(124,214,255,.45)}
 #squig.live .sq{animation:squigwave 1.1s linear infinite;stroke-dasharray:6 7}
 @keyframes squigwave{to{stroke-dashoffset:-13}}
-.chatstate{font-size:12.5px;color:#7c89a4;margin-top:8px;min-height:16px}
-.chatwrap.dragover{outline:2px dashed #7CD6FF;outline-offset:4px}
-/* ===== FOGMIRROR-CHAT-PANEL END ===== */
-.custhead{background:linear-gradient(135deg,rgba(94,200,240,.16),rgba(155,140,255,.12));border:1px solid rgba(255,255,255,.24);border-radius:18px;padding:22px 26px;margin-bottom:24px;display:flex;align-items:center;gap:20px;flex-wrap:wrap}
-.custhead .lbl{font-size:11px;letter-spacing:2.5px;color:#9fb8e6;font-weight:800}
-.custhead input{flex:1;min-width:240px;background:#0a101d;color:#fff;border:1px solid #4a7bd0;border-radius:10px;padding:14px 16px;font-size:16px;font-family:inherit}
-.custhead .cur{min-width:220px}
-.custhead .cur .nm{font-family:'Fraunces',serif;font-size:34px;font-weight:600;color:#fff;line-height:1.05}
-.custhead .cur small{display:block;font-size:12.5px;color:#9fb0cc;font-weight:500;margin-top:4px}
-.proc{background:rgba(12,19,34,.55);border:1px solid rgba(255,255,255,.10);border-left:7px solid var(--c);border-radius:18px;padding:20px 24px;margin-bottom:20px}
-.proc .ph{display:flex;align-items:baseline;justify-content:space-between;margin-bottom:16px;gap:12px;flex-wrap:wrap}
-.proc h2{font-family:'Fraunces',serif;font-size:26px;font-weight:600;color:var(--c)}
-.proc h2 a{color:inherit;text-decoration:none}
-.proc .now{font-size:13px;color:#9fb0cc;font-weight:600}
-.proc .now b{color:var(--c)}
-/* the big color-coded status bar */
-.pbar{height:12px;border-radius:7px;background:rgba(255,255,255,.09);overflow:hidden;margin-bottom:14px}
-.pbar i{display:block;height:100%;border-radius:7px}
-.bar{display:flex;gap:6px;width:100%}
-.seg{flex:1;min-width:0;height:76px;border-radius:13px;position:relative;cursor:pointer;display:flex;align-items:center;justify-content:center;padding:0 8px;transition:.15s;overflow:visible}
-.seg:hover{transform:translateY(-2px)}
-.seg .lab{font-size:14px;font-weight:800;color:#fff;text-shadow:0 1px 3px rgba(0,0,0,.55);text-align:center;line-height:1.15;letter-spacing:.2px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;width:100%}
-.seg.cur{outline:3px solid #fff;outline-offset:2px;z-index:2}
-.seg .tick{position:absolute;top:7px;left:9px;font-size:13px;font-weight:900;color:#fff;text-shadow:0 1px 2px rgba(0,0,0,.5)}
-/* hover popover — the tools for that step */
-.seg .pop{display:none;position:absolute;bottom:68px;left:50%;transform:translateX(-50%);width:230px;background:#0d1728;border:1px solid var(--c);border-radius:12px;padding:13px 14px;z-index:20;text-align:left;box-shadow:0 16px 40px rgba(0,0,0,.6)}
-.seg:hover .pop{display:block}
-.seg .pop:after{content:'';position:absolute;top:100%;left:50%;transform:translateX(-50%);border:7px solid transparent;border-top-color:var(--c)}
-.seg .pop .pt{font-size:12px;font-weight:800;color:var(--c);text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px}
-.seg .pop ul{list-style:none;display:flex;flex-direction:column;gap:6px}
-.seg .pop li{font-size:12.5px;color:#dfe7f3;line-height:1.3;padding-left:14px;position:relative}
-.seg .pop li:before{content:'▸';position:absolute;left:0;color:var(--c)}
-.seg .pop a{color:#fff;text-decoration:underline;font-weight:700}
-.hint{font-size:12.5px;color:#7c89a4;text-align:center;margin-top:20px;font-weight:300}
+#chatState{font-size:12px;color:#7c89a4;margin:6px auto 4px;min-height:15px;max-width:var(--chatmax,900px)}
+/* tiny headshots UNDER the text box */
+#botRow{display:flex;gap:16px;align-items:center;justify-content:center;padding-top:4px}
+#botRow a{text-decoration:none;text-align:center;color:#dfe7f3;cursor:pointer}
+#botRow img{width:40px;height:40px;border-radius:50%;object-fit:cover;border:2px solid rgba(255,255,255,.25);display:block;margin:0 auto 2px;transition:.15s}
+#botRow a:hover img{transform:translateY(-2px)}
+#botRow a.sel img{border-color:var(--glow);box-shadow:0 0 14px var(--glow)}
+#botRow a.sel span{color:var(--glow)}
+#botRow span{font-size:10.5px;font-weight:700}
+/* ARRANGE MODE — stretch the lines, move the sizes, it remembers */
+body.arrange #dragV,body.arrange #dragH{background:repeating-linear-gradient(45deg,#7CD6FF,#7CD6FF 4px,#D9A6FF 4px,#D9A6FF 8px);opacity:.8;border-radius:3px}
+#arrangeHint{display:none;position:fixed;top:54px;left:50%;transform:translateX(-50%);background:#0d1728;border:1px solid #7CD6FF;border-radius:10px;padding:8px 14px;font-size:12.5px;z-index:60}
+body.arrange #arrangeHint{display:block}
+.chatwrap-dragover{outline:2px dashed #7CD6FF;outline-offset:-4px}
 </style></head><body>
-<div class="wrap">
-<div class="fm-launch">
- <a href="https://outlook.office.com/mail/drafts" target="_blank" rel="noopener">📝 Drafts</a><a href="https://teams.microsoft.com/" target="_blank" rel="noopener">💬 Teams</a><a href="https://outlook.office.com/mail/" target="_blank" rel="noopener">📥 Outlook</a><a href="https://web.autocad.com/" target="_blank" rel="noopener">📐 AutoCAD</a><a href="https://www.google.com" target="_blank" rel="noopener">🌐 Google</a><a href="./forms.html">📋 Forms</a><a href="./read-plan.html">📐 Read Plan</a>
+<div id="topbar">
+ <b style="font-family:'Fraunces',serif;font-size:15px;margin-right:4px">Fog Mirror</b>
+ <a href="https://outlook.office.com/mail/drafts" target="_blank" rel="noopener">📝 Drafts</a><a href="https://teams.microsoft.com/" target="_blank" rel="noopener">💬 Teams</a><a href="https://outlook.office.com/mail/" target="_blank" rel="noopener">📥 Outlook</a><a href="https://web.autocad.com/" target="_blank" rel="noopener">📐 AutoCAD</a><a href="./forms.html">📋 Forms</a><a href="./read-plan.html">📐 Read Plan</a>
+ <span class="sp"></span>
+ <input id="custSel" list="custList" placeholder="Customer…" autocomplete="off"><datalist id="custList"></datalist>
+ <button id="procBtn">📊 Processes</button>
+ <button id="arrBtn" title="Drag the striped lines to stretch the chat box and side panel — sizes are remembered">🎛 Arrange</button>
 </div>
-<div class="bots" id="botRow">
- <div class="lbl">💬 TALK TO THE TEAM — tap a face, then type below or tap the squiggle</div>
- <a data-role="cassie" style="--glow:#7CD6FF" class="sel"><img src="./cassie.jpg" alt="Cassie"><span>Cassie</span></a>
- <a data-role="richard" style="--glow:#8EF0C0"><img src="./richard.jpg" alt="Richard"><span>Richard</span></a>
- <a data-role="irma" style="--glow:#D9A6FF"><img src="./irma.jpg" alt="Irma"><span>Irma</span></a>
- <a data-role="maya" style="--glow:#FFD98E"><img src="./maya.jpg" alt="Maya"><span>Maya</span></a>
+<div id="procDrawer">
+ <div class="custhead"><div><div class="nm" id="curName">Pick a customer ↑</div><small id="curSub">their processes stack below</small></div></div>
+ <div id="stack"></div>
 </div>
-<!-- FOGMIRROR-CHAT-PANEL START -->
-<div class="chatwrap" id="chatWrap">
-  <div class="chatlog" id="chatLog"></div>
+<div id="arrangeHint">Arrange mode: drag the striped line beside the side panel ↔ and above the text box ↕ · sizes save automatically · <a href="#" id="arrReset" style="color:#7CD6FF">reset</a></div>
+<div id="main">
+  <div id="chatCol"><div id="chatLog"></div></div>
+  <div id="dragV"></div>
+  <div id="docPanel"><div class="dhead"><span id="docTitle">Document</span><button id="docClose">✕</button></div><div id="docBody"></div></div>
+</div>
+<div id="dragH"></div>
+<div id="composerZone">
   <div class="composer">
     <button class="cbtn" id="attachBtn" title="Attach a photo, screenshot, or plan snippet">📎</button>
     <input type="file" id="chatFile" accept="image/*" style="display:none">
-    <textarea id="chatText" placeholder="Type to Cassie… (Enter to send · drop or paste an image · tap the squiggle to talk)"></textarea>
-    <button id="squig" title="Tap to talk — pause 4 seconds and the bot answers. Talk over it to interrupt.">
+    <textarea id="chatText" placeholder="Type to Cassie… (Enter to send · it grows as you type · drop or paste an image)"></textarea>
+    <button class="cbtn" id="dictBtn" title="Dictate — speak and your words type into the box">🎙</button>
+    <button id="squig" title="Conversation mode — talk, pause 4 seconds, the bot answers. Talk over it to interrupt.">
       <svg viewBox="0 0 40 26"><defs><linearGradient id="aur" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#7CD6FF"/><stop offset=".5" stop-color="#8EF0C0"/><stop offset="1" stop-color="#D9A6FF"/></linearGradient></defs><path class="sq" d="M2 13 Q7 3 12 13 T22 13 T32 13 T38 13"/></svg>
     </button>
     <button class="cbtn sendbtn" id="chatSend">Send</button>
   </div>
-  <div class="chatstate" id="chatState">Cassie is on the line — type, talk, or drop a plan photo.</div>
-</div>
-<!-- FOGMIRROR-CHAT-PANEL END -->
-<div class="custhead">
-  <div class="lbl">CUSTOMER</div>
-  <input id="custSel" list="custList" placeholder="Type a customer name…" autocomplete="off">
-  <datalist id="custList"></datalist>
-  <div class="cur"><div class="nm" id="curName">Pick a customer ↑</div><small id="curSub">then see all their processes stacked below</small></div>
-</div>
-<div id="stack"></div>
-<div class="hint">Hover any step to see the tools you need for it · Design reflects live data · other processes fill in as each project reaches them.</div>
+  <div id="chatState">Cassie is on the line — type, dictate 🎙, or tap the squiggle for conversation.</div>
+  <div id="botRow">
+    <a data-role="cassie" style="--glow:#7CD6FF" class="sel"><img src="./cassie.jpg" alt="Cassie"><span>Cassie</span></a>
+    <a data-role="richard" style="--glow:#8EF0C0"><img src="./richard.jpg" alt="Richard"><span>Richard</span></a>
+    <a data-role="irma" style="--glow:#D9A6FF"><img src="./irma.jpg" alt="Irma"><span>Irma</span></a>
+    <a data-role="maya" style="--glow:#FFD98E"><img src="./maya.jpg" alt="Maya"><span>Maya</span></a>
+  </div>
 </div>
 <script>
 var A="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InFyd2x5b3dkenF6a2liZHp2b2VrIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzAyNDIyODEsImV4cCI6MjA4NTgxODI4MX0.5xurzQ0HUECk4_SxlcRdKG-5KCmyQ30b4jyCiyERAoU";
-// order: Design -> Construction -> Bidding(subs) -> Selection Board
 var PROC=[
  {name:'Design',href:'./design.html',hue:140,cur:3,steps:[
    {l:'Intake',t:['<a href="./forms/01-client-intake.html">Client Intake form</a>','Retainer &amp; contract','Open client folder']},
@@ -155,7 +168,6 @@ var PROC=[
    {l:'Paid / Closed',t:['Record payment','Receipts','Month-end close']}
  ]}
 ];
-// light on the left -> darker hues to the right (across the natural process)
 function segColor(i,n,hue){ var gold=hue===40; var sat=gold?86:74; var l=Math.round(63-(i/Math.max(1,n-1))*32); return 'hsl('+hue+','+sat+'%,'+l+'%)'; }
 function render(){ document.getElementById('stack').innerHTML=PROC.map(function(p){
   var accent='hsl('+p.hue+','+(p.hue===40?86:70)+'%,'+(p.hue===40?54:58)+'%)';
@@ -165,14 +177,10 @@ function render(){ document.getElementById('stack').innerHTML=PROC.map(function(
   var segs=p.steps.map(function(s,i){
     var st=i<p.cur?'done':(i===p.cur?'cur':'up'); var mk=st==='done'?'✓':(st==='cur'?'●':'');
     var tips=s.t.map(function(x){return '<li>'+x+'</li>';}).join('');
-    return '<div class="seg '+st+'" style="background:'+segColor(i,n,p.hue)+'">'
-      +(mk?'<span class="tick">'+mk+'</span>':'')
-      +'<span class="lab">'+s.l+'</span>'
-      +'<div class="pop"><div class="pt">'+s.l+'</div><ul>'+tips+'</ul></div>'
-    +'</div>';
+    return '<div class="seg '+st+'" style="background:'+segColor(i,n,p.hue)+'">'+(mk?'<span class="tick">'+mk+'</span>':'')+'<span class="lab">'+s.l+'</span><div class="pop"><div class="pt">'+s.l+'</div><ul>'+tips+'</ul></div></div>';
   }).join('');
   var bar='<div class="pbar"><i style="width:'+pct+'%;background:hsl('+p.hue+','+(p.hue===40?86:74)+'%,55%)"></i></div>';
-  return '<div class="proc" style="--c:'+accent+'"><div class="ph"><h2><a href="'+p.href+'">'+p.name+' <span style="opacity:.55;font-size:16px">↗</span></a></h2><div class="now">'+nowLabel+'</div></div>'+bar+'<div class="bar">'+segs+'</div></div>';
+  return '<div class="proc" style="--c:'+accent+'"><div class="ph"><h2><a href="'+p.href+'">'+p.name+' <span style="opacity:.55;font-size:13px">↗</span></a></h2><div class="now">'+nowLabel+'</div></div>'+bar+'<div class="bar">'+segs+'</div></div>';
 }).join(''); }
 render();
 (function(){var sel=document.getElementById('custSel');var ap="";
@@ -183,21 +191,26 @@ render();
 })();
 </script>
 <script>
-/* ===== FOGMIRROR-CHAT-PANEL v2 (rebuilt 2026-07-30 from the recorded spec — inline chat, squiggle, 4s silence, barge-in) ===== */
+/* ===== FOGMIRROR-V3 CHAT — faces under the box, dictate + conversation + type, doc panel, arrange mode ===== */
 (function(){
 var SUPA="https://qrwlyowdzqzkibdzvoek.supabase.co";
 var NAMES={cassie:'Cassie',richard:'Richard',irma:'Irma',maya:'Maya'};
 var role='cassie';
 var log=document.getElementById('chatLog'), txt=document.getElementById('chatText'),
-    squig=document.getElementById('squig'), stateEl=document.getElementById('chatState'),
-    wrapEl=document.getElementById('chatWrap');
+    squig=document.getElementById('squig'), stateEl=document.getElementById('chatState');
 function getToken(){ try{ for(var i=0;i<localStorage.length;i++){ var k=localStorage.key(i); if(/^sb-.*-auth-token$/.test(k)){ var v=JSON.parse(localStorage.getItem(k)); var t=v&&(v.access_token||(v.currentSession&&v.currentSession.access_token)); if(t) return t; } } }catch(e){} return A; }
 function esc(t){return (t||'').replace(/[<>&]/g,function(c){return c==='<'?'&lt;':c==='>'?'&gt;':'&amp;';});}
-function bubble(kind,who,text,imgSrc){ var d=document.createElement('div'); d.className='bub '+kind; d.innerHTML=(who?'<span class="who">'+esc(who)+'</span>':'')+esc(text||''); if(imgSrc){ var im=document.createElement('img'); im.src=imgSrc; d.appendChild(im); } log.appendChild(d); log.scrollTop=log.scrollHeight; return d; }
-bubble('bot','Cassie',"Hi — I'm on the line. Type below, tap the squiggle to talk (pause 4 seconds and I answer — talk over me any time to interrupt), or drop a plan photo on this box.");
-/* bot faces select the bot IN-PAGE (mic.html links replaced) */
+function bubble(kind,who,text,imgSrc){ var d=document.createElement('div'); d.className='bub '+kind; d.innerHTML=(who?'<span class="who">'+esc(who)+'</span>':'')+esc(text||''); if(imgSrc){ var im=document.createElement('img'); im.src=imgSrc; im.title='Tap to open in the side panel'; im.addEventListener('click',function(){openDoc(imgSrc,'Image');}); d.appendChild(im); } log.appendChild(d); log.scrollTop=log.scrollHeight; return d; }
+bubble('bot','Cassie',"Hi — I'm on the line. Type below (the box grows with you), tap 🎙 to dictate into the box, or tap the squiggle for a live conversation — pause 4 seconds and I answer, talk over me to interrupt. Drop a plan photo anywhere and I'll read it in the side panel.");
+/* faces UNDER the box: tap = select that bot AND start talking; tap again = stop */
 var faces=document.querySelectorAll('#botRow a[data-role]');
-faces.forEach(function(a){ a.addEventListener('click',function(ev){ ev.preventDefault(); faces.forEach(function(x){x.classList.remove('sel');}); a.classList.add('sel'); role=a.getAttribute('data-role'); txt.placeholder='Type to '+NAMES[role]+'… (Enter to send · drop or paste an image · tap the squiggle to talk)'; stateEl.textContent=NAMES[role]+' is on the line.'; bubble('bot',NAMES[role],"I'm here — go ahead."); }); });
+faces.forEach(function(a){ a.addEventListener('click',function(ev){ ev.preventDefault(); var r=a.getAttribute('data-role');
+  if(r===role && convo){ stopConvo(); return; }
+  faces.forEach(function(x){x.classList.remove('sel');}); a.classList.add('sel'); role=r;
+  txt.placeholder='Type to '+NAMES[role]+'… (Enter to send · it grows as you type · drop or paste an image)';
+  bubble('bot',NAMES[role],"I'm here — go ahead.");
+  if(!convo) startConvo(); else setState('Listening for '+NAMES[role]+'…');
+}); });
 var busy=false, player=null;
 function setState(t){ stateEl.textContent=t; }
 function clip(t){ t=t.slice(0,800); var m=t.match(/^[\s\S]*[.!?](\s|$)/); return m?m[0].trim():t; }
@@ -208,18 +221,21 @@ function speak(text){ return new Promise(function(resolve){ var tok=getToken();
 function ask(msg,voiceMode){ if(!msg||busy) return; busy=true; bubble('you','You',msg); setState(NAMES[role]+' is thinking…'); var tok=getToken();
   fetch(SUPA+"/functions/v1/fog-mirror-chat",{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+tok,'apikey':A},body:JSON.stringify({question:msg,role:role})})
   .then(function(r){return r.json();}).then(function(d){ var reply=d.answer||d.error||'(no reply)'; bubble('bot',NAMES[role],reply); setState(NAMES[role]+' is on the line.');
-    if(voiceMode&&reply){ setState(NAMES[role]+' is speaking… (talk to interrupt)'); speak(reply).then(function(){ busy=false; if(convo) setState('Listening… pause 4 seconds when done.'); else setState(NAMES[role]+' is on the line.'); }); } else { busy=false; }
+    if(voiceMode&&reply){ setState(NAMES[role]+' is speaking… (talk to interrupt)'); speak(reply).then(function(){ busy=false; if(convo) setState('Listening… pause 4 seconds when done.'); }); } else { busy=false; }
   }).catch(function(e){ bubble('bot',NAMES[role],'Could not reach the brain: '+e.message); setState(NAMES[role]+' is on the line.'); busy=false; });
 }
-/* typed input — Enter to send */
-function sendTyped(){ var m=(txt.value||'').trim(); if(!m) return; txt.value=''; ask(m,false); }
+/* typed input — Enter to send, box GROWS as you type */
+function autogrow(){ txt.style.height='auto'; var h=Math.min(txt.scrollHeight, window.innerHeight*0.45); txt.style.height=h+'px'; }
+txt.addEventListener('input',autogrow);
+function sendTyped(){ var m=(txt.value||'').trim(); if(!m) return; txt.value=''; autogrow(); ask(m,false); }
 document.getElementById('chatSend').addEventListener('click',sendTyped);
 txt.addEventListener('keydown',function(e){ if(e.key==='Enter'&&!e.shiftKey){ e.preventDefault(); sendTyped(); } });
-/* SQUIGGLE conversation — 4s silence auto-send + BARGE-IN (talking while the bot speaks pauses it) */
-var convo=false, rec=null, turnText='', silenceTimer=null, SILENCE_MS=4000;
+/* speech engines */
 var SR=window.SpeechRecognition||window.webkitSpeechRecognition;
+/* CONVERSATION mode (squiggle): 4s silence auto-send + barge-in */
+var convo=false, rec=null, turnText='', silenceTimer=null, SILENCE_MS=4000;
 if(SR){ rec=new SR(); rec.continuous=true; rec.interimResults=true; rec.lang='en-US';
-  rec.onresult=function(e){ if(player&&!player.paused){ try{player.pause();}catch(_){}}  /* barge-in */
+  rec.onresult=function(e){ if(player&&!player.paused){ try{player.pause();}catch(_){}}
     turnText=''; for(var k=0;k<e.results.length;k++) turnText+=e.results[k][0].transcript;
     if(turnText.trim()) setState('You: '+turnText.trim());
     if(silenceTimer) clearTimeout(silenceTimer);
@@ -229,11 +245,31 @@ if(SR){ rec=new SR(); rec.continuous=true; rec.interimResults=true; rec.lang='en
   rec.onend=function(){ if(convo){ try{rec.start();}catch(_){}} };
 }
 function finalize(){ if(!convo) return; if(silenceTimer){clearTimeout(silenceTimer);silenceTimer=null;} var m=turnText.trim(); turnText=''; if(!m) return; ask(m,true); }
-function startConvo(){ if(!rec){ setState("This browser can't do voice — use Chrome. Typing works."); return; } convo=true; squig.classList.add('live'); setState('Listening… just talk, pause 4 seconds when done.'); try{rec.start();}catch(_){} }
+function startConvo(){ if(!rec){ setState("This browser can't do voice — use Chrome. Typing works."); return; } if(dictOn) stopDict(); convo=true; squig.classList.add('live'); setState('Conversation with '+NAMES[role]+' — just talk, pause 4 seconds when done.'); try{rec.start();}catch(_){} }
 function stopConvo(){ convo=false; squig.classList.remove('live'); if(silenceTimer){clearTimeout(silenceTimer);silenceTimer=null;} if(rec){try{rec.stop();}catch(_){}} if(player){try{player.pause();}catch(_){}} setState(NAMES[role]+' is on the line.'); }
 squig.addEventListener('click',function(){ convo?stopConvo():startConvo(); });
-/* attach / drag-drop / paste → read-plan (the AI eyes) */
-function handleImage(dataUrl){ if(!dataUrl||busy) return; busy=true; bubble('you','You','',dataUrl); setState('Reading the image…'); var tok=getToken();
+/* DICTATE mode (🎙): speech types INTO the box — you press Send */
+var dict=null, dictOn=false, dictBase='';
+var dictBtn=document.getElementById('dictBtn');
+if(SR){ dict=new SR(); dict.continuous=true; dict.interimResults=true; dict.lang='en-US';
+  dict.onresult=function(e){ var s=''; for(var k=0;k<e.results.length;k++) s+=e.results[k][0].transcript; txt.value=(dictBase+' '+s).trim(); autogrow(); };
+  dict.onend=function(){ if(dictOn){ try{dictBase=txt.value; dict.start();}catch(_){}} };
+  dict.onerror=function(ev){ if(ev.error==='not-allowed'){ setState('Allow the microphone in your browser to dictate.'); stopDict(); } };
+}
+function startDict(){ if(!dict){ setState("This browser can't do voice — use Chrome."); return; } if(convo) stopConvo(); dictOn=true; dictBase=txt.value; dictBtn.classList.add('on'); setState('Dictating into the box — tap 🎙 again to stop, then press Send.'); try{dict.start();}catch(_){} }
+function stopDict(){ dictOn=false; dictBtn.classList.remove('on'); if(dict){try{dict.stop();}catch(_){}} setState(NAMES[role]+' is on the line.'); }
+dictBtn.addEventListener('click',function(){ dictOn?stopDict():startDict(); });
+/* DOCUMENT SIDE PANEL — like Claude's */
+var panel=document.getElementById('docPanel'), docBody=document.getElementById('docBody');
+function openDoc(src,title){ document.getElementById('docTitle').textContent=title||'Document';
+  docBody.innerHTML='';
+  if(/\.(pdf|html?)($|\?)/i.test(src)){ var f=document.createElement('iframe'); f.src=src; docBody.appendChild(f); }
+  else { var im=document.createElement('img'); im.src=src; docBody.appendChild(im); }
+  if(getPanelW()<120){ setPanelW(Math.max(340, Math.round(window.innerWidth*0.32))); }
+}
+document.getElementById('docClose').addEventListener('click',function(){ setPanelW(0); });
+/* attach / drag-drop / paste → read-plan + show in panel */
+function handleImage(dataUrl){ if(!dataUrl||busy) return; busy=true; bubble('you','You','',dataUrl); openDoc(dataUrl,'Your image'); setState('Reading the image…'); var tok=getToken();
   fetch(SUPA+"/functions/v1/read-plan",{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+tok,'apikey':A},body:JSON.stringify({image:dataUrl})})
   .then(function(r){return r.json();}).then(function(d){ bubble('bot',NAMES[role],d.answer||d.error||'(no reading)'); setState(NAMES[role]+' is on the line.'); busy=false; })
   .catch(function(e){ bubble('bot',NAMES[role],'Could not read the image: '+e.message); setState(NAMES[role]+' is on the line.'); busy=false; });
@@ -242,10 +278,27 @@ function fileToImg(f){ if(!f||!/^image\//.test(f.type||'')) return; var r=new Fi
 var fi=document.getElementById('chatFile');
 document.getElementById('attachBtn').addEventListener('click',function(){ fi.click(); });
 fi.addEventListener('change',function(e){ fileToImg(e.target.files&&e.target.files[0]); });
-['dragover','dragenter'].forEach(function(ev){ wrapEl.addEventListener(ev,function(e){ e.preventDefault(); wrapEl.classList.add('dragover'); }); });
-['dragleave','drop'].forEach(function(ev){ wrapEl.addEventListener(ev,function(e){ e.preventDefault(); wrapEl.classList.remove('dragover'); }); });
-wrapEl.addEventListener('drop',function(e){ var f=e.dataTransfer&&e.dataTransfer.files&&e.dataTransfer.files[0]; if(f) fileToImg(f); });
+['dragover','dragenter'].forEach(function(ev){ document.body.addEventListener(ev,function(e){ e.preventDefault(); document.body.classList.add('chatwrap-dragover'); }); });
+['dragleave','drop'].forEach(function(ev){ document.body.addEventListener(ev,function(e){ e.preventDefault(); document.body.classList.remove('chatwrap-dragover'); }); });
+document.body.addEventListener('drop',function(e){ var f=e.dataTransfer&&e.dataTransfer.files&&e.dataTransfer.files[0]; if(f) fileToImg(f); });
 window.addEventListener('paste',function(e){ var items=(e.clipboardData||{}).items||[]; for(var i=0;i<items.length;i++){ if(items[i].type&&items[i].type.indexOf('image')===0){ var f=items[i].getAsFile(); if(f){ fileToImg(f); break; } } } });
+/* PROCESSES drawer */
+var drawer=document.getElementById('procDrawer'), procBtn=document.getElementById('procBtn');
+procBtn.addEventListener('click',function(){ drawer.classList.toggle('open'); procBtn.classList.toggle('on',drawer.classList.contains('open')); });
+/* ===== ARRANGE MODE — drag the striped lines; sizes remembered ===== */
+var LAY={}; try{ LAY=JSON.parse(localStorage.getItem('fm_layout')||'{}'); }catch(e){ LAY={}; }
+function applyLayout(){ document.documentElement.style.setProperty('--panelw',(LAY.panelw||0)+'px'); document.documentElement.style.setProperty('--comph',(LAY.comph||72)+'px'); document.documentElement.style.setProperty('--chatmax',(LAY.chatmax||900)+'px'); }
+function saveLayout(){ try{ localStorage.setItem('fm_layout',JSON.stringify(LAY)); }catch(e){} }
+function getPanelW(){ return LAY.panelw||0; } function setPanelW(w){ LAY.panelw=Math.max(0,Math.min(w,window.innerWidth-320)); applyLayout(); saveLayout(); }
+applyLayout();
+var arrBtn=document.getElementById('arrBtn');
+arrBtn.addEventListener('click',function(){ document.body.classList.toggle('arrange'); arrBtn.classList.toggle('on',document.body.classList.contains('arrange')); });
+document.getElementById('arrReset').addEventListener('click',function(e){ e.preventDefault(); LAY={}; applyLayout(); saveLayout(); });
+function dragify(el,onMove){ el.addEventListener('pointerdown',function(e){ e.preventDefault(); el.setPointerCapture(e.pointerId);
+  function mv(ev){ onMove(ev); } function up(ev){ el.releasePointerCapture(e.pointerId); el.removeEventListener('pointermove',mv); el.removeEventListener('pointerup',up); saveLayout(); }
+  el.addEventListener('pointermove',mv); el.addEventListener('pointerup',up); }); }
+dragify(document.getElementById('dragV'),function(ev){ setPanelW(window.innerWidth-ev.clientX); });
+dragify(document.getElementById('dragH'),function(ev){ var zone=document.getElementById('composerZone'); var h=Math.max(52,Math.min(window.innerHeight*0.45, window.innerHeight-ev.clientY-90)); LAY.comph=Math.round(h); applyLayout(); });
 })();
 </script>
 <script src="./authgate.js" defer></script>
