@@ -1,0 +1,220 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Fog Mirror · RHDP17 — Carbon Brass</title>
+<link href="https://fonts.googleapis.com/css2?family=Jost:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+/* ===== FOGMIRROR V4 — CARBON BRASS. Built 8/1 from the frozen ruling (V4.0-4.5). ===== */
+*{box-sizing:border-box;margin:0;padding:0}
+:root{--bg:#0b0b0e;--panel:#121216;--edge:rgba(201,164,92,.35);--brass:#c9a45c;--brass2:#b08d3f;--ink:#f2efe9;--mut:#9a948a}
+html,body{height:100%}
+body{font-family:Futura,'Jost',system-ui,sans-serif;background:radial-gradient(900px 500px at 80% -10%,#1a1610,transparent 60%),var(--bg);color:var(--ink);display:flex;flex-direction:column;overflow:hidden}
+/* metallic edge helper */
+.metal{border:1px solid var(--edge);box-shadow:inset 0 1px 0 rgba(255,255,255,.06),0 8px 24px rgba(0,0,0,.45);border-radius:14px;background:linear-gradient(180deg,rgba(255,255,255,.03),transparent 40%),var(--panel)}
+/* top bar */
+#top{display:flex;align-items:center;gap:10px;padding:10px 14px;border-bottom:1px solid var(--edge);background:rgba(11,11,14,.95);z-index:40}
+#top .ttl{font-weight:700;letter-spacing:3px;font-size:15px;color:var(--brass);text-transform:uppercase}
+#top button{background:#17171c;color:var(--ink);border:1px solid var(--edge);border-radius:10px;padding:7px 12px;font-family:inherit;font-size:13px;font-weight:600;cursor:pointer}
+#top button:hover{border-color:var(--brass)}
+#top button.on{color:var(--brass);box-shadow:0 0 12px rgba(201,164,92,.35)}
+#custSel{background:#0e0e12;color:var(--ink);border:1px solid var(--edge);border-radius:10px;padding:7px 12px;font-size:13px;font-family:inherit;width:200px;margin-left:auto}
+/* 3-column stage with SLIDING side panels */
+#stage{flex:1;display:flex;min-height:0;position:relative}
+#left,#right{flex:none;width:340px;transition:margin .28s ease;overflow-y:auto;padding:14px;border-right:1px solid var(--edge);background:rgba(14,14,18,.6)}
+#right{border-right:none;border-left:1px solid var(--edge);width:360px}
+#left.closed{margin-left:-340px}
+#right.closed{margin-right:-360px}
+/* left: choices tiles */
+.choices{display:flex;gap:7px;flex-wrap:wrap;margin-bottom:14px}
+.choices a{text-decoration:none;color:var(--ink);background:#17171c;border:1px solid var(--edge);border-radius:9px;padding:7px 10px;font-size:12px;font-weight:600}
+.choices a:hover{border-color:var(--brass);color:var(--brass)}
+/* left: process rows — light LEFT -> VIBRANT dark RIGHT, progress line above */
+.proc{margin-bottom:14px;padding:12px;position:relative}
+.proc h3{font-size:12.5px;letter-spacing:1.5px;text-transform:uppercase;color:var(--c);margin-bottom:8px}
+.pline{height:5px;border-radius:3px;background:rgba(255,255,255,.08);overflow:hidden;margin-bottom:8px}
+.pline i{display:block;height:100%;background:var(--c)}
+.row{display:flex;gap:4px}
+.seg{flex:1;height:40px;border-radius:8px;position:relative;cursor:pointer;display:flex;align-items:center;justify-content:center}
+.seg .lab{font-size:9.5px;font-weight:700;color:#fff;text-shadow:0 1px 3px rgba(0,0,0,.7);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;padding:0 3px}
+.seg.cur{outline:2px solid var(--brass);outline-offset:1px}
+.seg .pop{display:none;position:absolute;bottom:46px;left:50%;transform:translateX(-50%);width:210px;background:#101014;border:1px solid var(--c);border-radius:10px;padding:10px 12px;z-index:50;text-align:left}
+.seg:hover .pop{display:block}
+.seg .pop b{font-size:10.5px;color:var(--c);text-transform:uppercase;letter-spacing:.5px;display:block;margin-bottom:6px}
+.seg .pop li{font-size:11.5px;color:var(--ink);list-style:none;padding-left:11px;position:relative;margin-bottom:3px}
+.seg .pop li:before{content:'▸';position:absolute;left:0;color:var(--c)}
+.seg .pop a{color:var(--brass);font-weight:700}
+/* center chat */
+#mid{flex:1;display:flex;flex-direction:column;min-width:300px;min-height:0}
+#logwrap{flex:1;overflow-y:auto;padding:16px}
+#chatLog{max-width:860px;margin:0 auto;display:flex;flex-direction:column;gap:11px}
+.bub{max-width:85%;padding:12px 15px;border-radius:14px;font-size:15.5px;line-height:1.55;white-space:pre-wrap;word-wrap:break-word}
+.bub.you{align-self:flex-end;background:#1c1a14;border:1px solid rgba(201,164,92,.45)}
+.bub.bot{align-self:flex-start;background:#141419;border:1px solid rgba(255,255,255,.1)}
+.bub .who{display:block;font-size:10px;letter-spacing:1.6px;font-weight:700;color:var(--brass);margin-bottom:4px;text-transform:uppercase}
+.bub img{max-width:200px;border-radius:9px;display:block;margin-top:6px;cursor:pointer;border:1px solid var(--edge)}
+/* composer + faces UNDER it (original photos, small) */
+#composerZone{flex:none;padding:10px 16px 8px;border-top:1px solid var(--edge);background:rgba(11,11,14,.97)}
+.composer{display:flex;gap:8px;align-items:flex-end;max-width:860px;margin:0 auto}
+.composer textarea{flex:1;background:#0e0e12;color:var(--ink);border:1px solid var(--edge);border-radius:13px;padding:13px 15px;font-size:16px;font-family:inherit;resize:none;height:64px;max-height:42vh;outline:none;line-height:1.45}
+.composer textarea:focus{border-color:var(--brass);box-shadow:0 0 14px rgba(201,164,92,.25)}
+.cbtn{background:#17171c;color:var(--ink);border:1px solid var(--edge);border-radius:11px;padding:0 13px;height:48px;font-size:18px;cursor:pointer;font-family:inherit;flex:none}
+.cbtn:hover{border-color:var(--brass)}
+.cbtn.on{border-color:#8fd6a8;box-shadow:0 0 12px rgba(143,214,168,.4)}
+#sendB{font-size:14px;font-weight:700;background:linear-gradient(180deg,#d8b46b,#b08d3f);color:#151004;border:none}
+#squig{width:56px;height:48px;border-radius:11px;border:1px solid var(--edge);background:#101014;cursor:pointer;display:flex;align-items:center;justify-content:center;flex:none}
+#squig svg{width:34px;height:22px}
+#squig .sq{fill:none;stroke:url(#brassg);stroke-width:4;stroke-linecap:round}
+#squig.live{border-color:var(--brass);box-shadow:0 0 18px rgba(201,164,92,.5)}
+#squig.live .sq{animation:sw 1.1s linear infinite;stroke-dasharray:6 7}
+@keyframes sw{to{stroke-dashoffset:-13}}
+#chatState{font-size:11.5px;color:var(--mut);margin:6px auto 3px;max-width:860px;min-height:14px}
+#botRow{display:flex;gap:14px;align-items:center;justify-content:center;padding:3px 0 2px}
+#botRow a{text-decoration:none;text-align:center;color:var(--ink);cursor:pointer}
+#botRow img{width:36px;height:36px;border-radius:50%;object-fit:cover;border:2px solid rgba(255,255,255,.25);display:block;margin:0 auto 1px;transition:.15s}
+#botRow a.sel img{border-color:var(--brass);box-shadow:0 0 12px rgba(201,164,92,.6)}
+#botRow span{font-size:9.5px;font-weight:600;color:var(--mut)}
+#botRow a.sel span{color:var(--brass)}
+/* right: PROGRESS + thinking stream + documents */
+#right h4{font-size:11px;letter-spacing:2px;color:var(--brass);text-transform:uppercase;margin:4px 0 8px}
+#feed{font-size:12px;color:var(--mut);display:flex;flex-direction:column;gap:5px;margin-bottom:14px;max-height:30vh;overflow-y:auto}
+#feed div{padding-left:14px;position:relative}
+#feed div:before{content:'◆';position:absolute;left:0;color:var(--brass);font-size:8px;top:3px}
+#docBox{padding:10px;min-height:120px}
+#docBox img{max-width:100%;border-radius:9px}
+#docBox .none{font-size:12px;color:var(--mut)}
+</style></head><body>
+<div id="top">
+  <button id="leftT" class="on" title="Slide the process panel">☰</button>
+  <span class="ttl">Fog Mirror</span>
+  <input id="custSel" list="custList" placeholder="Customer…" autocomplete="off"><datalist id="custList"></datalist>
+  <button id="rightT" class="on" title="Slide the progress panel">▤</button>
+</div>
+<div id="stage">
+  <div id="left">
+    <div class="choices">
+      <a href="https://outlook.office.com/mail/drafts" target="_blank">📝 Drafts</a><a href="https://teams.microsoft.com/" target="_blank">💬 Teams</a><a href="https://outlook.office.com/mail/" target="_blank">📥 Outlook</a><a href="https://web.autocad.com/" target="_blank">📐 AutoCAD</a><a href="https://www.google.com" target="_blank">🌐 Google</a><a href="./forms.html">📋 Forms</a>
+    </div>
+    <div id="stack"></div>
+  </div>
+  <div id="mid">
+    <div id="logwrap"><div id="chatLog"></div></div>
+    <div id="composerZone">
+      <div class="composer">
+        <button class="cbtn" id="attachBtn" title="Attach a photo or plan">📎</button>
+        <input type="file" id="chatFile" accept="image/*" style="display:none">
+        <textarea id="chatText" placeholder="Type to Cassie… (Enter to send · grows as you type · drop or paste an image)"></textarea>
+        <button class="cbtn" id="dictBtn" title="Dictate into the box">🎙</button>
+        <button id="squig" title="Conversation — pause 4s to send, talk over the bot to interrupt">
+          <svg viewBox="0 0 40 26"><defs><linearGradient id="brassg" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#e8cf96"/><stop offset="1" stop-color="#b08d3f"/></linearGradient></defs><path class="sq" d="M2 13 Q7 3 12 13 T22 13 T32 13 T38 13"/></svg>
+        </button>
+        <button class="cbtn" id="sendB">Send</button>
+      </div>
+      <div id="chatState">Cassie is on the line.</div>
+      <div id="botRow">
+        <a data-role="cassie" class="sel"><img src="./cassie.jpg" alt="Cassie"><span>Cassie</span></a>
+        <a data-role="richard"><img src="./richard.jpg" alt="Richard"><span>Richard</span></a>
+        <a data-role="irma"><img src="./irma.jpg" alt="Irma"><span>Irma</span></a>
+        <a data-role="maya"><img src="./maya.jpg" alt="Maya"><span>Maya</span></a>
+      </div>
+    </div>
+  </div>
+  <div id="right">
+    <h4>Progress · The Thinking Stream</h4>
+    <div id="feed" class="metal" style="padding:10px"></div>
+    <h4>Documents</h4>
+    <div id="docBox" class="metal"><div class="none">Drop, paste, or attach a plan — it opens here and the bot reads it.</div></div>
+  </div>
+</div>
+<script>
+var A="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InFyd2x5b3dkenF6a2liZHp2b2VrIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzAyNDIyODEsImV4cCI6MjA4NTgxODI4MX0.5xurzQ0HUECk4_SxlcRdKG-5KCmyQ30b4jyCiyERAoU";
+var SUPA="https://qrwlyowdzqzkibdzvoek.supabase.co";
+var PROC=[
+ {name:'Design',hue:140,cur:3,steps:['Intake','Measure','Concept','Selections','Working Dwgs','Engineering','Plan Set','Submit'],
+  tips:[['<a href="./forms/01-client-intake.html">Client Intake form</a>','Retainer & contract'],['Site photos & measurements','Scan files'],['<a href="./forms/03-design-binder.html">Design binder</a>','Concept drawings'],['<a href="./selectionboard.html">Selection Board</a>'],['AutoCAD','Redlines'],['Engineer of record','Title 24'],['Final plan PDF'],['<a href="./portals.html">City portals</a>','Submittal checklist']]},
+ {name:'Construction',hue:0,cur:-1,steps:['Site Prep','Foundation','Framing','Rough Trades','Finishing','Inspections','Final'],
+  tips:[['Permits posted','Schedule subs'],['Concrete sub'],['Framing sub'],['Plumbing/Electrical/HVAC subs','Rough inspections'],['Drywall/paint/flooring subs'],['Inspection schedule'],['Final inspection','Punch list']]},
+ {name:'Bidding · Subs',hue:210,cur:-1,steps:['Scope','Invite','Collect','Compare','Award','Contracts'],
+  tips:[['Trade list from plans'],['<a href="./bidmanager.html">Bid Manager</a>','Email + text + call'],['3 bids per trade'],['Compare price/scope'],['Richard picks'],['COI · W-9 · Workers comp']]},
+ {name:'Selection Board',hue:40,cur:-1,steps:['Kickoff','Room-by-Room','Quotes','Approval','Ordered'],
+  tips:[['<a href="./selectionboard.html">Selection Board</a>'],['Product photos'],['Vendor quotes'],['Client sign-off'],['Lead times']]},
+ {name:'Bookkeeping',hue:275,cur:-1,steps:['Retainer 25%','Dwgs 50%','Permit 25%','Collections','Closed'],
+  tips:[['Invoice','25/50/25'],['After design accepted'],['At permit'],['Payment reminders'],['Receipts','Close']]}
+];
+function segColor(i,n,hue){var l=Math.round(72-(i/Math.max(1,n-1))*38);return 'hsl('+hue+',88%,'+l+'%)';}
+function render(){document.getElementById('stack').innerHTML=PROC.map(function(p){
+  var c='hsl('+p.hue+',88%,58%)';var n=p.steps.length;var pct=p.cur>=0?Math.round((p.cur/n)*100):0;
+  var segs=p.steps.map(function(s,i){var tips=(p.tips[i]||[]).map(function(x){return '<li>'+x+'</li>';}).join('');
+    return '<div class="seg'+(i===p.cur?' cur':'')+'" style="background:'+segColor(i,n,p.hue)+'"><span class="lab">'+s+'</span><div class="pop"><b>'+s+'</b><ul>'+tips+'</ul></div></div>';}).join('');
+  return '<div class="proc metal" style="--c:'+c+'"><h3>'+p.name+'</h3><div class="pline"><i style="width:'+pct+'%"></i></div><div class="row">'+segs+'</div></div>';}).join('');}
+render();
+/* customer picker (live data) */
+(function(){var sel=document.getElementById('custSel');
+ fetch(SUPA+"/functions/v1/dashboard-data",{headers:{apikey:A,Authorization:"Bearer "+A}}).then(function(r){return r.json();}).then(function(d){if(!d||!d.projects)return;window._proj=d.projects;var names=Array.from(new Set(d.projects.map(function(p){return p.name;}))).sort();document.getElementById('custList').innerHTML=names.map(function(n){return '<option value="'+n+'">';}).join('');}).catch(function(){});
+ sel.addEventListener('change',function(){var r=(window._proj||[]).filter(function(p){return p.name.toLowerCase().indexOf(sel.value.toLowerCase())>=0;})[0];if(r){PROC[0].cur=Math.max(0,Math.min(PROC[0].steps.length-1,Math.round((r.pct||0)/100*(PROC[0].steps.length-1))));render();feedAdd('Loaded '+r.name+' — Design '+(r.pct||0)+'%');}});
+})();
+/* sliding panels — crucial, persisted */
+function pane(id,btn,key){var el=document.getElementById(id),b=document.getElementById(btn);
+ try{if(localStorage.getItem(key)==='0'){el.classList.add('closed');b.classList.remove('on');}}catch(e){}
+ b.addEventListener('click',function(){el.classList.toggle('closed');var open=!el.classList.contains('closed');b.classList.toggle('on',open);try{localStorage.setItem(key,open?'1':'0');}catch(e){}});}
+pane('left','leftT','fm4_left');pane('right','rightT','fm4_right');
+/* THE THINKING STREAM */
+function feedAdd(t){var f=document.getElementById('feed');var d=document.createElement('div');d.textContent=t;f.appendChild(d);f.scrollTop=f.scrollHeight;}
+feedAdd('Fog Mirror v4 online — Carbon Brass.');
+/* chat engine (proven v3 core) */
+var NAMES={cassie:'Cassie',richard:'Richard',irma:'Irma',maya:'Maya'};var role='cassie';
+var log=document.getElementById('chatLog'),txt=document.getElementById('chatText'),squig=document.getElementById('squig'),stateEl=document.getElementById('chatState');
+function getToken(){try{for(var i=0;i<localStorage.length;i++){var k=localStorage.key(i);if(/^sb-.*-auth-token$/.test(k)){var v=JSON.parse(localStorage.getItem(k));var t=v&&(v.access_token||(v.currentSession&&v.currentSession.access_token));if(t)return t;}}}catch(e){}return A;}
+function esc(t){return (t||'').replace(/[<>&]/g,function(c){return c==='<'?'&lt;':c==='>'?'&gt;':'&amp;';});}
+function bubble(kind,who,text,imgSrc){var d=document.createElement('div');d.className='bub '+kind;d.innerHTML=(who?'<span class="who">'+esc(who)+'</span>':'')+esc(text||'');if(imgSrc){var im=document.createElement('img');im.src=imgSrc;im.addEventListener('click',function(){showDoc(imgSrc);});d.appendChild(im);}log.appendChild(d);document.getElementById('logwrap').scrollTop=1e9;return d;}
+bubble('bot','Cassie',"Welcome to Carbon Brass. Type, tap 🎙 to dictate, or tap the squiggle to talk — pause 4 seconds and I answer; talk over me to interrupt. Slide the panels with ☰ and ▤ up top.");
+var faces=document.querySelectorAll('#botRow a[data-role]');
+faces.forEach(function(a){a.addEventListener('click',function(ev){ev.preventDefault();var r=a.getAttribute('data-role');
+ if(r===role&&convo){stopConvo();return;}
+ faces.forEach(function(x){x.classList.remove('sel');});a.classList.add('sel');role=r;
+ txt.placeholder='Type to '+NAMES[role]+'…';feedAdd('Switched to '+NAMES[role]);bubble('bot',NAMES[role],"I'm here — go ahead.");if(!convo)startConvo();});});
+var busy=false,player=null;
+function setState(t){stateEl.textContent=t;feedAdd(t);}
+function clip(t){t=t.slice(0,800);var m=t.match(/^[\s\S]*[.!?](\s|$)/);return m?m[0].trim():t;}
+function speak(text){return new Promise(function(res){var tok=getToken();
+ fetch(SUPA+"/functions/v1/tts",{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+tok,'apikey':A},body:JSON.stringify({text:clip(text),input:clip(text),voice:'nova'})})
+ .then(function(r){return r.ok?r.arrayBuffer():null;}).then(function(buf){if(!buf){res();return;}if(player){try{player.pause();}catch(e){}}player=new Audio(URL.createObjectURL(new Blob([buf],{type:'audio/mpeg'})));player.onended=res;player.onerror=res;player.play().catch(res);}).catch(res);});}
+function ask(msg,voice){if(!msg||busy)return;busy=true;bubble('you','You',msg);setState(NAMES[role]+' is thinking…');var tok=getToken();
+ fetch(SUPA+"/functions/v1/fog-mirror-chat",{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+tok,'apikey':A},body:JSON.stringify({question:msg,role:role})})
+ .then(function(r){return r.json();}).then(function(d){var rep=d.answer||d.error||'(no reply)';bubble('bot',NAMES[role],rep);setState(NAMES[role]+' answered.');
+  if(voice&&rep){setState(NAMES[role]+' is speaking… (talk to interrupt)');speak(rep).then(function(){busy=false;if(convo)setState('Listening… pause 4 seconds when done.');});}else{busy=false;}})
+ .catch(function(e){bubble('bot',NAMES[role],'Could not reach the brain: '+e.message);busy=false;});}
+function autogrow(){txt.style.height='auto';txt.style.height=Math.min(txt.scrollHeight,window.innerHeight*0.42)+'px';}
+txt.addEventListener('input',autogrow);
+function sendTyped(){var m=(txt.value||'').trim();if(!m)return;txt.value='';autogrow();ask(m,false);}
+document.getElementById('sendB').addEventListener('click',sendTyped);
+txt.addEventListener('keydown',function(e){if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();sendTyped();}});
+var SR=window.SpeechRecognition||window.webkitSpeechRecognition;
+var convo=false,rec=null,turnText='',silT=null,SIL=4000;
+if(SR){rec=new SR();rec.continuous=true;rec.interimResults=true;rec.lang='en-US';
+ rec.onresult=function(e){if(player&&!player.paused){try{player.pause();}catch(_){}}turnText='';for(var k=0;k<e.results.length;k++)turnText+=e.results[k][0].transcript;if(turnText.trim())stateEl.textContent='You: '+turnText.trim();if(silT)clearTimeout(silT);silT=setTimeout(function(){if(!convo)return;var m=turnText.trim();turnText='';if(m)ask(m,true);},SIL);};
+ rec.onerror=function(ev){if(ev.error==='not-allowed'){setState('Allow the microphone, then tap the squiggle.');stopConvo();}};
+ rec.onend=function(){if(convo){try{rec.start();}catch(_){}}};}
+function startConvo(){if(!rec){setState("Voice needs Chrome — typing works.");return;}if(dictOn)stopDict();convo=true;squig.classList.add('live');setState('Conversation with '+NAMES[role]+' — pause 4 seconds when done.');try{rec.start();}catch(_){}}
+function stopConvo(){convo=false;squig.classList.remove('live');if(silT)clearTimeout(silT);if(rec){try{rec.stop();}catch(_){}}if(player){try{player.pause();}catch(_){}}setState(NAMES[role]+' is on the line.');}
+squig.addEventListener('click',function(){convo?stopConvo():startConvo();});
+var dict=null,dictOn=false,dBase='';var dictBtn=document.getElementById('dictBtn');
+if(SR){dict=new SR();dict.continuous=true;dict.interimResults=true;dict.lang='en-US';
+ dict.onresult=function(e){var s='';for(var k=0;k<e.results.length;k++)s+=e.results[k][0].transcript;txt.value=(dBase+' '+s).trim();autogrow();};
+ dict.onend=function(){if(dictOn){try{dBase=txt.value;dict.start();}catch(_){}}};}
+function startDict(){if(!dict)return;if(convo)stopConvo();dictOn=true;dBase=txt.value;dictBtn.classList.add('on');setState('Dictating — tap 🎙 to stop, then Send.');try{dict.start();}catch(_){}}
+function stopDict(){dictOn=false;dictBtn.classList.remove('on');if(dict){try{dict.stop();}catch(_){}}setState(NAMES[role]+' is on the line.');}
+dictBtn.addEventListener('click',function(){dictOn?stopDict():startDict();});
+/* documents → right panel + read-plan */
+function showDoc(src){var b=document.getElementById('docBox');b.innerHTML='';var im=document.createElement('img');im.src=src;b.appendChild(im);var r=document.getElementById('right');if(r.classList.contains('closed'))document.getElementById('rightT').click();}
+function handleImage(dataUrl){if(!dataUrl||busy)return;busy=true;bubble('you','You','',dataUrl);showDoc(dataUrl);setState('Reading the image…');var tok=getToken();
+ fetch(SUPA+"/functions/v1/read-plan",{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+tok,'apikey':A},body:JSON.stringify({image:dataUrl})})
+ .then(function(r){return r.json();}).then(function(d){bubble('bot',NAMES[role],d.answer||d.error||'(no reading)');setState('Image read.');busy=false;})
+ .catch(function(e){bubble('bot',NAMES[role],'Could not read the image: '+e.message);busy=false;});}
+function fileToImg(f){if(!f||!/^image\//.test(f.type||''))return;var r=new FileReader();r.onload=function(){handleImage(r.result);};r.readAsDataURL(f);}
+var fi=document.getElementById('chatFile');
+document.getElementById('attachBtn').addEventListener('click',function(){fi.click();});
+fi.addEventListener('change',function(e){fileToImg(e.target.files&&e.target.files[0]);});
+['dragover','dragenter'].forEach(function(ev){document.body.addEventListener(ev,function(e){e.preventDefault();});});
+document.body.addEventListener('drop',function(e){e.preventDefault();var f=e.dataTransfer&&e.dataTransfer.files&&e.dataTransfer.files[0];if(f)fileToImg(f);});
+window.addEventListener('paste',function(e){var it=(e.clipboardData||{}).items||[];for(var i=0;i<it.length;i++){if(it[i].type&&it[i].type.indexOf('image')===0){var f=it[i].getAsFile();if(f){fileToImg(f);break;}}}});
+</script>
+<script src="./authgate.js" defer></script>
+</body></html>
