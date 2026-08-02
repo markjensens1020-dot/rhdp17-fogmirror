@@ -218,4 +218,16 @@ document.body.addEventListener('drop',function(e){e.preventDefault();var f=e.dat
 window.addEventListener('paste',function(e){var it=(e.clipboardData||{}).items||[];for(var i=0;i<it.length;i++){if(it[i].type&&it[i].type.indexOf('image')===0){var f=it[i].getAsFile();if(f){fileToImg(f);break;}}}});
 </script>
 <script src="./authgate.js" defer></script>
+<script>
+/* SELF-REFRESH: dashboard updates itself when a new version ships. Checks every 5 min;
+   never reloads while someone is typing. Mark's rule 8/2: "it should refresh itself." */
+(function(){var cur=null;
+function typing(){var a=document.activeElement;return a&&/INPUT|TEXTAREA/.test(a.tagName)&&(a.value||'').length>0;}
+function chk(){fetch(location.pathname+'?vchk='+Date.now(),{method:'HEAD',cache:'no-store'}).then(function(r){
+  var e=r.headers.get('etag')||r.headers.get('last-modified')||r.headers.get('content-length');
+  if(cur===null){cur=e;return;}
+  if(e&&e!==cur&&!typing()){location.reload();}
+}).catch(function(){});}
+setInterval(chk,300000);setTimeout(chk,15000);})();
+</script>
 </body></html>
