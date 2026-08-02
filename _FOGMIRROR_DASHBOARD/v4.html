@@ -4,36 +4,36 @@
 /* ===== FOGMIRROR V6 — CARBON BRASS, ROUND-2 MOCK LAYOUT (Mark+Cassie ruling 8/2:
    "keep all the new features but look and feel like the mock"). Engine untouched. ===== */
 *{box-sizing:border-box;margin:0;padding:0}
-:root{--bg:#0f0d09;--panel:#151109;--card:#1b1712;--card2:#201a12;--edge:#2a2318;--brass:#c8a24a;--brass2:#8f7434;--ink:#efe6cf;--mut:#a89b7e;
+:root{--bg:#0f0d09;--panel:#151109;--card:#1b1712;--card2:#201a12;--edge:#352b1a;--brass:#c8a24a;--brass2:#8f7434;--ink:#efe6cf;--mut:#a89b7e;
 --green:#7fb069;--red:#c05248;--blue:#5b8bd9;--gold:#c8a24a;--purple:#9b7fc0}
 html,body{height:100%}
 body{font-family:Futura,'Trebuchet MS',Avenir,sans-serif;background:var(--bg);color:var(--ink);display:flex;flex-direction:column;overflow:hidden}
 h5.sec{font-size:10px;letter-spacing:2.2px;color:var(--mut);text-transform:uppercase;margin:16px 2px 8px}
 /* slim top bar — the search LAW lives here */
 #top{display:flex;align-items:center;gap:10px;padding:8px 12px;border-bottom:1px solid var(--edge);background:rgba(10,9,6,.97);z-index:40}
-#top button{background:#d9bc72;color:#141004;border:1px solid var(--brass2);border-radius:9px;padding:6px 11px;font-family:inherit;font-size:13px;font-weight:700;cursor:pointer}
+#top button{background:#d9bc72;color:#141004;border:1px solid var(--brass2);border-radius:6px;padding:6px 11px;font-family:inherit;font-size:13px;font-weight:700;cursor:pointer}
 #top button:hover{background:#e8cf96}
-#custSel{background:var(--card);color:var(--ink);border:1px solid var(--edge);border-radius:9px;padding:7px 12px;font-size:13px;font-family:inherit;width:300px;outline:none}
+#custSel{background:var(--card);color:var(--ink);border:1px solid var(--edge);border-radius:6px;padding:7px 12px;font-size:13px;font-family:inherit;width:300px;outline:none}
 #custSel:focus{border-color:var(--brass)}
 /* stage + sliding panels (kept) */
 #stage{flex:1;display:flex;min-height:0;position:relative}
 #left,#right{flex:none;width:300px;transition:margin .28s ease;overflow-y:auto;padding:14px;background:rgba(13,11,7,.7)}
 #left{border-right:1px solid var(--edge)}
-#right{width:330px;border-left:1px solid var(--edge)}
+#right{width:365px;border-left:1px solid var(--edge)}
 #left.closed{margin-left:-300px}
-#right.closed{margin-right:-330px}
+#right.closed{margin-right:-365px}
 /* brand block */
 .brand{display:flex;gap:10px;align-items:center;margin-bottom:6px}
-.brand .fm{width:38px;height:38px;border-radius:10px;background:var(--brass);color:#141004;font-weight:800;display:flex;align-items:center;justify-content:center;font-size:15px}
+.brand .fm{width:38px;height:38px;border-radius:6px;background:var(--brass);color:#141004;font-weight:800;display:flex;align-items:center;justify-content:center;font-size:15px}
 .brand b{display:block;font-size:15px;letter-spacing:.5px}
 .brand span{display:block;font-size:10.5px;color:var(--mut)}
 /* choices tiles (mock grid) */
 .choices{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
-.choices a{text-decoration:none;color:var(--ink);background:var(--card);border:1px solid var(--edge);border-radius:12px;padding:12px 6px 10px;font-size:11.5px;font-weight:700;text-align:center;position:relative}
+.choices a{text-decoration:none;color:var(--ink);background:var(--card);border:1px solid var(--edge);border-radius:7px;padding:12px 6px 10px;font-size:11.5px;font-weight:700;text-align:center;position:relative}
 .choices a .ic{display:block;font-size:18px;margin-bottom:5px}
 .choices a:hover{border-color:var(--brass);color:var(--brass)}
 /* process cards (mock) */
-.proc{margin-bottom:12px;padding:12px;background:var(--card);border:1px solid var(--edge);border-radius:12px}
+.proc{margin-bottom:12px;padding:12px;background:var(--card);border:1px solid var(--edge);border-radius:7px}
 .proc .hd{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:6px}
 .proc .hd b{font-size:12px;letter-spacing:1.6px;text-transform:uppercase;color:var(--c)}
 .proc .hd span{font-size:11px;font-weight:700;color:var(--c)}
@@ -44,7 +44,7 @@ h5.sec{font-size:10px;letter-spacing:2.2px;color:var(--mut);text-transform:upper
 .seg .lab{font-size:9.5px;font-weight:800;letter-spacing:.6px;color:#17130a;white-space:nowrap;text-transform:uppercase}
 .seg.todo{opacity:.33}
 .seg.cur{outline:2px solid var(--ink);outline-offset:1px}
-.seg .pop{display:none;position:absolute;bottom:34px;left:50%;transform:translateX(-50%);width:215px;background:#0c0a07;border:1px solid var(--c);border-radius:10px;padding:10px 12px;z-index:60;text-align:left}
+.seg .pop{display:none;position:absolute;bottom:34px;left:50%;transform:translateX(-50%);width:215px;background:#0c0a07;border:1px solid var(--c);border-radius:6px;padding:10px 12px;z-index:60;text-align:left}
 .seg:hover .pop{display:block}
 .seg .pop b{font-size:10.5px;color:var(--c);text-transform:uppercase;letter-spacing:.5px;display:block;margin-bottom:6px}
 .seg .pop li{font-size:11.5px;color:var(--ink);list-style:none;padding-left:11px;position:relative;margin-bottom:3px}
@@ -60,7 +60,7 @@ h5.sec{font-size:10px;letter-spacing:2.2px;color:var(--mut);text-transform:upper
 .pill{font-size:10.5px;font-weight:700;color:var(--brass);border:1px solid var(--brass2);border-radius:20px;padding:4px 12px;letter-spacing:.4px}
 #logwrap{flex:1;overflow-y:auto;padding:16px}
 #chatLog{max-width:880px;margin:0 auto;display:flex;flex-direction:column;gap:12px}
-.bub{max-width:85%;padding:12px 15px;border-radius:14px;font-size:15px;line-height:1.55;white-space:pre-wrap;word-wrap:break-word}
+.bub{max-width:85%;padding:12px 15px;border-radius:5px;font-size:15px;line-height:1.55;white-space:pre-wrap;word-wrap:break-word}
 .bub.you{align-self:flex-end;background:var(--card2);border:1px solid var(--brass2)}
 .bub.bot{align-self:flex-start;background:transparent;border:none;padding:0;max-width:92%}
 .bot .bhead{display:flex;align-items:center;gap:8px;margin-bottom:5px}
@@ -68,19 +68,19 @@ h5.sec{font-size:10px;letter-spacing:2.2px;color:var(--mut);text-transform:upper
 .bot .bhead b{font-size:12.5px;color:var(--brass)}
 .bot .bhead span{font-size:10px;color:var(--mut)}
 .bot .btxt{font-size:15px;line-height:1.55;white-space:pre-wrap}
-.bub img.att{max-width:200px;border-radius:9px;display:block;margin-top:6px;cursor:pointer;border:1px solid var(--edge)}
+.bub img.att{max-width:200px;border-radius:6px;display:block;margin-top:6px;cursor:pointer;border:1px solid var(--edge)}
 /* inline staged-doc chat card (mock) */
-.dcard{display:flex;align-items:center;gap:12px;background:var(--card);border:1px solid var(--edge);border-radius:12px;padding:12px 14px;margin-top:8px;max-width:560px}
+.dcard{display:flex;align-items:center;gap:12px;background:var(--card);border:1px solid var(--edge);border-radius:7px;padding:12px 14px;margin-top:8px;max-width:560px}
 .dcard .tag{flex:none;width:38px;height:30px;border-radius:7px;background:var(--brass);color:#141004;font-size:9.5px;font-weight:800;display:flex;align-items:center;justify-content:center}
 .dcard .m{flex:1;min-width:0}
 .dcard .m b{display:block;font-size:12.5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .dcard .m span{font-size:10px;color:var(--mut);letter-spacing:.4px}
-.dcard button{background:#d9bc72;color:#141004;border:1px solid var(--brass2);border-radius:8px;padding:6px 14px;font-size:12px;font-weight:700;cursor:pointer;font-family:inherit}
+.dcard button{background:#d9bc72;color:#141004;border:1px solid var(--brass2);border-radius:5px;padding:6px 14px;font-size:12px;font-weight:700;cursor:pointer;font-family:inherit}
 .dcard button:hover{background:#e8cf96}
 /* composer (mock) */
 #composerZone{flex:none;padding:10px 16px 6px;border-top:1px solid var(--edge);background:rgba(10,9,6,.97)}
-.composer{display:flex;gap:8px;align-items:flex-end;max-width:880px;margin:0 auto;background:var(--card);border:1px solid var(--edge);border-radius:16px;padding:8px 10px}
-.composer:focus-within{border-color:var(--brass);box-shadow:0 0 14px rgba(201,164,92,.2)}
+.composer{display:flex;gap:8px;align-items:flex-end;max-width:880px;margin:0 auto;background:var(--card);border:1px solid var(--edge);border-radius:6px;padding:8px 10px}
+.composer:focus-within{border-color:var(--brass);box-shadow:none}
 .composer textarea{flex:1;background:transparent;color:var(--ink);border:none;padding:8px 6px;font-size:15.5px;font-family:inherit;resize:none;height:44px;max-height:42vh;outline:none;line-height:1.45}
 .cbtn{background:transparent;color:var(--brass);border:none;font-size:17px;cursor:pointer;font-family:inherit;flex:none;padding:8px 6px}
 .cbtn:hover{color:#e8cf96}
@@ -97,7 +97,7 @@ h5.sec{font-size:10px;letter-spacing:2.2px;color:var(--mut);text-transform:upper
 #botRow{display:flex;gap:16px;align-items:center;justify-content:center;padding:4px 0 2px}
 #botRow a{text-decoration:none;text-align:center;color:var(--ink);cursor:pointer}
 #botRow img{width:38px;height:38px;border-radius:50%;object-fit:cover;border:2px solid rgba(255,255,255,.2);display:block;margin:0 auto 2px;transition:.15s}
-#botRow a.sel img{border-color:var(--brass);box-shadow:0 0 12px rgba(201,164,92,.6)}
+#botRow a.sel img{border-color:var(--brass);box-shadow:none}
 #botRow span{font-size:9.5px;font-weight:700;color:var(--mut)}
 #botRow a.sel span{color:var(--brass)}
 #botCap{text-align:center;font-size:10px;color:var(--mut);padding-bottom:6px}
@@ -106,11 +106,12 @@ h5.sec{font-size:10px;letter-spacing:2.2px;color:var(--mut);text-transform:upper
 .rhead b{font-size:16px}
 .rhead span{font-size:10.5px;color:var(--mut)}
 #right h4{font-size:10px;letter-spacing:2.2px;color:var(--mut);text-transform:uppercase;margin:16px 2px 8px}
-.metal{border:1px solid var(--edge);border-radius:12px;background:var(--card)}
+.metal{border:1px solid var(--edge);border-radius:7px;background:var(--card)}
 /* this-session checklist */
 #feed{font-size:12px;display:flex;flex-direction:column;gap:7px;max-height:26vh;overflow-y:auto;padding:11px}
 #feed div{padding-left:22px;position:relative;color:var(--ink);line-height:1.4}
 #feed div:before{content:'✓';position:absolute;left:0;top:0;width:14px;height:14px;border-radius:50%;background:#274c2c;color:#8fd6a8;font-size:9px;display:flex;align-items:center;justify-content:center}
+#feed div.busy:before{content:'◉';background:#4c3d1a;color:#e0b64f}
 /* schedule bars */
 #sched{padding:11px}
 .srow{display:flex;align-items:center;gap:8px;margin-bottom:8px}
@@ -140,24 +141,24 @@ h5.sec{font-size:10px;letter-spacing:2.2px;color:var(--mut);text-transform:upper
 #docBox .dvbar b{flex:1;font-size:11px;color:var(--brass);letter-spacing:.6px;text-transform:uppercase;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 #docBox .dvbar button{background:#d9bc72;color:#141004;border:1px solid var(--brass2);border-radius:7px;padding:3px 9px;font-size:12px;font-weight:700;cursor:pointer;font-family:inherit}
 #docBox .dvbar button:disabled{opacity:.4;cursor:default}
-#docBox iframe{width:100%;height:48vh;border:1px solid var(--edge);border-radius:9px;background:#fff}
-#docBox img{max-width:100%;border-radius:9px}
+#docBox iframe{width:100%;height:48vh;border:1px solid var(--edge);border-radius:6px;background:#fff}
+#docBox img{max-width:100%;border-radius:6px}
 /* staged-email editor card (Approve & Send — kept) */
 .wbmail label{display:block;font-size:9.5px;color:var(--mut);letter-spacing:.8px;text-transform:uppercase;margin:6px 0 2px}
-.wbmail input,.wbmail textarea,.wbmail select{width:100%;background:#0c0a07;color:var(--ink);border:1px solid var(--edge);border-radius:8px;padding:7px 9px;font-size:12px;font-family:inherit;outline:none}
+.wbmail input,.wbmail textarea,.wbmail select{width:100%;background:#0c0a07;color:var(--ink);border:1px solid var(--edge);border-radius:5px;padding:7px 9px;font-size:12px;font-family:inherit;outline:none}
 .wbmail input:focus,.wbmail textarea:focus{border-color:var(--brass)}
 .wbmail textarea{resize:vertical;min-height:90px;line-height:1.5}
 .wbmail .mrow{display:flex;gap:7px;align-items:center;margin-top:9px}
 .wbmail select{width:auto;flex:1}
-.wbsend{background:var(--brass);color:#141004;border:none;border-radius:9px;padding:8px 14px;font-size:12px;font-weight:800;cursor:pointer;font-family:inherit;flex:none}
+.wbsend{background:var(--brass);color:#141004;border:none;border-radius:6px;padding:8px 14px;font-size:12px;font-weight:800;cursor:pointer;font-family:inherit;flex:none}
 .wbsend:hover{background:#d8b46b}
 .wbsend:disabled{opacity:.5;cursor:default}
 .wbmail .mstate{font-size:11.5px;margin-top:7px;color:var(--mut)}
 .wbmail.sentok{outline:1px solid #3f6e4f}
 /* suggestion box (kept) */
-#sugTxt{width:100%;background:#0c0a07;color:var(--ink);border:1px solid var(--edge);border-radius:9px;padding:9px 11px;font-size:12px;font-family:inherit;resize:vertical;min-height:54px;outline:none}
+#sugTxt{width:100%;background:#0c0a07;color:var(--ink);border:1px solid var(--edge);border-radius:6px;padding:9px 11px;font-size:12px;font-family:inherit;resize:vertical;min-height:54px;outline:none}
 #sugTxt:focus{border-color:var(--brass)}
-#sugSend{margin-top:7px;background:#d9bc72;color:#141004;border:1px solid var(--brass2);border-radius:9px;padding:7px 14px;font-size:12px;font-weight:700;cursor:pointer;font-family:inherit}
+#sugSend{margin-top:7px;background:#d9bc72;color:#141004;border:1px solid var(--brass2);border-radius:6px;padding:7px 14px;font-size:12px;font-weight:700;cursor:pointer;font-family:inherit}
 #sugSend:hover{background:#e8cf96}
 #sugState{margin-top:6px;font-size:11px;color:var(--mut)}
 </style></head><body>
@@ -165,6 +166,7 @@ h5.sec{font-size:10px;letter-spacing:2.2px;color:var(--mut);text-transform:upper
   <button id="leftT" class="on" title="Slide the process panel">☰</button>
   <input id="custSel" list="custList" placeholder="🔍 Customer / file — type to search…" autocomplete="off"><datalist id="custList"></datalist>
   <span style="margin-left:auto"></span>
+  <button id="shotB" title="Screenshot the dashboard — lands in the preview">📸</button>
   <button id="rightT" class="on" title="Slide the progress panel">▤</button>
 </div>
 <div id="stage">
@@ -214,6 +216,7 @@ h5.sec{font-size:10px;letter-spacing:2.2px;color:var(--mut);text-transform:upper
     <h4>This session</h4>
     <div id="feed" class="metal"></div>
     <h4 id="schedHdr">Schedule</h4>
+    <div id="schedTog" style="display:flex;gap:6px;margin:-2px 2px 6px"><span style="background:#d9bc72;color:#141004;font-size:9px;font-weight:800;letter-spacing:.8px;border-radius:4px;padding:3px 9px">CALENDAR</span><span style="color:var(--mut);font-size:9px;font-weight:800;letter-spacing:.8px;padding:3px 4px">LIST</span></div>
     <div id="sched" class="metal"></div>
     <h4>Documents ready to judge</h4>
     <div id="wb" class="metal"><div class="none">Staged drafts and opened documents land here — click one to open it in the preview.</div></div>
@@ -281,7 +284,7 @@ function pane(id,btn,key){var el=document.getElementById(id),b=document.getEleme
  b.addEventListener('click',function(){el.classList.toggle('closed');var open=!el.classList.contains('closed');b.classList.toggle('on',open);try{localStorage.setItem(key,open?'1':'0');}catch(e){}});}
 pane('left','leftT','fm4_left');pane('right','rightT','fm4_right');
 /* THIS SESSION checklist (the thinking stream, mock-styled) */
-function feedAdd(t){var f=document.getElementById('feed');var d=document.createElement('div');d.textContent=t;f.appendChild(d);f.scrollTop=f.scrollHeight;}
+function feedAdd(t){var f=document.getElementById('feed');var prev=f.lastChild;if(prev&&prev.classList)prev.classList.remove('busy');var d=document.createElement('div');if(/…$/.test(t))d.className='busy';d.textContent=t;f.appendChild(d);f.scrollTop=f.scrollHeight;}
 feedAdd('Fog Mirror online — Carbon Brass round 2.');
 /* chat engine (proven core, mock-styled bubbles) */
 var NAMES={cassie:'Cassie',richard:'Richard',irma:'Irma',maya:'Maya'};
@@ -359,9 +362,13 @@ function renderDocs(){var w=document.getElementById('wb');
  document.getElementById('progCount').textContent=DOCS.length+' staged';}
 function addDoc(d){DOCS.unshift(d);renderDocs();return d;}
 function chatDocCard(d){var wrap=document.createElement('div');wrap.className='dcard';
- wrap.innerHTML='<div class="tag">'+extTag(d)+'</div><div class="m"><b>'+esc(d.title)+'</b><span>STAGED DRAFT · lands in Documents ready to judge</span></div>';
+ var cust=(document.getElementById('custTitle').textContent||'').split(' — ')[0];
+ wrap.innerHTML='<div class="tag">'+extTag(d)+'</div><div class="m"><b>'+esc(d.title)+'</b><span>STAGED DRAFT · filed to Customers / '+esc(cust!=='Fog Mirror'?cust:'…')+' / 03_EMAILS</span></div>';
  var b=document.createElement('button');b.textContent='Open ▾';b.addEventListener('click',function(){openDoc(DOCS.indexOf(d));});
- wrap.appendChild(b);log.appendChild(wrap);document.getElementById('logwrap').scrollTop=1e9;}
+ wrap.appendChild(b);log.appendChild(wrap);
+ var rx=document.createElement('div');rx.style.cssText='display:flex;gap:10px;margin:4px 0 0 6px;font-size:13px;opacity:.7';
+ ['👍','👎'].forEach(function(e){var s2=document.createElement('span');s2.textContent=e;s2.style.cursor='pointer';s2.addEventListener('click',function(){feedAdd(e==='👍'?('👍 Draft liked: "'+d.title+'"'):('👎 Draft flagged — tell the bot what to change: "'+d.title+'"'));});rx.appendChild(s2);});
+ log.appendChild(rx);document.getElementById('logwrap').scrollTop=1e9;}
 function dvClose(){_pk.list=null;var b=document.getElementById('docBox');b.classList.remove('open');b.innerHTML='';}
 function dvRender(title,node){var b=document.getElementById('docBox');b.innerHTML='';b.classList.add('open');
  var bar=document.createElement('div');bar.className='dvbar';
@@ -420,6 +427,25 @@ function emailCard(doc){var m=doc.email;var d=document.createElement('div');d.cl
    else{btn.disabled=false;who.disabled=false;st.textContent='⚠ '+((r&&(r.error||r.detail))||'send failed — tell Claude');feedAdd('⚠ Send failed: "'+sub+'"');}})
   .catch(function(e){btn.disabled=false;who.disabled=false;st.textContent='⚠ network problem — tell Claude';});});
  return d;}
+
+/* 📸 SCREENSHOT BUTTON — captures the dashboard, lands in the PREVIEW (no download chores) */
+(function(){var b=document.getElementById('shotB');if(!b)return;
+function withH2C(cb){if(window.html2canvas)return cb();var sc=document.createElement('script');sc.src='https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js';sc.onload=cb;sc.onerror=function(){feedAdd('Screenshot library could not load — tell Claude.');};document.head.appendChild(sc);}
+b.addEventListener('click',function(){feedAdd('📸 Capturing the dashboard…');
+ withH2C(function(){window.html2canvas(document.body,{backgroundColor:'#0f0d09',useCORS:true,logging:false}).then(function(cv){
+  var url=cv.toDataURL('image/png');
+  var wrap=document.createElement('div');
+  var im=document.createElement('img');im.src=url;wrap.appendChild(im);
+  var row=document.createElement('div');row.style.cssText='display:flex;gap:7px;margin-top:8px';
+  var cp=document.createElement('button');cp.className='wbsend';cp.textContent='Copy image';
+  cp.addEventListener('click',function(){cv.toBlob(function(bl){if(navigator.clipboard&&window.ClipboardItem){navigator.clipboard.write([new ClipboardItem({'image/png':bl})]).then(function(){cp.textContent='✅ Copied';feedAdd('📸 Screenshot copied to clipboard.');},function(){cp.textContent='⚠ Copy blocked — use Save';});}else{cp.textContent='⚠ Use Save';}});});
+  var sv=document.createElement('a');sv.className='wbsend';sv.textContent='Save PNG';sv.style.textDecoration='none';sv.style.display='inline-block';
+  sv.href=url;sv.download='fogmirror-'+new Date().toISOString().slice(0,16).replace(/[:T]/g,'-')+'.png';
+  row.appendChild(cp);row.appendChild(sv);wrap.appendChild(row);
+  _pk.list=null;dvRender('📸 Screenshot',wrap);
+  addDoc({kind:'img',title:'📸 Screenshot · '+new Date().toLocaleTimeString([],{hour:'numeric',minute:'2-digit'}),src:url});
+  feedAdd('📸 Screenshot ready — in the preview & documents list.');
+ }).catch(function(e){feedAdd('Screenshot failed: '+e.message);});});});})();
 /* images: attach / drop / paste → read-plan + preview */
 function handleImage(dataUrl){if(!dataUrl||busy)return;busy=true;bubble('you','You','',dataUrl);showDoc(dataUrl);setState('Reading the image…');var tok=getToken();
  fetch(SUPA+"/functions/v1/read-plan",{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+tok,'apikey':A},body:JSON.stringify({image:dataUrl})})
