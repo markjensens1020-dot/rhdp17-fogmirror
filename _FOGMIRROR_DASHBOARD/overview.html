@@ -28,6 +28,7 @@
   .choices{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
   .tile{background:var(--panel2);border:1px solid var(--line);border-radius:10px;padding:10px 6px;text-align:center;font-size:11.5px;color:var(--cream);cursor:pointer;position:relative}
   .tile:hover{border-color:var(--brass-dim)}
+  a.tile{text-decoration:none;color:var(--cream);display:block}
   .tile .ic{font-size:15px;display:block;margin-bottom:5px}
   .tile .badge{position:absolute;top:-6px;right:-6px;background:var(--brass);color:#171204;font-size:10px;font-weight:700;width:17px;height:17px;border-radius:50%;display:flex;align-items:center;justify-content:center}
   .proc{background:var(--panel2);border:1px solid var(--line);border-radius:12px;padding:10px 11px}
@@ -132,12 +133,12 @@
   <div class="brand"><div class="fm">FM</div><h1>Fog Mirror<small>Richard Haro Drafting &amp; Planning</small></h1></div>
   <div class="sec">CHOICES</div>
   <div class="choices">
-    <div class="tile"><span class="ic">📝</span>Drafts</div>
-    <div class="tile"><span class="ic">👥</span>Teams</div>
-    <div class="tile"><span class="ic">✉️</span>Outlook<span class="badge">2</span></div>
-    <div class="tile"><span class="ic">📐</span>AutoCAD</div>
-    <div class="tile"><span class="ic">🌐</span>Google</div>
-    <div class="tile"><span class="ic">📄</span>Forms</div>
+    <a class="tile" href="https://outlook.office.com/mail/drafts" target="_blank" rel="noopener"><span class="ic">📝</span>Drafts</a>
+    <a class="tile" href="https://teams.microsoft.com" target="_blank" rel="noopener"><span class="ic">👥</span>Teams</a>
+    <a class="tile" href="https://outlook.office.com/mail/" target="_blank" rel="noopener"><span class="ic">✉️</span>Outlook<span class="badge">2</span></a>
+    <a class="tile" href="https://web.autocad.com" target="_blank" rel="noopener"><span class="ic">📐</span>AutoCAD</a>
+    <a class="tile" href="https://www.google.com" target="_blank" rel="noopener"><span class="ic">🌐</span>Google</a>
+    <a class="tile" href="https://forms.office.com" target="_blank" rel="noopener"><span class="ic">📄</span>Forms</a>
   </div>
   <div class="sec">PROCESSES — CASTRO</div>
   <div class="proc"><div class="hd"><b style="color:var(--green)">DESIGN</b><span>100%</span></div>
@@ -181,7 +182,7 @@
         <div class="ftag">EML</div>
         <div class="meta"><b>Castro — Client Update · city status &amp; next steps</b>
         <small><span class="st">STAGED DRAFT</span> · filed to Customers / Castro / 03_EMAILS</small></div>
-        <button class="openbtn">Open ▾</button>
+        <a class="openbtn" style="text-decoration:none" href="https://outlook.office.com/mail/drafts" target="_blank" rel="noopener">Open ▾</a>
       </div>
       <div class="mrow"><span title="Copy">⧉</span><span title="Read aloud">🔊</span><span title="Good">👍</span><span title="Bad">👎</span></div>
     </div>
@@ -239,9 +240,9 @@
   </div>
   <div class="card">
     <h3>DOCUMENTS READY TO JUDGE</h3>
-    <div class="doc"><div class="ftag">EML</div><div class="nm">Client update — Joel Castro</div><a href="#">Show in Folder</a></div>
-    <div class="doc"><div class="ftag" style="color:#e07a70">PDF</div><div class="nm">Bid tabulation — 6 of 39 replied</div><a href="#">Show in Folder</a></div>
-    <div class="doc"><div class="ftag" style="color:#9fd88c">XLS</div><div class="nm">Status report — 17 customers</div><a href="#">Show in Folder</a></div>
+    <div class="doc"><div class="ftag">EML</div><div class="nm">Client update — Joel Castro</div><a href="https://richardharodraftingand.sharepoint.com/sites/TeamRHDP17/Shared%20Documents/Forms/AllItems.aspx" target="_blank">Show in Folder</a></div>
+    <div class="doc"><div class="ftag" style="color:#e07a70">PDF</div><div class="nm">Bid tabulation — 6 of 39 replied</div><a href="https://richardharodraftingand.sharepoint.com/sites/TeamRHDP17/Shared%20Documents/Forms/AllItems.aspx" target="_blank">Show in Folder</a></div>
+    <div class="doc"><div class="ftag" style="color:#9fd88c">XLS</div><div class="nm">Status report — 17 customers</div><a href="https://richardharodraftingand.sharepoint.com/sites/TeamRHDP17/Shared%20Documents/Forms/AllItems.aspx" target="_blank">Show in Folder</a></div>
   </div>
   <div class="card wait">
     <h3>WAITING ON</h3>
@@ -251,6 +252,13 @@
 </aside>
 
 <script>
+/* REAL DESTINATIONS — every tile goes somewhere true */
+/* tiles + Open are true anchors now — no script needed for them */
+/* toast for features that arrive with the merge */
+function toast(m){let t=document.getElementById('tst');if(!t){t=document.createElement('div');t.id='tst';
+  t.style.cssText='position:fixed;bottom:120px;left:50%;transform:translateX(-50%);background:#2c240f;border:1px solid #c8a24a;color:#efe6cf;padding:10px 18px;border-radius:10px;font-size:12.5px;z-index:99;transition:opacity .4s';
+  document.body.appendChild(t);}t.textContent=m;t.style.opacity=1;clearTimeout(t._h);t._h=setTimeout(()=>t.style.opacity=0,3200);}
+document.querySelectorAll('.sendbtn,.cbtn,.convo').forEach(b=>b.onclick=()=>toast('Live bot chat connects in the merge build — talk to the bots today at /v4'));
 /* growing text box */
 const ta=document.getElementById('ta');
 ta.addEventListener('input',()=>{ta.style.height='auto';ta.style.height=Math.min(ta.scrollHeight,180)+'px';});
