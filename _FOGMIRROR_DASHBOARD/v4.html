@@ -83,6 +83,12 @@ body{font-family:Futura,'Trebuchet MS',Avenir,'Jost',sans-serif;background:var(-
 #feed{font-size:12px;color:var(--mut);display:flex;flex-direction:column;gap:5px;margin-bottom:14px;max-height:30vh;overflow-y:auto}
 #feed div{padding-left:14px;position:relative}
 #feed div:before{content:'◆';position:absolute;left:0;color:var(--brass);font-size:8px;top:3px}
+#wb .none{font-size:12px;color:var(--mut);padding:4px 2px}
+.wbcard{background:var(--panel2);border:1px solid var(--edge);border-radius:12px;padding:10px 12px;margin-bottom:8px;position:relative}
+.wbcard b{font-size:10.5px;color:var(--brass);letter-spacing:.8px;text-transform:uppercase;display:block;margin-bottom:5px;padding-right:22px}
+.wbcard .wbtxt{font-size:12px;color:var(--ink);line-height:1.5;max-height:160px;overflow:auto;white-space:pre-wrap}
+.wbcard .wbx{position:absolute;top:7px;right:9px;background:none;border:none;color:var(--mut);font-size:14px;cursor:pointer;font-family:inherit}
+.wbcard .wbx:hover{color:var(--brass)}
 #docBox{padding:10px;min-height:120px}
 #docBox img{max-width:100%;border-radius:9px}
 #docBox .none{font-size:12px;color:var(--mut)}
@@ -125,6 +131,8 @@ body{font-family:Futura,'Trebuchet MS',Avenir,'Jost',sans-serif;background:var(-
   <div id="right">
     <h4>Progress · The Thinking Stream</h4>
     <div id="feed" class="metal" style="padding:10px"></div>
+    <h4>Workbench</h4>
+    <div id="wb"><div class="none">Bot outputs land here as cards — press ✕ to clear one.</div></div>
     <h4>Documents</h4>
     <div id="docBox" class="metal"><div class="none">Drop, paste, or attach a plan — it opens here and the bot reads it.</div></div>
   </div>
@@ -169,6 +177,12 @@ var NAMES={cassie:'Cassie',richard:'Richard',irma:'Irma',maya:'Maya'};var role='
 var log=document.getElementById('chatLog'),txt=document.getElementById('chatText'),squig=document.getElementById('squig'),stateEl=document.getElementById('chatState');
 function getToken(){try{for(var i=0;i<localStorage.length;i++){var k=localStorage.key(i);if(/^sb-.*-auth-token$/.test(k)){var v=JSON.parse(localStorage.getItem(k));var t=v&&(v.access_token||(v.currentSession&&v.currentSession.access_token));if(t)return t;}}}catch(e){}return A;}
 function esc(t){return (t||'').replace(/[<>&]/g,function(c){return c==='<'?'&lt;':c==='>'?'&gt;':'&amp;';});}
+function wbAdd(title,text){var w=document.getElementById('wb');if(!w)return;var n=w.querySelector('.none');if(n)n.remove();
+ var d=document.createElement('div');d.className='wbcard';
+ d.innerHTML='<b>'+esc(title)+'</b><div class="wbtxt">'+esc(text)+'</div>';
+ var x=document.createElement('button');x.className='wbx';x.textContent='✕';
+ x.addEventListener('click',function(){d.remove();if(!w.children.length){w.innerHTML='<div class="none">Bot outputs land here as cards — press ✕ to clear one.</div>';}});
+ d.appendChild(x);w.insertBefore(d,w.firstChild);}
 function bubble(kind,who,text,imgSrc){var d=document.createElement('div');d.className='bub '+kind;d.innerHTML=(who?'<span class="who">'+esc(who)+'</span>':'')+esc(text||'');if(imgSrc){var im=document.createElement('img');im.src=imgSrc;im.addEventListener('click',function(){showDoc(imgSrc);});d.appendChild(im);}log.appendChild(d);document.getElementById('logwrap').scrollTop=1e9;return d;}
 bubble('bot','Cassie',"Welcome to Carbon Brass. Type, tap 🎙 to dictate, or tap the squiggle to talk — pause 4 seconds and I answer; talk over me to interrupt. Slide the panels with ☰ and ▤ up top.");
 var faces=document.querySelectorAll('#botRow a[data-role]');
@@ -184,7 +198,7 @@ function speak(text){return new Promise(function(res){var tok=getToken();
  .then(function(r){return r.ok?r.arrayBuffer():null;}).then(function(buf){if(!buf){res();return;}if(player){try{player.pause();}catch(e){}}player=new Audio(URL.createObjectURL(new Blob([buf],{type:'audio/mpeg'})));player.onended=res;player.onerror=res;player.play().catch(res);}).catch(res);});}
 function ask(msg,voice){if(!msg||busy)return;busy=true;bubble('you','You',msg);setState(NAMES[role]+' is thinking…');var tok=getToken();
  fetch(SUPA+"/functions/v1/fog-mirror-chat",{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+tok,'apikey':A},body:JSON.stringify({question:msg,role:role})})
- .then(function(r){return r.json();}).then(function(d){var rep=d.answer||d.error||'(no reply)';bubble('bot',NAMES[role],rep);setState(NAMES[role]+' answered.');
+ .then(function(r){return r.json();}).then(function(d){var rep=d.answer||d.error||'(no reply)';bubble('bot',NAMES[role],rep);setState(NAMES[role]+' answered.');wbAdd(NAMES[role]+' · '+new Date().toLocaleTimeString([],{hour:'numeric',minute:'2-digit'}),rep);
   if(voice&&rep){setState(NAMES[role]+' is speaking… (talk to interrupt)');speak(rep).then(function(){busy=false;if(convo)setState('Listening… pause 4 seconds when done.');});}else{busy=false;}})
  .catch(function(e){bubble('bot',NAMES[role],'Could not reach the brain: '+e.message);busy=false;});}
 function autogrow(){txt.style.height='auto';txt.style.height=Math.min(txt.scrollHeight,window.innerHeight*0.42)+'px';}
