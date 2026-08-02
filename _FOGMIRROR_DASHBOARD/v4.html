@@ -12,9 +12,10 @@ body{font-family:Futura,'Trebuchet MS',Avenir,'Jost',sans-serif;background:var(-
 /* top bar */
 #top{display:flex;align-items:center;gap:10px;padding:10px 14px;border-bottom:1px solid var(--edge);background:rgba(11,11,14,.95);z-index:40}
 #top .ttl{font-weight:700;letter-spacing:3px;font-size:15px;color:var(--brass);text-transform:uppercase}
-#top button{background:var(--card);color:var(--ink);border:1px solid var(--edge);border-radius:10px;padding:7px 12px;font-family:inherit;font-size:13px;font-weight:600;cursor:pointer}
-#top button:hover{border-color:var(--brass)}
-#top button.on{color:var(--brass);box-shadow:0 0 12px rgba(201,164,92,.35)}
+/* V5 black-print ruling: buttons/chips/tiles get light-brass faces with near-black print */
+#top button{background:#d9bc72;color:#141004;border:1px solid var(--brass2);border-radius:10px;padding:7px 12px;font-family:inherit;font-size:13px;font-weight:700;cursor:pointer}
+#top button:hover{background:#e8cf96}
+#top button.on{background:var(--brass);box-shadow:0 0 12px rgba(201,164,92,.35)}
 #custSel{background:var(--panel);color:var(--ink);border:1px solid var(--edge);border-radius:10px;padding:8px 14px;font-size:14px;font-family:inherit;width:280px;margin-left:14px;outline:none}
 #custSel:focus{border-color:var(--brass)}
 #rightT{margin-left:auto}
@@ -26,18 +27,25 @@ body{font-family:Futura,'Trebuchet MS',Avenir,'Jost',sans-serif;background:var(-
 #right.closed{margin-right:-360px}
 /* left: choices tiles */
 .choices{display:flex;gap:7px;flex-wrap:wrap;margin-bottom:14px}
-.choices a{text-decoration:none;color:var(--ink);background:var(--card);border:1px solid var(--edge);border-radius:9px;padding:7px 10px;font-size:12px;font-weight:600}
-.choices a:hover{border-color:var(--brass);color:var(--brass)}
+.choices a{text-decoration:none;color:#141004;background:#d9bc72;border:1px solid var(--brass2);border-radius:9px;padding:7px 10px;font-size:12px;font-weight:700}
+.choices a:hover{background:#e8cf96}
 /* left: process rows — light LEFT -> VIBRANT dark RIGHT, progress line above */
 .proc{margin-bottom:14px;padding:12px;position:relative}
 .proc .hd{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px}
 .proc .hd b{font-size:12px;letter-spacing:1.1px;text-transform:uppercase;color:var(--ink)}
 .proc .hd span{font-size:11px;color:var(--mut)}
-.pline{height:4px;border-radius:3px;background:#2a2318;overflow:hidden;margin-bottom:8px}
+/* V5: skinny progress line with the % reading AT THE END of the bar */
+.plwrap{display:flex;align-items:center;gap:7px;margin-bottom:8px}
+.pline{flex:1;height:4px;border-radius:3px;background:#2a2318;overflow:hidden}
 .pline i{display:block;height:100%;background:var(--c)}
-.row{display:flex;flex-wrap:wrap;gap:5px}
-.seg{flex:none;border-radius:6px;position:relative;cursor:pointer;background:var(--c);padding:4px 8px}
-.seg .lab{font-size:9.5px;font-weight:600;letter-spacing:.4px;color:#171204;text-shadow:none;white-space:nowrap}
+.ppct{font-size:11px;font-weight:700;color:var(--c);flex:none}
+/* V5: ONE horizontal row, LEFT→RIGHT, never wraps; slides out over center on hover */
+.rowwrap{height:40px;position:relative}
+.row{display:flex;flex-wrap:nowrap;gap:5px;overflow-x:auto;scrollbar-width:none;padding-bottom:2px}
+.row::-webkit-scrollbar{display:none}
+.proc:hover .row{position:fixed;left:12px;top:var(--rowtop,120px);z-index:70;overflow:visible;max-width:calc(100vw - 24px);background:var(--panel2);border:1px solid var(--c);border-radius:10px;padding:9px 10px;box-shadow:0 8px 30px rgba(0,0,0,.55)}
+.seg{flex:none;border-radius:6px;position:relative;cursor:pointer;background:var(--sc,var(--c));padding:6px 10px}
+.seg .lab{font-size:11.5px;font-weight:700;letter-spacing:.4px;color:#171204;text-shadow:none;white-space:nowrap}
 .seg.todo{opacity:.32}
 .seg.cur{outline:2px solid var(--ink);outline-offset:1px}
 .seg .pop{display:none;position:absolute;bottom:46px;left:50%;transform:translateX(-50%);width:210px;background:#101014;border:1px solid var(--c);border-radius:10px;padding:10px 12px;z-index:50;text-align:left}
@@ -60,8 +68,8 @@ body{font-family:Futura,'Trebuchet MS',Avenir,'Jost',sans-serif;background:var(-
 .composer{display:flex;gap:8px;align-items:flex-end;max-width:860px;margin:0 auto}
 .composer textarea{flex:1;background:var(--panel);color:var(--ink);border:1px solid var(--edge);border-radius:13px;padding:13px 15px;font-size:16px;font-family:inherit;resize:none;height:64px;max-height:42vh;outline:none;line-height:1.45}
 .composer textarea:focus{border-color:var(--brass);box-shadow:0 0 14px rgba(201,164,92,.25)}
-.cbtn{background:var(--card);color:var(--ink);border:1px solid var(--edge);border-radius:11px;padding:0 13px;height:48px;font-size:18px;cursor:pointer;font-family:inherit;flex:none}
-.cbtn:hover{border-color:var(--brass)}
+.cbtn{background:#d9bc72;color:#141004;border:1px solid var(--brass2);border-radius:11px;padding:0 13px;height:48px;font-size:18px;cursor:pointer;font-family:inherit;flex:none}
+.cbtn:hover{background:#e8cf96}
 .cbtn.on{border-color:#8fd6a8;box-shadow:0 0 12px rgba(143,214,168,.4)}
 #sendB{font-size:14px;font-weight:600;background:var(--brass);color:#141004;border:none;border-radius:11px}
 #sendB:hover{background:#d8b46b}
@@ -109,6 +117,14 @@ body{font-family:Futura,'Trebuchet MS',Avenir,'Jost',sans-serif;background:var(-
 #docBox{padding:10px;min-height:120px}
 #docBox img{max-width:100%;border-radius:9px}
 #docBox .none{font-size:12px;color:var(--mut)}
+/* V5: right panel = THE WORK SURFACE — doc viewer with page-flip, resting options when closed */
+#docBox .dvbar{display:flex;align-items:center;gap:6px;margin-bottom:7px}
+#docBox .dvbar b{flex:1;font-size:11px;color:var(--brass);letter-spacing:.6px;text-transform:uppercase;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+#docBox .dvbar button{background:#d9bc72;color:#141004;border:1px solid var(--brass2);border-radius:7px;padding:3px 9px;font-size:12px;font-weight:700;cursor:pointer;font-family:inherit}
+#docBox .dvbar button:disabled{opacity:.4;cursor:default}
+#docBox iframe{width:100%;height:52vh;border:1px solid var(--edge);border-radius:9px;background:#fff}
+.workopt{display:block;width:100%;text-align:left;background:#d9bc72;color:#141004;border:1px solid var(--brass2);border-radius:9px;padding:9px 11px;font-size:12.5px;font-weight:700;cursor:pointer;font-family:inherit;margin-bottom:7px}
+.workopt:hover{background:#e8cf96}
 </style></head><body>
 <div id="top">
   <button id="leftT" class="on" title="Slide the process panel">☰</button>
@@ -119,7 +135,7 @@ body{font-family:Futura,'Trebuchet MS',Avenir,'Jost',sans-serif;background:var(-
 <div id="stage">
   <div id="left">
     <div class="choices">
-      <a href="https://outlook.office.com/mail/drafts" target="_blank">📝 Drafts</a><a href="https://teams.microsoft.com/" target="_blank">💬 Teams</a><a href="https://outlook.office.com/mail/" target="_blank">📥 Outlook</a><a href="https://web.autocad.com/" target="_blank">📐 AutoCAD</a><a href="https://www.google.com" target="_blank">🌐 Google</a><a href="./forms.html">📋 Forms</a>
+      <a href="https://outlook.office.com/mail/drafts" target="_blank">📝 Drafts</a><a href="https://teams.microsoft.com/" target="_blank">💬 Teams</a><a href="https://outlook.office.com/mail/" target="_blank">📥 Outlook</a><a href="https://web.autocad.com/" target="_blank">📐 AutoCAD</a><a href="https://www.google.com" target="_blank">🌐 Google</a><a href="./forms.html" data-panel="./forms.html">📋 Forms</a>
     </div>
     <div id="stack"></div>
   </div>
@@ -176,16 +192,31 @@ var PROC=[
   tips:[['Invoice','25/50/25'],['After design accepted'],['At permit'],['Payment reminders'],['Receipts','Close']]}
 ];
 var SECCOLOR={140:'#7fb069',0:'#c05248',210:'#5b8bd9',40:'#c8a24a',275:'#9b7fc0'};
+/* V5 render: one non-wrapping LEFT→RIGHT row per process · subtle light→dark gradient across
+   the steps · % at the END of the skinny progress line · fly-out links open IN THE RIGHT PANEL */
+function panelize(html){return (html||'').replace(/<a href="(\.\/[^"]+)"/g,'<a href="$1" data-panel="$1"');}
 function render(){document.getElementById('stack').innerHTML=PROC.map(function(p){
   var c=SECCOLOR[p.hue]||'#c8a24a';var n=p.steps.length;var pct=p.cur>=0?Math.round((p.cur/n)*100):0;
-  var segs=p.steps.map(function(s,i){var tips=(p.tips[i]||[]).map(function(x){return '<li>'+x+'</li>';}).join('');
-    return '<div class="seg'+(i===p.cur?' cur':(i>p.cur?' todo':''))+'"><span class="lab">'+s+'</span><div class="pop"><b>'+s+'</b><ul>'+tips+'</ul></div></div>';}).join('');
-  return '<div class="proc metal" style="--c:'+c+'"><div class="hd"><b>'+p.name+'</b><span>'+pct+'%</span></div><div class="pline"><i style="width:'+pct+'%"></i></div><div class="row">'+segs+'</div></div>';}).join('');}
+  var segs=p.steps.map(function(s,i){var tips=(p.tips[i]||[]).map(function(x){return '<li>'+panelize(x)+'</li>';}).join('');
+    var mix=n>1?Math.round(34-34*(i/(n-1))):0; /* lighter left → full color right, SUBTLE */
+    return '<div class="seg'+(i===p.cur?' cur':(i>p.cur?' todo':''))+'" style="--sc:color-mix(in srgb,'+c+' '+(100-mix)+'%, #fff)"><span class="lab">'+s+'</span><div class="pop"><b>'+s+'</b><ul>'+tips+'</ul></div></div>';}).join('');
+  return '<div class="proc metal" style="--c:'+c+'"><div class="hd"><b>'+p.name+'</b></div><div class="plwrap"><div class="pline"><i style="width:'+pct+'%"></i></div><span class="ppct">'+pct+'%</span></div><div class="rowwrap"><div class="row">'+segs+'</div></div></div>';}).join('');
+  /* hover row-expand: the row flies out across the middle at its own height — panel never moves */
+  document.querySelectorAll('#stack .proc').forEach(function(pr){pr.addEventListener('mouseenter',function(){
+    var r=pr.getBoundingClientRect();var top=Math.max(60,Math.min(r.top+34,window.innerHeight-120));
+    pr.style.setProperty('--rowtop',top+'px');});});}
 render();
+/* V5: anything marked data-panel opens in the RIGHT PANEL — nothing navigates away */
+document.addEventListener('click',function(e){var a=e.target.closest&&e.target.closest('[data-panel]');
+ if(a){e.preventDefault();openInPanel(a.getAttribute('data-panel'),a.textContent.trim());}});
 /* customer picker (live data) */
 (function(){var sel=document.getElementById('custSel');
  fetch(SUPA+"/functions/v1/dashboard-data",{headers:{apikey:A,Authorization:"Bearer "+A}}).then(function(r){return r.json();}).then(function(d){if(!d||!d.projects)return;window._proj=d.projects;var names=Array.from(new Set(d.projects.map(function(p){return p.name;}))).sort();document.getElementById('custList').innerHTML=names.map(function(n){return '<option value="'+n+'">';}).join('');}).catch(function(){});
- sel.addEventListener('change',function(){var r=(window._proj||[]).filter(function(p){return p.name.toLowerCase().indexOf(sel.value.toLowerCase())>=0;})[0];if(r){PROC[0].cur=Math.max(0,Math.min(PROC[0].steps.length-1,Math.round((r.pct||0)/100*(PROC[0].steps.length-1))));render();feedAdd('Loaded '+r.name+' — Design '+(r.pct||0)+'%');}});
+ sel.addEventListener('change',function(){var r=(window._proj||[]).filter(function(p){return p.name.toLowerCase().indexOf(sel.value.toLowerCase())>=0;})[0];if(r){PROC[0].cur=Math.max(0,Math.min(PROC[0].steps.length-1,Math.round((r.pct||0)/100*(PROC[0].steps.length-1))));
+  /* V5 overlap truth: as Design finishes, Construction prep + Selection Board + Sub Bids light TOGETHER */
+  if((r.pct||0)>=75){if(PROC[1].cur<0)PROC[1].cur=0;if(PROC[2].cur<0)PROC[2].cur=0;if(PROC[3].cur<0)PROC[3].cur=0;
+   feedAdd(r.name+': Design is finishing — Construction prep, Sub Bids, and Selection Board ramp up together.');}
+  render();feedAdd('Loaded '+r.name+' — Design '+(r.pct||0)+'%');}});
 })();
 /* sliding panels — crucial, persisted */
 function pane(id,btn,key){var el=document.getElementById(id),b=document.getElementById(btn);
@@ -266,6 +297,7 @@ function ask(msg,voice){if(!msg||busy)return;busy=true;bubble('you','You',msg);s
  .then(function(r){return r.json();}).then(function(d){var rep=d.answer||d.error||'(no reply)';bubble('bot',NAMES[role],rep);setState(NAMES[role]+' answered.');
   var em=parseEmailDraft(rep);if(em){wbAddEmail(em);feedAdd('✉ Email staged on the Workbench — read it, then Approve & Send.');}
   else{wbAdd(NAMES[role]+' · '+new Date().toLocaleTimeString([],{hour:'numeric',minute:'2-digit'}),rep);}
+  var fm=rep.match(/OPEN FORM:\s*(\.?\/?[\w./-]+\.html)/i);if(fm){openInPanel(fm[1].indexOf('.')===0?fm[1]:'./'+fm[1]);}
   if(voice&&rep){setState(NAMES[role]+' is speaking… (talk to interrupt)');speak(rep).then(function(){busy=false;if(convo)setState('Listening… pause 4 seconds when done.');});}else{busy=false;}})
  .catch(function(e){bubble('bot',NAMES[role],'Could not reach the brain: '+e.message);busy=false;});}
 function autogrow(){txt.style.height='auto';txt.style.height=Math.min(txt.scrollHeight,window.innerHeight*0.42)+'px';}
@@ -289,8 +321,43 @@ if(SR){dict=new SR();dict.continuous=true;dict.interimResults=true;dict.lang='en
 function startDict(){if(!dict)return;if(convo)stopConvo();dictOn=true;dBase=txt.value;dictBtn.classList.add('on');setState('Dictating — tap 🎙 to stop, then Send.');try{dict.start();}catch(_){}}
 function stopDict(){dictOn=false;dictBtn.classList.remove('on');if(dict){try{dict.stop();}catch(_){}}setState(NAMES[role]+' is on the line.');}
 dictBtn.addEventListener('click',function(){dictOn?stopDict():startDict();});
-/* documents → right panel + read-plan */
-function showDoc(src){var b=document.getElementById('docBox');b.innerHTML='';var im=document.createElement('img');im.src=src;b.appendChild(im);var r=document.getElementById('right');if(r.classList.contains('closed'))document.getElementById('rightT').click();}
+/* ===== V5 RIGHT-PANEL WORK SURFACE — viewer with PAGE-FLIP, resting options when closed =====
+   Packets flip ‹ › through every page; forms are editable in place inside the panel;
+   closing returns the resting work panel. Bots can summon any form (OPEN FORM: path). */
+var FORM_PACKET=[
+ {u:'./forms/01-client-intake.html',t:'Client Intake'},
+ {u:'./forms/02-onboarding.html',t:'Customer Onboarding'},
+ {u:'./forms/03-design-binder.html',t:'Design Binder & Selections'},
+ {u:'./forms/04-forms-3-7.html',t:'Forms 3–7 (Status)'},
+ {u:'./forms/05-selection-board.html',t:'Selection Board'},
+ {u:'./forms/retainer-design-phase.html',t:'Design Retainer'},
+ {u:'./forms/contract-standard-cslb.html',t:'CSLB Contract'}];
+function openRight(){var r=document.getElementById('right');if(r.classList.contains('closed'))document.getElementById('rightT').click();}
+function restingPanel(){var b=document.getElementById('docBox');b.innerHTML='';
+ var opts=[['📋 Open the Forms packet',function(){openPacket(0);}],
+           ['✉ Stage an email (ask the bot)',function(){var t=document.getElementById('chatText');t.value='Draft an email: ';t.focus();}],
+           ['📎 Attach a plan or photo',function(){document.getElementById('chatFile').click();}]];
+ opts.forEach(function(o){var btn=document.createElement('button');btn.className='workopt';btn.textContent=o[0];btn.addEventListener('click',o[1]);b.appendChild(btn);});
+ var hint=document.createElement('div');hint.className='none';hint.textContent='Hover a process step for its to-dos and forms. Anything you open lands here — fill it, get it ready, send it. Drop or paste an image any time.';b.appendChild(hint);}
+var _pk={list:null,i:0};
+function dvRender(title,node){var b=document.getElementById('docBox');b.innerHTML='';
+ var bar=document.createElement('div');bar.className='dvbar';
+ var flip=_pk.list&&_pk.list.length>1;
+ var prev=document.createElement('button');prev.textContent='‹';prev.disabled=!flip||_pk.i<=0;prev.title='Previous page';
+ var next=document.createElement('button');next.textContent='›';next.disabled=!flip||_pk.i>=_pk.list.length-1;next.title='Next page';
+ prev.addEventListener('click',function(){if(_pk.i>0){_pk.i--;openPacket(_pk.i);}});
+ next.addEventListener('click',function(){if(_pk.i<_pk.list.length-1){_pk.i++;openPacket(_pk.i);}});
+ var ttl=document.createElement('b');ttl.textContent=(flip?('Pg '+(_pk.i+1)+'/'+_pk.list.length+' · '):'')+(title||'Document');
+ var x=document.createElement('button');x.textContent='✕';x.title='Close — back to the work panel';
+ x.addEventListener('click',function(){_pk.list=null;restingPanel();});
+ bar.appendChild(prev);bar.appendChild(next);bar.appendChild(ttl);bar.appendChild(x);
+ b.appendChild(bar);b.appendChild(node);openRight();}
+function openPacket(i){_pk.list=FORM_PACKET;_pk.i=i;var f=document.createElement('iframe');f.src=FORM_PACKET[i].u;dvRender(FORM_PACKET[i].t,f);feedAdd('Opened '+FORM_PACKET[i].t+' in the work panel.');}
+function openInPanel(url,title){var idx=FORM_PACKET.findIndex(function(p){return url.indexOf(p.u.replace('./',''))>=0||p.u===url;});
+ if(idx>=0){openPacket(idx);return;}
+ _pk.list=null;var f=document.createElement('iframe');f.src=url;dvRender(title||url.split('/').pop(),f);feedAdd('Opened '+(title||url)+' in the work panel.');}
+function showDoc(src){_pk.list=null;var im=document.createElement('img');im.src=src;dvRender('Image',im);}
+restingPanel();
 function handleImage(dataUrl){if(!dataUrl||busy)return;busy=true;bubble('you','You','',dataUrl);showDoc(dataUrl);setState('Reading the image…');var tok=getToken();
  fetch(SUPA+"/functions/v1/read-plan",{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+tok,'apikey':A},body:JSON.stringify({image:dataUrl})})
  .then(function(r){return r.json();}).then(function(d){bubble('bot',NAMES[role],d.answer||d.error||'(no reading)');setState('Image read.');busy=false;})
