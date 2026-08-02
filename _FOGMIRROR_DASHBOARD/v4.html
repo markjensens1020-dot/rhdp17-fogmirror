@@ -94,6 +94,18 @@ body{font-family:Futura,'Trebuchet MS',Avenir,'Jost',sans-serif;background:var(-
 .wbcard .wbtxt{font-size:12px;color:var(--ink);line-height:1.5;max-height:160px;overflow:auto;white-space:pre-wrap}
 .wbcard .wbx{position:absolute;top:7px;right:9px;background:none;border:none;color:var(--mut);font-size:14px;cursor:pointer;font-family:inherit}
 .wbcard .wbx:hover{color:var(--brass)}
+/* staged-email cards — Look-Then-Launch: human reads THIS card, picks their name, presses Send */
+.wbmail label{display:block;font-size:9.5px;color:var(--mut);letter-spacing:.8px;text-transform:uppercase;margin:6px 0 2px}
+.wbmail input,.wbmail textarea,.wbmail select{width:100%;background:var(--panel);color:var(--ink);border:1px solid var(--edge);border-radius:8px;padding:7px 9px;font-size:12px;font-family:inherit;outline:none}
+.wbmail input:focus,.wbmail textarea:focus{border-color:var(--brass)}
+.wbmail textarea{resize:vertical;min-height:90px;line-height:1.5}
+.wbmail .mrow{display:flex;gap:7px;align-items:center;margin-top:9px}
+.wbmail select{width:auto;flex:1}
+.wbsend{background:var(--brass);color:#141004;border:none;border-radius:9px;padding:8px 14px;font-size:12px;font-weight:700;cursor:pointer;font-family:inherit;flex:none}
+.wbsend:hover{background:#d8b46b}
+.wbsend:disabled{opacity:.5;cursor:default}
+.wbmail .mstate{font-size:11.5px;margin-top:7px;color:var(--mut)}
+.wbmail.sentok{border-color:#3f6e4f;box-shadow:0 0 10px rgba(96,180,120,.25)}
 #docBox{padding:10px;min-height:120px}
 #docBox img{max-width:100%;border-radius:9px}
 #docBox .none{font-size:12px;color:var(--mut)}
@@ -194,6 +206,48 @@ function wbAdd(title,text){var w=document.getElementById('wb');if(!w)return;var 
  var x=document.createElement('button');x.className='wbx';x.textContent='✕';
  x.addEventListener('click',function(){d.remove();if(!w.children.length){w.innerHTML='<div class="none">Bot outputs land here as cards — press ✕ to clear one.</div>';}});
  d.appendChild(x);w.insertBefore(d,w.firstChild);}
+/* ===== STAGED EMAIL CARDS + [APPROVE & SEND] — the send engine's dashboard face (8/2).
+   Flow (Look-Then-Launch law): bot stages full text -> a HUMAN reads it on this card,
+   may edit it, picks their own name, presses Approve & Send. That press IS the approval.
+   fog-mirror-send executes from haroinc@ (or given @rhdpinc.com box), verifies in Sent
+   Items, logs to audit_log; the card reports SENT & VERIFIED or the exact error. ===== */
+function parseEmailDraft(t){if(!t)return null;var to=t.match(/(^|\n)TO:[ \t]*(.+)/i),su=t.match(/(^|\n)SUBJECT:[ \t]*(.+)/i);if(!to||!su)return null;
+ var cc=t.match(/(^|\n)CC:[ \t]*(.+)/i),fr=t.match(/(^|\n)FROM:[ \t]*(.+)/i);
+ var bi=t.search(/(^|\n)BODY:[ \t]*/i);var body='';
+ if(bi>=0){body=t.slice(bi).replace(/^(\n)?BODY:[ \t]*\n?/i,'');}
+ else{var lines=t.split('\n'),k=0;for(var i=0;i<lines.length;i++){if(/^(TO|CC|BCC|FROM|SUBJECT):/i.test(lines[i]))k=i+1;}body=lines.slice(k).join('\n').replace(/^\s+/,'');}
+ function addrs(m){return m?m[2].split(/[,;]/).map(function(a){return a.trim();}).filter(function(a){return a.indexOf('@')>0;}):[];}
+ if(!addrs(to).length||!body)return null;
+ return {to:addrs(to),cc:addrs(cc),from:fr?fr[2].trim():'haroinc@rhdpinc.com',subject:su[2].trim(),body:body};}
+function wbAddEmail(m){var w=document.getElementById('wb');if(!w)return;var n=w.querySelector('.none');if(n)n.remove();
+ var d=document.createElement('div');d.className='wbcard wbmail';
+ d.innerHTML='<b>✉ Staged email — read it, then approve</b>'+
+  '<label>To</label><input class="mto" value="'+esc(m.to.join(', '))+'">'+
+  '<label>Cc</label><input class="mcc" value="'+esc((m.cc||[]).join(', '))+'">'+
+  '<label>From (must be @rhdpinc.com — clients get haroinc@)</label><input class="mfrom" value="'+esc(m.from||'haroinc@rhdpinc.com')+'">'+
+  '<label>Subject</label><input class="msub" value="'+esc(m.subject)+'">'+
+  '<label>Body — edit freely; what you see is exactly what sends</label><textarea class="mbody">'+esc(m.body)+'</textarea>'+
+  '<div class="mrow"><select class="mwho"><option value="">Who is approving?</option><option>Mark</option><option>Cassie</option><option>Richard</option><option>Irma</option><option>Jesus</option><option>Farrah</option></select>'+
+  '<button class="wbsend" disabled>Approve &amp; Send</button></div><div class="mstate">Staged. Nothing sends until a named human presses the button.</div>';
+ var x=document.createElement('button');x.className='wbx';x.textContent='✕';
+ x.addEventListener('click',function(){d.remove();if(!w.children.length){w.innerHTML='<div class="none">Bot outputs land here as cards — press ✕ to clear one.</div>';}});
+ d.appendChild(x);w.insertBefore(d,w.firstChild);
+ var who=d.querySelector('.mwho'),btn=d.querySelector('.wbsend'),st=d.querySelector('.mstate');
+ who.addEventListener('change',function(){btn.disabled=!who.value;});
+ btn.addEventListener('click',function(){
+  var to=d.querySelector('.mto').value.split(/[,;]/).map(function(a){return a.trim();}).filter(Boolean);
+  var cc=d.querySelector('.mcc').value.split(/[,;]/).map(function(a){return a.trim();}).filter(Boolean);
+  var from=d.querySelector('.mfrom').value.trim(),sub=d.querySelector('.msub').value.trim(),body=d.querySelector('.mbody').value;
+  if(!to.length||!sub||!body.trim()){st.textContent='⚠ Need To, Subject, and Body.';return;}
+  if(from.indexOf('@rhdpinc.com')<0){st.textContent='⚠ From must be an @rhdpinc.com mailbox (clients get haroinc@).';return;}
+  btn.disabled=true;who.disabled=true;st.textContent='Sending as '+who.value+'… (engine verifies in Sent Items)';feedAdd('Send pressed by '+who.value+': "'+sub+'"');
+  fetch(SUPA+"/functions/v1/fog-mirror-send",{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+A,'apikey':A},
+   body:JSON.stringify({action:'send',approved_by:who.value+' (dashboard button)',from:from,to:to,cc:cc,subject:sub,body:body})})
+  .then(function(r){return r.json();}).then(function(r){
+   if(r&&r.ok&&r.verified){d.classList.add('sentok');st.innerHTML='✅ SENT &amp; VERIFIED — in '+esc(r.from)+' Sent Items. Sentry watches for bounces.';feedAdd('✅ Sent & verified: "'+sub+'"');}
+   else if(r&&r.ok){d.classList.add('sentok');st.textContent='🕐 Sent (accepted by Microsoft) — verification pending; Sentry confirms within the hour.';feedAdd('🕐 Sent, verifying: "'+sub+'"');}
+   else{btn.disabled=false;who.disabled=false;st.textContent='⚠ '+((r&&(r.error||r.detail))||'send failed — tell Claude');feedAdd('⚠ Send failed: "'+sub+'"');}})
+  .catch(function(e){btn.disabled=false;who.disabled=false;st.textContent='⚠ network problem — tell Claude';});});}
 function bubble(kind,who,text,imgSrc){var d=document.createElement('div');d.className='bub '+kind;d.innerHTML=(who?'<span class="who">'+esc(who)+'</span>':'')+esc(text||'');if(imgSrc){var im=document.createElement('img');im.src=imgSrc;im.addEventListener('click',function(){showDoc(imgSrc);});d.appendChild(im);}log.appendChild(d);document.getElementById('logwrap').scrollTop=1e9;return d;}
 bubble('bot','Cassie',"Welcome to Carbon Brass. Type, tap 🎙 to dictate, or tap the squiggle to talk — pause 4 seconds and I answer; talk over me to interrupt. Slide the panels with ☰ and ▤ up top.");
 var faces=document.querySelectorAll('#botRow a[data-role]');
@@ -209,7 +263,9 @@ function speak(text){return new Promise(function(res){var tok=getToken();
  .then(function(r){return r.ok?r.arrayBuffer():null;}).then(function(buf){if(!buf){res();return;}if(player){try{player.pause();}catch(e){}}player=new Audio(URL.createObjectURL(new Blob([buf],{type:'audio/mpeg'})));player.onended=res;player.onerror=res;player.play().catch(res);}).catch(res);});}
 function ask(msg,voice){if(!msg||busy)return;busy=true;bubble('you','You',msg);setState(NAMES[role]+' is thinking…');var tok=getToken();
  fetch(SUPA+"/functions/v1/fog-mirror-chat",{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+tok,'apikey':A},body:JSON.stringify({question:msg,role:role})})
- .then(function(r){return r.json();}).then(function(d){var rep=d.answer||d.error||'(no reply)';bubble('bot',NAMES[role],rep);setState(NAMES[role]+' answered.');wbAdd(NAMES[role]+' · '+new Date().toLocaleTimeString([],{hour:'numeric',minute:'2-digit'}),rep);
+ .then(function(r){return r.json();}).then(function(d){var rep=d.answer||d.error||'(no reply)';bubble('bot',NAMES[role],rep);setState(NAMES[role]+' answered.');
+  var em=parseEmailDraft(rep);if(em){wbAddEmail(em);feedAdd('✉ Email staged on the Workbench — read it, then Approve & Send.');}
+  else{wbAdd(NAMES[role]+' · '+new Date().toLocaleTimeString([],{hour:'numeric',minute:'2-digit'}),rep);}
   if(voice&&rep){setState(NAMES[role]+' is speaking… (talk to interrupt)');speak(rep).then(function(){busy=false;if(convo)setState('Listening… pause 4 seconds when done.');});}else{busy=false;}})
  .catch(function(e){bubble('bot',NAMES[role],'Could not reach the brain: '+e.message);busy=false;});}
 function autogrow(){txt.style.height='auto';txt.style.height=Math.min(txt.scrollHeight,window.innerHeight*0.42)+'px';}
