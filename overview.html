@@ -319,10 +319,11 @@ function bubble(kind,who,text,imgSrc){var d=document.createElement('div');
  log.appendChild(d);document.getElementById('logwrap').scrollTop=1e9;return d;}
 bubble('bot','Cassie',"Welcome to Carbon Brass. Type, tap 🎙 to dictate, or press the Conversation squiggle and just talk — pause 4 seconds and I answer. Slide the panels with ☰ and ▤ up top. Anything I stage lands on the right as a document ready to judge.");
 var faces=document.querySelectorAll('#botRow a[data-role]');
+var greetings={cassie:"Hello. My name is Cassie. I'm the admin and customer care lead here. How can I help you? What project are you working on?",richard:"Hello. My name is Richard. I handle design and planning here. How can I help you? What's the project?",irma:"Hello. My name is Irma. I manage the books and financials. How can I help you? What do you need?",maya:"Hello. My name is Maya. I handle bookkeeping and billing. How can I help you? What project needs attention?"};
 faces.forEach(function(a){a.addEventListener('click',function(ev){ev.preventDefault();var r=a.getAttribute('data-role');
  if(r===role&&convo){stopConvo();return;}
  faces.forEach(function(x){x.classList.remove('sel');});a.classList.add('sel');role=r;
- txt.placeholder='Type to '+NAMES[role]+'…';feedAdd('Switched to '+NAMES[role]);bubble('bot',NAMES[role],"I'm here — go ahead.");if(!convo)startConvo();});});
+ txt.placeholder='Type to '+NAMES[role]+'…';feedAdd('Switched to '+NAMES[role]);var greeting=greetings[role]||"I'm here — go ahead.";bubble('bot',NAMES[role],greeting);speak(greeting);if(!convo)startConvo();});});
 var busy=false,player=null;
 function setState(t){stateEl.textContent=t;feedAdd(t);}
 function clip(t){t=t.slice(0,800);var m=t.match(/^[\s\S]*[.!?](\s|$)/);return m?m[0].trim():t;}
@@ -349,7 +350,7 @@ if(SR){rec=new SR();rec.continuous=true;rec.interimResults=true;rec.lang='en-US'
  rec.onresult=function(e){if(player&&!player.paused){try{player.pause();}catch(_){}}turnText='';for(var k=0;k<e.results.length;k++)turnText+=e.results[k][0].transcript;if(turnText.trim())stateEl.textContent='You: '+turnText.trim();if(silT)clearTimeout(silT);silT=setTimeout(function(){if(!convo)return;var m=turnText.trim();turnText='';if(m)ask(m,true);},SIL);};
  rec.onerror=function(ev){if(ev.error==='not-allowed'){setState('Allow the microphone, then tap the squiggle.');stopConvo();}};
  rec.onend=function(){if(convo){try{rec.start();}catch(_){}}};}
-function startConvo(){if(!rec){setState("Voice needs Chrome — typing works.");return;}if(dictOn)stopDict();convo=true;squig.classList.add('live');setState('Conversation with '+NAMES[role]+' — pause 4 seconds when done.');var greetings={cassie:"Hello. My name is Cassie. I'm the admin and customer care lead here. How can I help you? What project are you working on?",richard:"Hello. My name is Richard. I handle design and planning here. How can I help you? What's the project?",irma:"Hello. My name is Irma. I manage the books and financials. How can I help you? What do you need?",maya:"Hello. My name is Maya. I handle bookkeeping and billing. How can I help you? What project needs attention?"};setTimeout(function(){if(convo&&greetings[role]){bubble('bot',NAMES[role],greetings[role]);speak(greetings[role]);}},800);try{rec.start();}catch(_){}}
+function startConvo(){if(!rec){setState("Voice needs Chrome — typing works.");return;}if(dictOn)stopDict();convo=true;squig.classList.add('live');setState('Conversation with '+NAMES[role]+' — pause 4 seconds when done.');try{rec.start();}catch(_){}}
 function stopConvo(){convo=false;squig.classList.remove('live');if(silT)clearTimeout(silT);if(rec){try{rec.stop();}catch(_){}}if(player){try{player.pause();}catch(_){}}setState(NAMES[role]+' is on the line.');}
 squig.addEventListener('click',function(){convo?stopConvo():startConvo();});
 var dict=null,dictOn=false,dBase='';var dictBtn=document.getElementById('dictBtn');
