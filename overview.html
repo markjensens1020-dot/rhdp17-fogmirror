@@ -306,6 +306,7 @@ feedAdd('Fog Mirror online — Carbon Brass round 2.');
 var NAMES={cassie:'Cassie',richard:'Richard',irma:'Irma',maya:'Maya'};
 var ROLES={cassie:'admin & customer care',richard:'design',irma:'the books',maya:'bookkeeping & billing'};
 var AVIS={cassie:'./cassie.jpg',richard:'./richard.jpg',irma:'./irma.jpg',maya:'./maya.jpg'};
+var VOICES={cassie:'nova',richard:'onyx',irma:'shimmer',maya:'alloy'};
 var role='cassie';
 var log=document.getElementById('chatLog'),txt=document.getElementById('chatText'),squig=document.getElementById('squig'),stateEl=document.getElementById('chatState');
 function getToken(){try{for(var i=0;i<localStorage.length;i++){var k=localStorage.key(i);if(/^sb-.*-auth-token$/.test(k)){var v=JSON.parse(localStorage.getItem(k));var t=v&&(v.access_token||(v.currentSession&&v.currentSession.access_token));if(t)return t;}}}catch(e){}return A;}
@@ -337,7 +338,8 @@ function speak(text){return new Promise(function(res){
   setState(NAMES[role]+' speaking');
   var txt=clip(text);
   var tok=getToken();
-  fetch(SUPA+"/functions/v1/tts",{method:'POST',headers:{'Content-Type':'application/json','apikey':A,'Authorization':'Bearer '+tok},body:JSON.stringify({text:txt,voice:'nova'})})
+  var voice=VOICES[role]||'nova';
+  fetch(SUPA+"/functions/v1/tts",{method:'POST',headers:{'Content-Type':'application/json','apikey':A,'Authorization':'Bearer '+tok},body:JSON.stringify({text:txt,voice:voice})})
   .then(function(r){return r.blob();}).then(function(blob){
     if(player){try{player.pause();}catch(e){}}
     player=new Audio(URL.createObjectURL(blob));
