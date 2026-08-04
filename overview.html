@@ -345,6 +345,7 @@ txt.addEventListener('keydown',function(e){if(e.key==='Enter'&&!e.shiftKey){e.pr
 var SR=window.SpeechRecognition||window.webkitSpeechRecognition;
 var convo=false,rec=null,turnText='',silT=null,SIL=4000;
 if(SR){rec=new SR();rec.continuous=true;rec.interimResults=true;rec.lang='en-US';
+ if(navigator.mediaDevices&&navigator.mediaDevices.getUserMedia){navigator.mediaDevices.getUserMedia({audio:true}).then(function(stream){stream.getTracks().forEach(function(t){t.stop();});setState('Microphone permission granted — voice ready.');}).catch(function(err){setState('Microphone permission denied. Voice features unavailable.');});}}
  rec.onresult=function(e){if(player&&!player.paused){try{player.pause();}catch(_){}}turnText='';for(var k=0;k<e.results.length;k++)turnText+=e.results[k][0].transcript;if(turnText.trim())stateEl.textContent='You: '+turnText.trim();if(silT)clearTimeout(silT);silT=setTimeout(function(){if(!convo)return;var m=turnText.trim();turnText='';if(m)ask(m,true);},SIL);};
  rec.onerror=function(ev){if(ev.error==='not-allowed'){setState('Allow the microphone, then tap the squiggle.');stopConvo();}};
  rec.onend=function(){if(convo){try{rec.start();}catch(_){}}};}
