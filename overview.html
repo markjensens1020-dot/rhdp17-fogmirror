@@ -323,7 +323,7 @@ var greetings={cassie:"Hello. My name is Cassie. I'm the admin and customer care
 faces.forEach(function(a){a.addEventListener('click',function(ev){ev.preventDefault();var r=a.getAttribute('data-role');
  if(r===role&&convo){stopConvo();return;}
  faces.forEach(function(x){x.classList.remove('sel');});a.classList.add('sel');role=r;
- txt.placeholder='Type to '+NAMES[role]+'…';feedAdd('Switched to '+NAMES[role]);var greeting=greetings[role]||"I'm here — go ahead.";bubble('bot',NAMES[role],greeting);console.log('Bot click: calling speak() with greeting for',NAMES[role]);speak(greeting).then(function(){console.log('Greeting spoken for',NAMES[role]);});if(!convo)startConvo();});});
+ txt.placeholder='Type to '+NAMES[role]+'…';feedAdd('Switched to '+NAMES[role]);var greeting=greetings[role]||"I'm here — go ahead.";bubble('bot',NAMES[role],greeting);console.log('Bot click: calling speak() with greeting for',NAMES[role]);speak(greeting).then(function(){console.log('Greeting spoken, now starting conversation for',NAMES[role]);if(!convo)startConvo();});});});
 var busy=false,player=null;
 function setState(t){stateEl.textContent=t;feedAdd(t);}
 function clip(t){t=t.slice(0,800);var m=t.match(/^[\s\S]*[.!?](\s|$)/);return m?m[0].trim():t;}
