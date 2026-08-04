@@ -306,7 +306,7 @@ feedAdd('Fog Mirror online — Carbon Brass round 2.');
 var NAMES={cassie:'Cassie',richard:'Richard',irma:'Irma',maya:'Maya'};
 var ROLES={cassie:'admin & customer care',richard:'design',irma:'the books',maya:'bookkeeping & billing'};
 var AVIS={cassie:'./cassie.jpg',richard:'./richard.jpg',irma:'./irma.jpg',maya:'./maya.jpg'};
-var VOICES={cassie:'nova',richard:'onyx',irma:'shimmer',maya:'alloy'};
+var VOICES={cassie:'nova',richard:'onyx',irma:'alloy',maya:'shimmer'};
 var role='cassie';
 var log=document.getElementById('chatLog'),txt=document.getElementById('chatText'),squig=document.getElementById('squig'),stateEl=document.getElementById('chatState');
 function getToken(){try{for(var i=0;i<localStorage.length;i++){var k=localStorage.key(i);if(/^sb-.*-auth-token$/.test(k)){var v=JSON.parse(localStorage.getItem(k));var t=v&&(v.access_token||(v.currentSession&&v.currentSession.access_token));if(t)return t;}}}catch(e){}return A;}
