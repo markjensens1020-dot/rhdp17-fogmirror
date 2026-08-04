@@ -218,7 +218,7 @@ h5.sec{font-size:10px;letter-spacing:2.2px;color:var(--mut);text-transform:upper
       </div>
       <div id="chatState">Cassie is on the line.</div>
       <div id="botRow">
-        <a data-role="kathy" class="sel"><img src="./kathy.jpg" alt="Kathy"><span>Kathy</span></a>
+        <a data-role="cassie" class="sel"><img src="./cassie.jpg" alt="Cassie"><span>Cassie</span></a>
         <a data-role="richard"><img src="./richard.jpg" alt="Richard"><span>Richard</span></a>
         <a data-role="irma"><img src="./irma.jpg" alt="Irma"><span>Irma</span></a>
         <a data-role="maya"><img src="./maya.jpg" alt="Maya"><span>Maya</span></a>
@@ -303,10 +303,10 @@ pane('left','leftT','fm4_left');pane('right','rightT','fm4_right');
 function feedAdd(t){var f=document.getElementById('feed');var prev=f.lastChild;if(prev&&prev.classList)prev.classList.remove('busy');var d=document.createElement('div');if(/…$/.test(t))d.className='busy';d.textContent=t;f.appendChild(d);f.scrollTop=f.scrollHeight;}
 feedAdd('Fog Mirror online — Carbon Brass round 2.');
 /* chat engine (proven core, mock-styled bubbles) */
-var NAMES={kathy:'Kathy',richard:'Richard',irma:'Irma',maya:'Maya'};
-var ROLES={kathy:'admin, onboarding & customer success',richard:'design',irma:'sales manager',maya:'bookkeeper'};
-var AVIS={kathy:'./kathy.jpg',richard:'./richard.jpg',irma:'./irma.jpg',maya:'./maya.jpg'};
-var VOICES={kathy:'nova',richard:'onyx',irma:'shimmer',maya:'alloy'};
+var NAMES={cassie:'Cassie',richard:'Richard',irma:'Irma',maya:'Maya'};
+var ROLES={cassie:'admin, onboarding & customer success',richard:'design',irma:'sales manager',maya:'bookkeeper'};
+var AVIS={cassie:'./cassie.jpg',richard:'./richard.jpg',irma:'./irma.jpg',maya:'./maya.jpg'};
+var VOICES={cassie:'nova',richard:'onyx',irma:'shimmer',maya:'alloy'};
 var role='cassie';
 var log=document.getElementById('chatLog'),txt=document.getElementById('chatText'),squig=document.getElementById('squig'),stateEl=document.getElementById('chatState');
 function getToken(){try{for(var i=0;i<localStorage.length;i++){var k=localStorage.key(i);if(/^sb-.*-auth-token$/.test(k)){var v=JSON.parse(localStorage.getItem(k));var t=v&&(v.access_token||(v.currentSession&&v.currentSession.access_token));if(t)return t;}}}catch(e){}return A;}
@@ -318,9 +318,9 @@ function bubble(kind,who,text,imgSrc){var d=document.createElement('div');
  else{d.className='bub you';d.innerHTML=esc(text||'');}
  if(imgSrc){var im=document.createElement('img');im.className='att';im.src=imgSrc;im.addEventListener('click',function(){showDoc(imgSrc);});d.appendChild(im);}
  log.appendChild(d);document.getElementById('logwrap').scrollTop=1e9;return d;}
-bubble('bot','Kathy',"Welcome to Fog Mirror. Type, tap 🎙 to dictate, or press the Conversation squiggle and just talk — pause 4 seconds and I answer. Slide the panels with ☰ and ▤ up top. Anything I stage lands on the right as a document ready to judge.");
+bubble('bot','Cassie',"Welcome to Fog Mirror. Type, tap 🎙 to dictate, or press the Conversation squiggle and just talk — pause 4 seconds and I answer. Slide the panels with ☰ and ▤ up top. Anything I stage lands on the right as a document ready to judge.");
 var faces=document.querySelectorAll('#botRow a[data-role]');
-var greetings={kathy:"Hello. My name is Kathy. I'm here to help you with onboarding, customer success, and getting what you need. How can I help you today? What project are you working on?",richard:"Hello. My name is Richard. I handle design and planning here. How can I help you? What's the project?",irma:"Hello. My name is Irma. I'm our sales manager and can help explain our process, pricing, and what we build. How can I help you?",maya:"Hello. My name is Maya. I handle bookkeeping and billing. How can I help you? What project needs attention?"};
+var greetings={cassie:"Hello. My name is Cassie. I'm here to help you with onboarding, customer success, and getting what you need. How can I help you today? What project are you working on?",richard:"Hello. My name is Richard. I handle design and planning here. How can I help you? What's the project?",irma:"Hello. My name is Irma. I'm our sales manager and can help explain our process, pricing, and what we build. How can I help you?",maya:"Hello. My name is Maya. I handle bookkeeping and billing. How can I help you? What project needs attention?"};
 faces.forEach(function(a){a.addEventListener('click',function(ev){ev.preventDefault();var r=a.getAttribute('data-role');
  if(r===role&&convo){stopConvo();return;}
  faces.forEach(function(x){x.classList.remove('sel');});a.classList.add('sel');role=r;
