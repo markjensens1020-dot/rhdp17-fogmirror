@@ -328,7 +328,7 @@ var busy=false,player=null;
 function setState(t){stateEl.textContent=t;feedAdd(t);}
 function clip(t){t=t.slice(0,800);var m=t.match(/^[\s\S]*[.!?](\s|$)/);return m?m[0].trim():t;}
 var synth=window.speechSynthesis;
-function speak(text){return new Promise(function(res){if(convo&&rec){try{rec.stop();}catch(e){}}synth.cancel();var utterance=new SpeechSynthesisUtterance(clip(text));utterance.rate=1;utterance.pitch=1;utterance.onend=function(){if(convo&&rec){try{rec.start();}catch(e){}}res();};utterance.onerror=function(){res();};setState(NAMES[role]+' speaking');synth.speak(utterance);});}
+function speak(text){return new Promise(function(res){if(convo&&rec){try{rec.stop();}catch(e){}}if(synth.speaking){synth.cancel();}var utterance=new SpeechSynthesisUtterance(clip(text));utterance.rate=1;utterance.pitch=1;utterance.onend=function(){if(convo&&rec){try{rec.start();}catch(e){}}res();};utterance.onerror=function(){res();};setState(NAMES[role]+' speaking');synth.speak(utterance);});}
 function ask(msg,voice){if(!msg||busy)return;busy=true;bubble('you','You',msg);setState(NAMES[role]+' is thinking…');var tok=getToken();
  fetch(SUPA+"/functions/v1/fog-mirror-chat",{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+tok,'apikey':A},body:JSON.stringify({question:msg,role:role})})
  .then(function(r){return r.json();}).then(function(d){var rep=d.answer||d.error||'(no reply)';bubble('bot',NAMES[role],rep);setState(NAMES[role]+' answered.');
