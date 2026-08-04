@@ -329,21 +329,22 @@ faces.forEach(function(a){a.addEventListener('click',function(ev){ev.preventDefa
 var busy=false,player=null;
 function setState(t){stateEl.textContent=t;feedAdd(t);}
 function clip(t){t=t.slice(0,800);var m=t.match(/^[\s\S]*[.!?](\s|$)/);return m?m[0].trim():t;}
-var synth=window.speechSynthesis;
-var speaking_now=false;
+var speaking_now=false,player=null;
 function speak(text){return new Promise(function(res){
-  if(speaking_now){console.log('[SPEAK] Already speaking');return res();}
+  if(speaking_now)return res();
   speaking_now=true;
-  console.log('[SPEAK] Starting: '+clip(text).slice(0,40));
-  if(convo&&rec){try{rec.stop();}catch(e){console.log('[SPEAK] rec.stop failed',e.message);}}
-  if(synth.speaking){synth.cancel();}
-  var u=new SpeechSynthesisUtterance(clip(text));
-  u.rate=1;u.pitch=1;u.volume=1;
-  u.onstart=function(){console.log('[SPEAK] onstart fired');};
-  u.onend=function(){console.log('[SPEAK] onend fired');speaking_now=false;if(convo&&rec){try{rec.start();}catch(e){}}res();};
-  u.onerror=function(e){console.log('[SPEAK] error:',e.error);speaking_now=false;if(convo&&rec){try{rec.start();}catch(e){}}res();};
+  if(convo&&rec){try{rec.stop();}catch(e){}}
   setState(NAMES[role]+' speaking');
-  try{synth.speak(u);console.log('[SPEAK] synth.speak() called');}catch(e){console.log('[SPEAK] synth.speak failed:',e.message);speaking_now=false;res();}
+  var txt=clip(text);
+  var tok=getToken();
+  fetch(SUPA+"/functions/v1/tts",{method:'POST',headers:{'Content-Type':'application/json','apikey':A,'Authorization':'Bearer '+tok},body:JSON.stringify({text:txt,voice:'nova'})})
+  .then(function(r){return r.blob();}).then(function(blob){
+    if(player){try{player.pause();}catch(e){}}
+    player=new Audio(URL.createObjectURL(blob));
+    player.onended=function(){speaking_now=false;if(convo&&rec){try{rec.start();}catch(e){}}res();};
+    player.onerror=function(){speaking_now=false;if(convo&&rec){try{rec.start();}catch(e){}}res();};
+    player.play().catch(function(){speaking_now=false;if(convo&&rec){try{rec.start();}catch(e){}}res();});
+  }).catch(function(e){speaking_now=false;if(convo&&rec){try{rec.start();}catch(e){}}res();});
 });}
 function ask(msg,voice){if(!msg||busy)return;busy=true;bubble('you','You',msg);setState(NAMES[role]+' is thinking…');var tok=getToken();
  fetch(SUPA+"/functions/v1/fog-mirror-chat",{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+tok,'apikey':A},body:JSON.stringify({question:msg,role:role})})
