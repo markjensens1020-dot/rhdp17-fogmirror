@@ -161,6 +161,22 @@ h5.sec{font-size:10px;letter-spacing:2.2px;color:var(--mut);text-transform:upper
 #sugSend{margin-top:7px;background:#d9bc72;color:#141004;border:1px solid var(--brass2);border-radius:3px;padding:7px 14px;font-size:12px;font-weight:700;cursor:pointer;font-family:inherit}
 #sugSend:hover{background:#e8cf96}
 #sugState{margin-top:6px;font-size:11px;color:var(--mut)}
+/* ===== VOICE SYSTEM (ElevenLabs TTS + Microphone) ===== */
+#voice-controls{position:fixed;bottom:20px;right:20px;z-index:1000;display:flex;gap:10px;background:var(--card);padding:10px;border-radius:8px;border:1px solid var(--edge);box-shadow:0 2px 10px rgba(0,0,0,0.4)}
+#voice-input-button{padding:10px 15px;background:var(--blue);color:#fff;border:none;border-radius:4px;cursor:pointer;font-size:14px;font-weight:bold}
+#voice-input-button:hover{opacity:.8}
+#voice-send-button{padding:10px 15px;background:var(--green);color:#fff;border:none;border-radius:4px;cursor:pointer;font-size:14px;font-weight:bold}
+#voice-send-button:hover{opacity:.8}
+/* ===== DRAGGABLE PANEL DIVIDERS ===== */
+.panel-divider{position:absolute;top:0;bottom:0;width:8px;cursor:col-resize;background:linear-gradient(90deg,transparent 0%,rgba(100,100,100,0.3) 50%,transparent 100%);z-index:100;user-select:none;transition:background-color 0.2s ease}
+.panel-divider:hover{background:linear-gradient(90deg,transparent 0%,rgba(100,100,100,0.6) 50%,transparent 100%)}
+.panel-divider.dragging{background:linear-gradient(90deg,transparent 0%,rgba(91,139,217,0.8) 50%,transparent 100%)}
+#stage{position:relative}
+/* ===== SIDEBAR TOGGLE BUTTON ===== */
+.sidebar-toggle{position:absolute;top:10px;left:10px;z-index:200;padding:8px 12px;background:var(--brass);color:#141004;border:none;border-radius:4px;cursor:pointer;font-size:12px;font-weight:bold;transition:all 0.3s ease}
+.sidebar-toggle:hover{background:#e8cf96}
+#left.hidden{width:0!important;overflow:hidden;border-right:none}
+#left.hidden .sidebar-toggle{position:fixed;left:10px;background:#FF9800}
 </style></head><body>
 <div id="top">
   <button id="leftT" class="on" title="Slide the process panel">☰</button>
@@ -245,7 +261,7 @@ var PROC=[
  {name:'Bookkeeping',c:'var(--purple)',cur:-1,steps:['Retainer 25%','Working Dwgs','Permit 25%','Collect','Paid'],
   tips:[['Invoice','25/50/25'],['After design accepted'],['At permit'],['Payment reminders'],['Receipts','Close']]}
 ];
-function panelize(html){return (html||'').replace(/<a href="(\.\/[^"]+)"/g,'<a href="$1" data-panel="$1"');}
+function panelize(html){return (html||'').replace(/<a href="(./[^"]+)"/g,'<a href="$1" data-panel="$1"');}
 function render(){document.getElementById('stack').innerHTML=PROC.map(function(p){
   var c=p.c;var n=p.steps.length;var pct=p.cur>=0?Math.round(((p.cur+1)/n)*100):0;
   var segs=p.steps.map(function(s,i){var tips=(p.tips[i]||[]).map(function(x){return '<li>'+panelize(x)+'</li>';}).join('');
@@ -290,6 +306,7 @@ feedAdd('Fog Mirror online — Carbon Brass round 2.');
 var NAMES={cassie:'Cassie',richard:'Richard',irma:'Irma',maya:'Maya'};
 var ROLES={cassie:'admin & customer care',richard:'design',irma:'the books',maya:'bookkeeping & billing'};
 var AVIS={cassie:'./cassie.jpg',richard:'./richard.jpg',irma:'./irma.jpg',maya:'./maya.jpg'};
+var BOT_GREETINGS={cassie:"Hello, how you doing? What project or client would you like to work on?",richard:"Hello, how you doing? What project or client would you like to work on?",irma:"Hello, how you doing? What project or client would you like to work on?",maya:"Hello, how you doing? What project or client would you like to work on?"};
 var role='cassie';
 var log=document.getElementById('chatLog'),txt=document.getElementById('chatText'),squig=document.getElementById('squig'),stateEl=document.getElementById('chatState');
 function getToken(){try{for(var i=0;i<localStorage.length;i++){var k=localStorage.key(i);if(/^sb-.*-auth-token$/.test(k)){var v=JSON.parse(localStorage.getItem(k));var t=v&&(v.access_token||(v.currentSession&&v.currentSession.access_token));if(t)return t;}}}catch(e){}return A;}
@@ -306,10 +323,10 @@ var faces=document.querySelectorAll('#botRow a[data-role]');
 faces.forEach(function(a){a.addEventListener('click',function(ev){ev.preventDefault();var r=a.getAttribute('data-role');
  if(r===role&&convo){stopConvo();return;}
  faces.forEach(function(x){x.classList.remove('sel');});a.classList.add('sel');role=r;
- txt.placeholder='Type to '+NAMES[role]+'…';feedAdd('Switched to '+NAMES[role]);bubble('bot',NAMES[role],"I'm here — go ahead.");if(!convo)startConvo();});});
+ txt.placeholder='Type to '+NAMES[role]+'…';feedAdd('Switched to '+NAMES[role]);bubble('bot',NAMES[role],"I'm here — go ahead.");if(!convo)startConvo();speak(BOT_GREETINGS[r]||"Hello!");});});
 var busy=false,player=null;
 function setState(t){stateEl.textContent=t;feedAdd(t);}
-function clip(t){t=t.slice(0,800);var m=t.match(/^[\s\S]*[.!?](\s|$)/);return m?m[0].trim():t;}
+function clip(t){t=t.slice(0,800);var m=t.match(/^[sS]*[.!?](s|$)/);return m?m[0].trim():t;}
 function speak(text){return new Promise(function(res){var tok=getToken();
  fetch(SUPA+"/functions/v1/tts",{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+tok,'apikey':A},body:JSON.stringify({text:clip(text),input:clip(text),voice:'nova'})})
  .then(function(r){return r.ok?r.arrayBuffer():null;}).then(function(buf){if(!buf){res();return;}if(player){try{player.pause();}catch(e){}}player=new Audio(URL.createObjectURL(new Blob([buf],{type:'audio/mpeg'})));player.onended=res;player.onerror=res;player.play().catch(res);}).catch(res);});}
@@ -318,7 +335,7 @@ function ask(msg,voice){if(!msg||busy)return;busy=true;bubble('you','You',msg);s
  .then(function(r){return r.json();}).then(function(d){var rep=d.answer||d.error||'(no reply)';bubble('bot',NAMES[role],rep);setState(NAMES[role]+' answered.');
   var em=parseEmailDraft(rep);
   if(em){var doc=addDoc({kind:'eml',title:em.subject,email:em});chatDocCard(doc);feedAdd('✉ Email staged — read it, then Approve & Send.');}
-  var fm=rep.match(/OPEN FORM:\s*(\.?\/?[\w./-]+\.html)/i);if(fm){openInPanel(fm[1].indexOf('.')===0?fm[1]:'./'+fm[1]);}
+  var fm=rep.match(/OPEN FORM:s*(.?/?[w./-]+.html)/i);if(fm){openInPanel(fm[1].indexOf('.')===0?fm[1]:'./'+fm[1]);}
   if(voice&&rep){setState(NAMES[role]+' is speaking… (talk to interrupt)');speak(rep).then(function(){busy=false;if(convo)setState('Listening… pause 4 seconds when done.');});}else{busy=false;}})
  .catch(function(e){bubble('bot',NAMES[role],'Could not reach the brain: '+e.message);busy=false;});}
 function autogrow(){txt.style.height='auto';txt.style.height=Math.min(txt.scrollHeight,window.innerHeight*0.42)+'px';}
@@ -393,11 +410,20 @@ function openDoc(i){var d=DOCS[i];if(!d)return;
  else if(d.kind==='img'){showDoc(d.src);}
  else{openInPanel(d.url,d.title);}}
 /* staged email — editable card + [Approve & Send] (Look-Then-Launch, kept verbatim) */
-function parseEmailDraft(t){if(!t)return null;var to=t.match(/(^|\n)TO:[ \t]*(.+)/i),su=t.match(/(^|\n)SUBJECT:[ \t]*(.+)/i);if(!to||!su)return null;
- var cc=t.match(/(^|\n)CC:[ \t]*(.+)/i),fr=t.match(/(^|\n)FROM:[ \t]*(.+)/i);
- var bi=t.search(/(^|\n)BODY:[ \t]*/i);var body='';
- if(bi>=0){body=t.slice(bi).replace(/^(\n)?BODY:[ \t]*\n?/i,'');}
- else{var lines=t.split('\n'),k=0;for(var i=0;i<lines.length;i++){if(/^(TO|CC|BCC|FROM|SUBJECT):/i.test(lines[i]))k=i+1;}body=lines.slice(k).join('\n').replace(/^\s+/,'');}
+function parseEmailDraft(t){if(!t)return null;var to=t.match(/(^|
+)TO:[ 	]*(.+)/i),su=t.match(/(^|
+)SUBJECT:[ 	]*(.+)/i);if(!to||!su)return null;
+ var cc=t.match(/(^|
+)CC:[ 	]*(.+)/i),fr=t.match(/(^|
+)FROM:[ 	]*(.+)/i);
+ var bi=t.search(/(^|
+)BODY:[ 	]*/i);var body='';
+ if(bi>=0){body=t.slice(bi).replace(/^(
+)?BODY:[ 	]*
+?/i,'');}
+ else{var lines=t.split('
+'),k=0;for(var i=0;i<lines.length;i++){if(/^(TO|CC|BCC|FROM|SUBJECT):/i.test(lines[i]))k=i+1;}body=lines.slice(k).join('
+').replace(/^s+/,'');}
  function addrs(m){return m?m[2].split(/[,;]/).map(function(a){return a.trim();}).filter(function(a){return a.indexOf('@')>0;}):[];}
  if(!addrs(to).length||!body)return null;
  return {to:addrs(to),cc:addrs(cc),from:fr?fr[2].trim():'haroinc@rhdpinc.com',subject:su[2].trim(),body:body};}
@@ -451,7 +477,7 @@ function handleImage(dataUrl){if(!dataUrl||busy)return;busy=true;bubble('you','Y
  fetch(SUPA+"/functions/v1/read-plan",{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+tok,'apikey':A},body:JSON.stringify({image:dataUrl})})
  .then(function(r){return r.json();}).then(function(d){bubble('bot',NAMES[role],d.answer||d.error||'(no reading)');setState('Image read.');busy=false;})
  .catch(function(e){bubble('bot',NAMES[role],'Could not read the image: '+e.message);busy=false;});}
-function fileToImg(f){if(!f||!/^image\//.test(f.type||''))return;var r=new FileReader();r.onload=function(){handleImage(r.result);};r.readAsDataURL(f);}
+function fileToImg(f){if(!f||!/^image//.test(f.type||''))return;var r=new FileReader();r.onload=function(){handleImage(r.result);};r.readAsDataURL(f);}
 var fi=document.getElementById('chatFile');
 document.getElementById('attachBtn').addEventListener('click',function(){fi.click();});
 fi.addEventListener('change',function(e){fileToImg(e.target.files&&e.target.files[0]);});
@@ -480,5 +506,58 @@ function chk(){fetch(location.pathname+'?vchk='+Date.now(),{method:'HEAD',cache:
   if(e&&e!==cur&&!typing()){location.reload();}
 }).catch(function(){});}
 setInterval(chk,300000);setTimeout(chk,15000);})();
+/* ===== DRAGGABLE PANEL DIVIDERS (adapted for #stage/#left/#mid/#right) ===== */
+(function initializeDraggablePanels(){
+ var stage=document.getElementById('stage'),left=document.getElementById('left'),mid=document.getElementById('mid'),right=document.getElementById('right');
+ if(!stage||!left||!mid||!right){console.log('[DraggablePanels] Elements not found');return;}
+ var divL=document.createElement('div');divL.className='panel-divider';divL.style.left='300px';divL.style.cursor='col-resize';mid.style.position='relative';mid.appendChild(divL);
+ var divR=document.createElement('div');divR.className='panel-divider';divR.style.right='365px';divR.style.cursor='col-resize';mid.appendChild(divR);
+ var isDragging=false,draggedDiv=null;
+ [divL,divR].forEach(function(d){
+  d.addEventListener('mousedown',function(e){isDragging=true;draggedDiv=d;d.classList.add('dragging');e.preventDefault();});
+ });
+ document.addEventListener('mousemove',function(e){
+  if(!isDragging||!draggedDiv)return;
+  var stageR=stage.getBoundingClientRect(),mouseX=e.clientX-stageR.left;
+  if(draggedDiv===divL){
+   var minW=150,maxW=stageR.width-300;
+   var newW=Math.max(minW,Math.min(maxW,mouseX));
+   left.style.width=newW+'px';divL.style.left=newW+'px';divR.style.right=(stageR.width-newW-mid.offsetWidth)+'px';
+  }
+ });
+ document.addEventListener('mouseup',function(){if(draggedDiv)draggedDiv.classList.remove('dragging');isDragging=false;draggedDiv=null;});
+ console.log('[DraggablePanels] Initialized');
+})();
+/* ===== SIDEBAR TOGGLE BUTTON (adapted for #left) ===== */
+(function initializeSidebarToggle(){
+ var left=document.getElementById('left');
+ if(!left){console.log('[SidebarToggle] Left panel not found');return;}
+ var btn=document.createElement('button');
+ btn.className='sidebar-toggle';btn.textContent='✕ Hide';
+ btn.onclick=function(){left.classList.toggle('hidden');btn.textContent=left.classList.contains('hidden')?'☰ Show':'✕ Hide';console.log('[SidebarToggle] Toggled');};
+ left.insertBefore(btn,left.firstChild);
+ document.addEventListener('keydown',function(e){if((e.ctrlKey||e.metaKey)&&e.key==='b'){e.preventDefault();btn.click();}});
+ console.log('[SidebarToggle] Initialized (Ctrl+B / Cmd+B to toggle)');
+})();
+/* ===== VOICE CONTROLS (TTS-ready microphone UI) ===== */
+(function initializeVoiceControls(){
+ var vc=document.createElement('div');vc.id='voice-controls';
+ var micBtn=document.createElement('button');micBtn.id='voice-input-button';micBtn.textContent='🎙 Mic';
+ var sendBtn=document.createElement('button');sendBtn.id='voice-send-button';sendBtn.textContent='↑ Send';
+ vc.appendChild(micBtn);vc.appendChild(sendBtn);
+ document.body.appendChild(vc);
+ var rec=window.SpeechRecognition||window.webkitSpeechRecognition;
+ if(!rec){console.log('[VoiceControls] SpeechRecognition not available');return;}
+ var recognizer=new rec(),listening=false;
+ recognizer.continuous=true;recognizer.interimResults=true;
+ micBtn.addEventListener('click',function(){listening?stopListening():startListening();});
+ sendBtn.addEventListener('click',function(){if(listening)stopAndSend();});
+ recognizer.onresult=function(e){console.log('[VoiceControls] Result');};
+ recognizer.onerror=function(e){console.log('[VoiceControls] Error: '+e.error);};
+ function startListening(){listening=true;micBtn.textContent='🔴 Stop';try{recognizer.start();}catch(e){}}
+ function stopListening(){listening=false;micBtn.textContent='🎙 Mic';try{recognizer.stop();}catch(e){}}
+ function stopAndSend(){stopListening();console.log('[VoiceControls] Send triggered');sendBtn.textContent='✓ Sent';setTimeout(function(){sendBtn.textContent='↑ Send';},1500);}
+ console.log('[VoiceControls] Initialized');
+})();
 </script>
 </body></html>
