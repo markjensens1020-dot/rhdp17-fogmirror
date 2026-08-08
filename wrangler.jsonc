@@ -1,0 +1,29 @@
+{
+  "name": "rhdp17-fogmirror",
+  "main": "src/index.ts",
+  "type": "javascript",
+  "compatibility_date": "2026-07-23",
+  "env": {
+    "production": {
+      "vars": {
+        "ENVIRONMENT": "production"
+      }
+    },
+    "development": {
+      "vars": {
+        "ENVIRONMENT": "development"
+      }
+    }
+  },
+  "observability": {
+    "enabled": true
+  },
+  "assets": {
+    "directory": "_FOGMIRROR_DASHBOARD",
+    "binding": "ASSETS"
+  },
+  "triggers": {
+    "crons": ["0 0 * * *"]
+  },
+  "compatibility_flags": ["nodejs_compat"]
+}
