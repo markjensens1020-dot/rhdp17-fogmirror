@@ -261,7 +261,7 @@ var PROC=[
  {name:'Bookkeeping',c:'var(--purple)',cur:-1,steps:['Retainer 25%','Working Dwgs','Permit 25%','Collect','Paid'],
   tips:[['Invoice','25/50/25'],['After design accepted'],['At permit'],['Payment reminders'],['Receipts','Close']]}
 ];
-function panelize(html){return (html||'').replace(/<a href="(./[^"]+)"/g,'<a href="$1" data-panel="$1"');}
+function panelize(html){return (html||'').replace(/<a href="(\.\/[^"]+)"/g,'<a href="$1" data-panel="$1"');}
 function render(){document.getElementById('stack').innerHTML=PROC.map(function(p){
   var c=p.c;var n=p.steps.length;var pct=p.cur>=0?Math.round(((p.cur+1)/n)*100):0;
   var segs=p.steps.map(function(s,i){var tips=(p.tips[i]||[]).map(function(x){return '<li>'+panelize(x)+'</li>';}).join('');
@@ -326,7 +326,7 @@ faces.forEach(function(a){a.addEventListener('click',function(ev){ev.preventDefa
  txt.placeholder='Type to '+NAMES[role]+'…';feedAdd('Switched to '+NAMES[role]);bubble('bot',NAMES[role],"I'm here — go ahead.");if(!convo)startConvo();speak(BOT_GREETINGS[r]||"Hello!");});});
 var busy=false,player=null;
 function setState(t){stateEl.textContent=t;feedAdd(t);}
-function clip(t){t=t.slice(0,800);var m=t.match(/^[sS]*[.!?](s|$)/);return m?m[0].trim():t;}
+function clip(t){t=t.slice(0,800);var m=t.match(/^[\s\S]*[.!?](\s|$)/);return m?m[0].trim():t;}
 function speak(text){return new Promise(function(res){var tok=getToken();
  fetch(SUPA+"/functions/v1/tts",{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+tok,'apikey':A},body:JSON.stringify({text:clip(text),input:clip(text),voice:'nova'})})
  .then(function(r){return r.ok?r.arrayBuffer():null;}).then(function(buf){if(!buf){res();return;}if(player){try{player.pause();}catch(e){}}player=new Audio(URL.createObjectURL(new Blob([buf],{type:'audio/mpeg'})));player.onended=res;player.onerror=res;player.play().catch(res);}).catch(res);});}
@@ -335,7 +335,7 @@ function ask(msg,voice){if(!msg||busy)return;busy=true;bubble('you','You',msg);s
  .then(function(r){return r.json();}).then(function(d){var rep=d.answer||d.error||'(no reply)';bubble('bot',NAMES[role],rep);setState(NAMES[role]+' answered.');
   var em=parseEmailDraft(rep);
   if(em){var doc=addDoc({kind:'eml',title:em.subject,email:em});chatDocCard(doc);feedAdd('✉ Email staged — read it, then Approve & Send.');}
-  var fm=rep.match(/OPEN FORM:s*(.?/?[w./-]+.html)/i);if(fm){openInPanel(fm[1].indexOf('.')===0?fm[1]:'./'+fm[1]);}
+  var fm=rep.match(/OPEN FORM:\s*(\.?\/?[\w./-]+\.html)/i);if(fm){openInPanel(fm[1].indexOf('.')===0?fm[1]:'./'+fm[1]);}
   if(voice&&rep){setState(NAMES[role]+' is speaking… (talk to interrupt)');speak(rep).then(function(){busy=false;if(convo)setState('Listening… pause 4 seconds when done.');});}else{busy=false;}})
  .catch(function(e){bubble('bot',NAMES[role],'Could not reach the brain: '+e.message);busy=false;});}
 function autogrow(){txt.style.height='auto';txt.style.height=Math.min(txt.scrollHeight,window.innerHeight*0.42)+'px';}
@@ -410,20 +410,11 @@ function openDoc(i){var d=DOCS[i];if(!d)return;
  else if(d.kind==='img'){showDoc(d.src);}
  else{openInPanel(d.url,d.title);}}
 /* staged email — editable card + [Approve & Send] (Look-Then-Launch, kept verbatim) */
-function parseEmailDraft(t){if(!t)return null;var to=t.match(/(^|
-)TO:[ 	]*(.+)/i),su=t.match(/(^|
-)SUBJECT:[ 	]*(.+)/i);if(!to||!su)return null;
- var cc=t.match(/(^|
-)CC:[ 	]*(.+)/i),fr=t.match(/(^|
-)FROM:[ 	]*(.+)/i);
- var bi=t.search(/(^|
-)BODY:[ 	]*/i);var body='';
- if(bi>=0){body=t.slice(bi).replace(/^(
-)?BODY:[ 	]*
-?/i,'');}
- else{var lines=t.split('
-'),k=0;for(var i=0;i<lines.length;i++){if(/^(TO|CC|BCC|FROM|SUBJECT):/i.test(lines[i]))k=i+1;}body=lines.slice(k).join('
-').replace(/^s+/,'');}
+function parseEmailDraft(t){if(!t)return null;var to=t.match(/(^|\n)TO:[ \t]*(.+)/i),su=t.match(/(^|\n)SUBJECT:[ \t]*(.+)/i);if(!to||!su)return null;
+ var cc=t.match(/(^|\n)CC:[ \t]*(.+)/i),fr=t.match(/(^|\n)FROM:[ \t]*(.+)/i);
+ var bi=t.search(/(^|\n)BODY:[ \t]*/i);var body='';
+ if(bi>=0){body=t.slice(bi).replace(/^(\n)?BODY:[ \t]*\n?/i,'');}
+ else{var lines=t.split('\n'),k=0;for(var i=0;i<lines.length;i++){if(/^(TO|CC|BCC|FROM|SUBJECT):/i.test(lines[i]))k=i+1;}body=lines.slice(k).join('\n').replace(/^\s+/,'');}
  function addrs(m){return m?m[2].split(/[,;]/).map(function(a){return a.trim();}).filter(function(a){return a.indexOf('@')>0;}):[];}
  if(!addrs(to).length||!body)return null;
  return {to:addrs(to),cc:addrs(cc),from:fr?fr[2].trim():'haroinc@rhdpinc.com',subject:su[2].trim(),body:body};}
@@ -477,7 +468,7 @@ function handleImage(dataUrl){if(!dataUrl||busy)return;busy=true;bubble('you','Y
  fetch(SUPA+"/functions/v1/read-plan",{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+tok,'apikey':A},body:JSON.stringify({image:dataUrl})})
  .then(function(r){return r.json();}).then(function(d){bubble('bot',NAMES[role],d.answer||d.error||'(no reading)');setState('Image read.');busy=false;})
  .catch(function(e){bubble('bot',NAMES[role],'Could not read the image: '+e.message);busy=false;});}
-function fileToImg(f){if(!f||!/^image//.test(f.type||''))return;var r=new FileReader();r.onload=function(){handleImage(r.result);};r.readAsDataURL(f);}
+function fileToImg(f){if(!f||!/^image\//.test(f.type||''))return;var r=new FileReader();r.onload=function(){handleImage(r.result);};r.readAsDataURL(f);}
 var fi=document.getElementById('chatFile');
 document.getElementById('attachBtn').addEventListener('click',function(){fi.click();});
 fi.addEventListener('change',function(e){fileToImg(e.target.files&&e.target.files[0]);});
@@ -561,3 +552,4 @@ setInterval(chk,300000);setTimeout(chk,15000);})();
 })();
 </script>
 </body></html>
+STEP 1  ·  THIS IS THE GOOD FILE  ·  PRESS Cmd+A THEN Cmd+C  ·  then tell me
