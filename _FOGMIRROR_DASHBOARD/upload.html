@@ -78,41 +78,62 @@ input:focus,select:focus{border-color:var(--gold)}
 const SUPA="https://qrwlyowdzqzkibdzvoek.supabase.co";
 const ANON="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InFyd2x5b3dkenF6a2liZHp2b2VrIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzAyNDIyODEsImV4cCI6MjA4NTgxODI4MX0.5xurzQ0HUECk4_SxlcRdKG-5KCmyQ30b4jyCiyERAoU";
 const sb=window.supabase.createClient(SUPA,ANON);
-let picked=[];
+let picked=[], sending=false;
 const $=id=>document.getElementById(id);
 $('files').addEventListener('change',e=>{
-  picked=picked.concat(Array.from(e.target.files));
+  picked=picked.concat(Array.from(e.target.files).map(file=>({file,metadata:null,uploaded:false})));
+  e.target.value='';
   renderThumbs();
 });
 function renderThumbs(){
   const t=$('thumbs');t.innerHTML='';
-  picked.forEach(f=>{
+  picked.forEach(item=>{
+    const f=item.file;
     if(f.type.startsWith('image/')){const img=document.createElement('img');img.className='thumb';img.src=URL.createObjectURL(f);t.appendChild(img);}
     else{const d=document.createElement('div');d.className='thumb doc';d.textContent=(f.name||'file').slice(0,16);t.appendChild(d);}
   });
-  $('send').disabled = picked.length===0;
+  $('send').disabled = sending || picked.length===0;
 }
 function slug(s){return (s||'anon').toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'').slice(0,40)||'anon';}
 $('send').addEventListener('click',async()=>{
+  if(sending || !picked.length)return;
   const name=$('name').value.trim(), kind=$('kind').value, proj=$('proj').value.trim();
-  if(!picked.length)return;
+  const batch=picked.slice(), completed=new Set();
+  sending=true;
+  ['name','kind','proj'].forEach(id=>$(id).disabled=true);
   $('send').disabled=true;$('status').className='status';$('status').textContent='Sending…';
-  $('bar').style.display='block';
+  $('bar').style.display='block';$('barfill').style.width='0%';
   let done=0, ok=0;
-  for(const f of picked){
+  for(const item of batch){
+    const f=item.file;
     try{
-      const ext=(f.name.split('.').pop()||'jpg').toLowerCase();
-      const path=`${kind}/${slug(name)}/${Date.now()}-${Math.random().toString(36).slice(2,7)}.${ext}`;
-      const up=await sb.storage.from('intake-uploads').upload(path,f,{contentType:f.type||'image/jpeg',upsert:false});
-      if(up.error)throw up.error;
-      await sb.from('media_uploads').insert({kind,uploaded_by_name:name||null,project_ref:proj||null,file_path:path});
+      if(!item.metadata){
+        const ext=(f.name.split('.').pop()||'jpg').toLowerCase();
+        const path=`${kind}/${slug(name)}/${Date.now()}-${Math.random().toString(36).slice(2,7)}.${ext}`;
+        item.metadata={kind,uploaded_by_name:name||null,project_ref:proj||null,file_path:path};
+      }
+      // Keep the original path and project when retrying a metadata save.
+      if(!item.uploaded){
+        const up=await sb.storage.from('intake-uploads').upload(item.metadata.file_path,f,{contentType:f.type||'image/jpeg',upsert:false});
+        if(up.error)throw up.error;
+        item.uploaded=true;
+      }
+      const saved=await sb.from('media_uploads').insert(item.metadata);
+      if(saved.error)throw saved.error;
+      completed.add(item);
       ok++;
     }catch(err){console.error(err);}
-    done++; $('barfill').style.width=Math.round(done/picked.length*100)+'%';
+    done++; $('barfill').style.width=Math.round(done/batch.length*100)+'%';
   }
-  if(ok===picked.length){$('status').className='status ok';$('status').textContent=`✓ Sent ${ok} file${ok===1?'':'s'}. Thank you — our team has it.`;picked=[];renderThumbs();}
-  else if(ok>0){$('status').className='status';$('status').textContent=`Sent ${ok} of ${picked.length}. Please retry the rest.`;$('send').disabled=false;}
-  else{$('status').className='status err';$('status').textContent='Something went wrong — please try again, or email us the files.';$('send').disabled=false;}
+  // Files selected during this batch stay queued; completed files are never resent.
+  picked=picked.filter(item=>!completed.has(item));
+  sending=false;
+  ['name','kind','proj'].forEach(id=>$(id).disabled=false);
+  renderThumbs();
+  if(!picked.length){$('status').className='status ok';$('status').textContent=`✓ Sent ${ok} file${ok===1?'':'s'}. Thank you — our team has it.`;}
+  else if(ok===batch.length){$('status').className='status';$('status').textContent=`Sent ${ok} file${ok===1?'':'s'}. ${picked.length} more ready to send.`;}
+  else if(ok>0){$('status').className='status';$('status').textContent=`Sent ${ok} of ${batch.length}. ${picked.length} file${picked.length===1?'':'s'} remain — send again to finish.`;}
+  else{$('status').className='status err';$('status').textContent='Could not finish saving the files. Please retry — files already uploaded will not be uploaded again.';}
 });
 </script>
 <script>if('serviceWorker' in navigator){window.addEventListener('load',function(){navigator.serviceWorker.register('./sw.js').catch(function(){});});}</script>
