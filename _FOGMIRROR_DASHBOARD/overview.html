@@ -279,7 +279,35 @@ document.addEventListener('click',function(e){var a=e.target.closest&&e.target.c
  if(a){e.preventDefault();openInPanel(a.getAttribute('data-panel'),a.textContent.trim());}});
 /* customer picker (live data) + overlap logic + header title/pill */
 (function(){var sel=document.getElementById('custSel');
- fetch(SUPA+"/functions/v1/dashboard-data",{headers:{apikey:A,Authorization:"Bearer "+A}}).then(function(r){return r.json();}).then(function(d){if(!d||!d.projects)return;window._proj=d.projects;var names=Array.from(new Set(d.projects.map(function(p){return p.name;}))).sort();document.getElementById('custList').innerHTML=names.map(function(n){return '<option value="'+n+'">';}).join('');}).catch(function(){});
+ var lastToken=null,requestId=0,placeholder=sel.getAttribute('placeholder');
+ function loadCustomers(token){
+  if(!token||token===A||token===lastToken)return;
+  lastToken=token;var currentRequest=++requestId;
+  window._proj=[];document.getElementById('custList').textContent='';
+  sel.setAttribute('aria-busy','true');sel.placeholder='Loading customers…';
+  return fetch(SUPA+"/functions/v1/dashboard-data",{headers:{apikey:A,Authorization:"Bearer "+token}})
+   .then(function(r){if(!r.ok)throw new Error('Customer request failed');return r.json();})
+   .then(function(d){
+    if(currentRequest!==requestId)return;
+    if(!d||!Array.isArray(d.projects))throw new Error('Invalid customer response');
+    window._proj=d.projects.filter(function(p){return p&&typeof p.name==='string';});
+    var list=document.getElementById('custList');list.textContent='';
+    Array.from(new Set(window._proj.map(function(p){return p.name;}))).sort().forEach(function(name){
+     var option=document.createElement('option');option.value=name;list.appendChild(option);
+    });
+    sel.placeholder=window._proj.length?placeholder:'No customers are available for this account';
+   }).catch(function(){
+    if(currentRequest!==requestId)return;
+    lastToken=null;sel.placeholder='Customers unavailable — reload to retry';
+    feedAdd('Customers could not load. Reload the page to retry.');
+   }).finally(function(){if(currentRequest===requestId)sel.removeAttribute('aria-busy');});
+ }
+ var previousOnAuthReady=window.onAuthReady;
+ window.onAuthReady=function(token,email){
+  if(typeof previousOnAuthReady==='function')previousOnAuthReady(token,email);
+  return loadCustomers(token);
+ };
+ if(window.__authToken)loadCustomers(window.__authToken);
  sel.addEventListener('change',function(){var r=(window._proj||[]).filter(function(p){return p.name.toLowerCase().indexOf(sel.value.toLowerCase())>=0;})[0];if(r){
   PROC[0].cur=Math.max(0,Math.min(PROC[0].steps.length-1,Math.round((r.pct||0)/100*(PROC[0].steps.length-1))));
   if((r.pct||0)>=75){if(PROC[2].cur<0)PROC[2].cur=0;if(PROC[1].cur<0)PROC[1].cur=0;if(PROC[3].cur<0)PROC[3].cur=0;
