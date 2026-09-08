@@ -166,7 +166,7 @@
   <!-- concierge router removed — talk to a bot by clicking its avatar -->
 
   <div class="acts">
-    <button title="Open AutoCAD / Autodesk Construction Cloud — your drawings and markups" onclick="window.open('https://acc.autodesk.com','_blank')">📐 AutoCAD</button>
+    <button title="Open AutoCAD Web — your drawings and markups" onclick="window.open('https://web.autocad.com/','_blank','noopener')">📐 AutoCAD</button>
     <button title="Open Microsoft Teams — team chat and the shared project files" onclick="window.open('https://teams.microsoft.com','_blank')">💬 Teams</button>
     <button title="Open Outlook — your inbox" onclick="window.open('https://outlook.office.com/mail','_blank')">📧 Outlook</button>
     <button title="Open your Outlook calendar — inspections, deliveries, meetings" onclick="window.open('https://outlook.office.com/calendar','_blank')">📅 Calendar</button>
@@ -347,14 +347,7 @@ const PROC=[
 const ICON={form:'📋',contract:'📜',plan:'📐',email:'✉️',select:'🎯',file:'📄'};
 const CUSTBY=['Castro','Chung','Balcunas','Haraguchi','Bocian'];
 document.getElementById('rows').innerHTML='<div class="pbar">'+['Intake','Design','Selections','Permit','Construction','Final'].map(function(x,i){return '<div class="pseg'+(i===3?' cur':'')+'">'+x+'</div>';}).join('')+'</div>';
- const fillc=`hsl(${p.h},${p.s}%,55%)`;
- return `<div class="prow">
-   <div class="plabel"><div class="pname">${p.name}</div><div class="pcust">${CUSTBY[pi]}</div></div>
-   <div class="rowmain">
-     <div class="bars"><div class="bar"><div class="fill" style="width:${p.pct}%;background:${fillc}"></div></div></div>
-     <div class="track">${cells}</div>
-   </div></div>`;
-}).join('');
+
 
 // Paste each customer's real OneDrive "Copy link" URL here for direct folder jumps.
 const CUSTLINK={"Castro": "https://richardharodraftingand.sharepoint.com/sites/AllProjectsAlert/Shared Documents/RHDP DRAFTING PROJECTS 2025/Castro-Grand Teton 2025", "Chang": "https://richardharodraftingand.sharepoint.com/sites/AllProjectsAlert/Shared Documents/RHDP DRAFTING PROJECTS 2025/Chang-Sheraton 2025", "Bocian": "https://richardharodraftingand.sharepoint.com/sites/AllProjectsAlert/Shared Documents/RHDP DRAFTING PROJECTS 2025/1.NEW LEAD - Paul Bocian 2025", "Balcunas": "https://richardharodraftingand.sharepoint.com/sites/AllProjectsAlert/Shared Documents/RHDP DRAFTING PROJECTS 2025/Balcunas-O'Toole 2025", "Tolentino": "https://richardharodraftingand.sharepoint.com/sites/AllProjectsAlert/Shared Documents/RHDP DRAFTING PROJECTS 2025/Tolentino-S.Union 2025", "Orquidea Negrete": "https://richardharodraftingand.sharepoint.com/sites/AllProjectsAlert/Shared Documents/RHDP DRAFTING PROJECTS 2025/Negrete-Pittsfield 2025", "Buddhist Temple": "https://richardharodraftingand.sharepoint.com/sites/AllProjectsAlert/Shared Documents/RHDP DRAFTING PROJECTS 2025/Temple, Buddhist Church-Story Rd 2025"};
@@ -396,18 +389,41 @@ function projMatch(x){var ap=window.activeProject||'All Projects';if(ap==='All P
 function renderProjects(){var d=window._projects;if(!d||!window._projRow)return;var row=window._projRow;var ap=window.activeProject||'All Projects';var f=(ap==='All Projects')?d:d.filter(function(p){return p.name===ap;});var sd=document.getElementById('sbdesign'),sb=document.getElementById('sbbuild');if(sd)sd.innerHTML=f.filter(function(p){return p.side==='design';}).map(row).join('')||'<div style="color:#8aa0c8;font-size:12px;padding:6px">None in design for this project.</div>';if(sb)sb.innerHTML=f.filter(function(p){return p.side==='construction';}).map(row).join('')||'<div style="color:#8aa0c8;font-size:12px;padding:6px">None in construction for this project.</div>';}
 function setProject(n){window.activeProject=n;try{localStorage.setItem('rhdp17_active_project',n);}catch(e){}var note=document.getElementById('projnote');if(note)note.textContent=(n==='All Projects')?'showing all customers':'focused on '+n;try{renderProjects();}catch(e){}try{renderBriefing();}catch(e){}var _r=document.getElementById('fmClientSel');if(_r&&_r.value!==n)_r.value=n;}
 function setProjectLocal(n){window.activeProject=n;var note=document.getElementById('projnote');if(note)note.textContent=(n==='All Projects')?'showing all customers':'focused on '+n+' (this page)';try{renderProjects();}catch(e){}try{renderBriefing();}catch(e){}}
-/* ---- LIVE DATA: pull real projects from Supabase (falls back to samples above) ---- */
-(function(){const ANON='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InFyd2x5b3dkenF6a2liZHp2b2VrIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzAyNDIyODEsImV4cCI6MjA4NTgxODI4MX0.5xurzQ0HUECk4_SxlcRdKG-5KCmyQ30b4jyCiyERAoU';
- fetch('https://qrwlyowdzqzkibdzvoek.supabase.co/functions/v1/dashboard-data',{headers:{apikey:ANON,Authorization:'Bearer '+ANON}}).then(r=>r.json()).then(d=>{
-  if(!d||!d.ok||!d.projects||!d.projects.length)return;
-  const H=s=>s==='design'?262:140;
-  const row=p=>`<div class="sbrow"><div class="l1"><span class="cn">${p.name}</span></div><div class="ph">${p.phase||''}</div><div class="bar"><i style="width:${p.pct}%;background:hsl(${H(p.side)},60%,52%)"></i></div></div>`;
-  window._projects=d.projects;window._projRow=row;
-  var _sel=document.getElementById('projsel');
-  if(_sel){var _names=Array.from(new Set(d.projects.map(function(p){return p.name;}))).sort();_sel.innerHTML='<option>All Projects</option>'+_names.map(function(n){return '<option'+(n===window.activeProject?' selected':'')+'>'+n+'</option>';}).join('');}
-  var _note=document.getElementById('projnote');if(_note&&window.activeProject!=='All Projects')_note.textContent='focused on '+window.activeProject;
+/* ---- AUTHENTICATED PROJECT READS ---- */
+var dashboardReadToken=null,projectReadId=0,followupReadId=0,dashboardAuthPromise=null,followupReadToken=null;
+function currentDashboardToken(){var token=window.__authToken;return token&&token!==SB_ANON?token:null;}
+function projectReadMessage(message){
+ window._projects=[];
+ ['sbdesign','sbbuild'].forEach(function(id){var el=document.getElementById(id);if(el)el.textContent=message;});
+ var sel=document.getElementById('projsel');
+ if(sel){sel.textContent='';var option=document.createElement('option');option.value='All Projects';option.textContent='All Projects';sel.appendChild(option);sel.disabled=true;}
+ var note=document.getElementById('projnote');if(note)note.textContent=message;
+}
+function loadDashboardProjects(){
+ var token=currentDashboardToken(),request=++projectReadId;
+ if(!token){projectReadMessage('Sign in to load your project list.');return Promise.resolve();}
+ projectReadMessage('Loading your project list…');
+ return fetch('https://qrwlyowdzqzkibdzvoek.supabase.co/functions/v1/dashboard-data',{headers:{apikey:SB_ANON,Authorization:'Bearer '+token}})
+ .then(function(r){if(!r.ok){var error=new Error('Project request failed');error.status=r.status;throw error;}return r.json();})
+ .then(function(d){
+  if(request!==projectReadId||token!==currentDashboardToken())return;
+  if(!d||d.ok===false||d.error||!Array.isArray(d.projects)||d.projects.some(function(p){return !p||typeof p.name!=='string';}))throw new Error('Invalid project response');
+  window._projects=d.projects;
+  window._projRow=function(p){var hue=p.side==='design'?262:140,pct=Math.max(0,Math.min(100,Number(p.pct)||0));
+   return '<div class="sbrow"><div class="l1"><span class="cn">'+fuEsc(p.name)+'</span></div><div class="ph">'+fuEsc(p.phase||'')+'</div><div class="bar"><i style="width:'+pct+'%;background:hsl('+hue+',60%,52%)"></i></div></div>';};
+  if(!d.projects.length){projectReadMessage('No projects were returned for this account.');return;}
+  var names=Array.from(new Set(d.projects.map(function(p){return p.name;}))).sort();
+  if(names.indexOf(window.activeProject)<0)window.activeProject='All Projects';
+  var sel=document.getElementById('projsel');
+  if(sel){sel.textContent='';['All Projects'].concat(names).forEach(function(name){var option=document.createElement('option');option.value=name;option.textContent=name;option.selected=name===window.activeProject;sel.appendChild(option);});sel.disabled=false;}
+  var note=document.getElementById('projnote');if(note)note.textContent=window.activeProject==='All Projects'?'showing all customers':'focused on '+window.activeProject;
   renderProjects();
- }).catch(()=>{});})();
+ }).catch(function(error){
+  if(request!==projectReadId||token!==currentDashboardToken())return;
+  projectReadMessage(error.status===401||error.status===403?'Project access was denied. Check your signed-in account and reload.':'The project list could not load. Reload to retry.');
+ });
+}
+/* ---- END AUTHENTICATED PROJECT READS ---- */
 
 function toast(m){const t=document.getElementById('toast');t.textContent=m;t.classList.add('on');clearTimeout(window._tt);window._tt=setTimeout(()=>t.classList.remove('on'),2600);}
 function pick(e,name,tag){e.stopPropagation();const where={select:'Selection Board',contract:'Contract clause',plan:'Plans (DWG + PDF)',email:'Email / drafts',form:'RHDP17 form',file:'OneDrive file'}[tag]||'OneDrive';toast('Opening "'+name+'" → '+where);}
@@ -471,48 +487,74 @@ var DRAFTURL='https://qrwlyowdzqzkibdzvoek.supabase.co/functions/v1/draft-reply'
 var STATUSURL='https://qrwlyowdzqzkibdzvoek.supabase.co/functions/v1/followup-status';
 var FUFILTER='All';
 function fnFilter(w){FUFILTER=w;renderBriefing();}
-function fuOwner(x){var a=((x&&x.assigned_to)||'').trim();return a||'Triage';}
+function fuOwner(x){var a=String((x&&x.assigned_to)||'').trim();return a||'Triage';}
 function fuEsc(t){return String(t==null?'':t).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
 function fuBtns(i,x){var st=(x&&x.status==='drafted');var b='<div style="margin:6px 0 1px">';
- if(st){if(x&&x.draft){b+='<div style="margin:6px 0;background:#0a1526;border:1px solid #2a3b5e;border-radius:8px;padding:9px 11px;font-size:12px;color:#dbe6f5;white-space:pre-wrap;max-height:170px;overflow:auto">'+fuEsc(x.draft)+'</div>';}b+='<button onclick="fnApprove('+i+',this)" style="font-size:11px;background:#173f2a;color:#cdeedd;border:1px solid #2f7d4a;border-radius:6px;padding:3px 10px;margin-right:6px;cursor:pointer">✅ Approve</button>';
+ if(st){if(x&&x.draft){b+='<div style="margin:6px 0;background:#0a1526;border:1px solid #2a3b5e;border-radius:8px;padding:9px 11px;font-size:12px;color:#dbe6f5;white-space:pre-wrap;max-height:170px;overflow:auto">'+fuEsc(x.draft)+'</div>';}b+='<span style="font-size:11px;color:#8fd6a0;margin-right:6px">Human review required</span>';
  b+='<button onclick="fnEdit('+i+')" style="font-size:11px;background:#3a2f12;color:#f0e2b8;border:1px solid #7d6a2f;border-radius:6px;padding:3px 10px;margin-right:6px;cursor:pointer">✏️ Edit</button>';
  b+='<span style="color:#8fd6a0;font-size:11px">draft ready — read it above, send from Outlook</span>';}
- else{b+='<button onclick="fnDraft('+i+',this)" style="font-size:11px;background:#1d3a6e;color:#dbe6f5;border:1px solid #3a5da0;border-radius:6px;padding:3px 10px;margin-right:6px;cursor:pointer">✍️ Draft reply</button>';}
+ else{b+='<button disabled title="Draft generation is paused until its mailbox behavior is verified." style="font-size:11px;background:#1d3a6e;color:#dbe6f5;border:1px solid #3a5da0;border-radius:6px;padding:3px 10px;margin-right:6px;opacity:.6">✍️ Draft reply</button><button onclick="fnEdit('+i+')" style="font-size:11px;background:#3a2f12;color:#f0e2b8;border:1px solid #7d6a2f;border-radius:6px;padding:3px 10px;cursor:pointer">Open Outlook</button>';}
  b+='</div>';return b;}
-function fnDraft(i,btn){var x=(window._fuAll||[])[i];if(!x)return;btn.disabled=true;btn.textContent='Drafting...';fetch(DRAFTURL,{method:'POST',headers:{'Content-Type':'application/json',apikey:SB_ANON,Authorization:'Bearer '+SB_ANON},body:JSON.stringify({thread_id:x.thread_id})}).then(function(r){return r.json();}).then(function(d){if(d&&d.ok){renderBriefing();}else{btn.textContent='Retry';btn.disabled=false;alert('Draft: '+((d&&d.error)||'failed'));}}).catch(function(){btn.textContent='Retry';btn.disabled=false;});}
-function fnApprove(i,btn){var x=(window._fuAll||[])[i];if(!x)return;if(!confirm('Approve & clear "'+(x.project||'this item')+'"? Send it from Outlook Drafts first — this just marks it handled.'))return;btn.disabled=true;fetch(STATUSURL,{method:'POST',headers:{'Content-Type':'application/json',apikey:SB_ANON,Authorization:'Bearer '+SB_ANON},body:JSON.stringify({thread_id:x.thread_id,status:'sent'})}).then(function(r){return r.json();}).then(function(d){if(d&&d.ok){renderBriefing();}else{btn.disabled=false;}}).catch(function(){btn.disabled=false;});}
-function fnEdit(i){window.open('https://outlook.office.com/mail/drafts','_blank');}
+function fnDraft(){toast('Draft generation is paused until its mailbox behavior is verified. Open Outlook to write a reply yourself.');}
+function fnApprove(){toast('Review and send in Outlook. This dashboard does not mark a message sent without delivery evidence.');}
+function fnEdit(i){window.open('https://outlook.office.com/mail/drafts','_blank','noopener');}
 function announce(t){}
 function announceBriefing(){}
-function renderBriefing(){fetch(FOLLOWUPS,{headers:{apikey:SB_ANON,Authorization:'Bearer '+SB_ANON}}).then(function(r){return r.json();}).then(function(d){
+function briefingReadMessage(message){var el=document.getElementById('briefing');window._fuAll=[];followupReadToken=null;window._briefingSpeech='';if(el){el.style.display='block';el.textContent=message;}}
+function renderBriefing(){
+ var token=currentDashboardToken(),request=++followupReadId;
+ if(!token){briefingReadMessage('Sign in to load your email follow-ups.');return Promise.resolve();}
+ briefingReadMessage('Loading your email follow-ups…');
+ return fetch(FOLLOWUPS,{headers:{apikey:SB_ANON,Authorization:'Bearer '+token}})
+ .then(function(r){if(!r.ok){var error=new Error('Follow-up request failed');error.status=r.status;throw error;}return r.json();})
+ .then(function(d){
+ if(request!==followupReadId||token!==currentDashboardToken())return;
+ if(!d||d.ok===false||d.error||!Array.isArray(d.followups)||d.followups.some(function(x){return !x||typeof x!=='object'||Array.isArray(x);}))throw new Error('Invalid follow-up response');
  var el=document.getElementById('briefing');if(!el)return;
- var all=(d&&d.followups)||[];window._fuAll=all;
+ var all=d.followups;window._fuAll=all;followupReadToken=token;
  var PEOPLE=['Jesus','Cassie','Mark','Richard','Irma','Maya'];var ROLES={Jesus:'Drafter',Cassie:'Intake',Mark:'Director',Richard:'Design',Irma:'Bills',Maya:'Bookkeeper'};
  function inBox(x,w){var o=fuOwner(x);if(o==='All')return true;if(w==='All')return true;if(w==='Triage')return (PEOPLE.indexOf(o)<0&&o!=='All');return o.toLowerCase()===w.toLowerCase();}
  function cnt(w){return all.filter(function(x){return inBox(x,w);}).length;}
- if(!all.length){el.style.display='block';el.innerHTML='<b>🔔 Check-in briefing</b> — all caught up. No open follow-ups. Sweeps run 7am / 1pm / 4pm Pacific.';window._briefingSpeech='Check in briefing. You are all caught up, no open follow ups.';return;}
+ if(!all.length){el.style.display='block';el.textContent='No open email follow-ups were returned for this account.';window._briefingSpeech='No open email follow-ups were returned.';return;}
  var tabs=['All'].concat(PEOPLE);var triageN=all.filter(function(x){return PEOPLE.indexOf(fuOwner(x))<0&&fuOwner(x)!=='All';}).length;if(triageN)tabs.push('Triage');
  var tabHtml=tabs.map(function(w){var on=(FUFILTER===w);var n=cnt(w);return '<button onclick="fnFilter(\''+w+'\')" style="font-size:11.5px;margin:0 5px 5px 0;padding:3px 11px;border-radius:14px;cursor:pointer;border:1px solid '+(on?'#7bb0ff':'#33507f')+';background:'+(on?'#254a86':'#0f1d33')+';color:'+(on?'#eaf2ff':'#a9bbdb')+'">'+(w==='All'?'👥 All':(w+(ROLES[w]?(' — '+ROLES[w]):'')))+' '+n+'</button>';}).join('');
  var list=all.filter(function(x){return inBox(x,FUFILTER)&&projMatch(x);});list.sort(function(a,b){var da=(a.status==='drafted')?0:1,db=(b.status==='drafted')?0:1;if(da!==db)return da-db;return Number(b.age_days||0)-Number(a.age_days||0);});
- var rows=list.slice(0,12).map(function(x){var i=window._fuAll.indexOf(x);var age=Number(x.age_days||0);
+ var rows=list.slice(0,12).map(function(x){var i=window._fuAll.indexOf(x);var age=Number(x.age_days)||0;
   var badge=age>1.5?' · <span style="color:#ff9a9a;font-weight:600">ESCALATE</span>':(age>1?' · <span style="color:#ffce7a">remind</span>':'');
   var money=(fuOwner(x)==='Maya'||/invoice|billing|payment|deposit/i.test(x.category||''))?' <span style="color:#ffb0b0;font-size:11px">· money out → Irma/Richard approve</span>':'';
   return '<div style="margin:8px 0;padding:8px 10px;background:#0e1b31;border:1px solid #223455;border-radius:9px">'
-   +'<div style="font-size:11px;color:#8fb3ea;margin-bottom:2px">FOR: <b style="color:#cfe0ff">'+((fuOwner(x)==='All')?'All \u00b7 City/County (everyone)':fuOwner(x))+'</b>'+money+'</div>'
-   +'<div style="font-size:13px">• <b>'+(x.project||'?')+'</b> — '+(x.category||'')+' · '+age+'d'+badge+'</div>'
-   +(x.summary?('<div style="color:#9fb0cc;font-size:12px;margin-top:2px">'+x.summary+'</div>'):'')
-   +'<div style="font-size:11px;color:#7f92b6;margin-top:3px">FROM: '+(x.sender||'?')+'</div>'
+   +'<div style="font-size:11px;color:#8fb3ea;margin-bottom:2px">FOR: <b style="color:#cfe0ff">'+fuEsc((fuOwner(x)==='All')?'All \u00b7 City/County (everyone)':fuOwner(x))+'</b>'+money+'</div>'
+   +'<div style="font-size:13px">• <b>'+fuEsc(x.project||'?')+'</b> — '+fuEsc(x.category||'')+' · '+age+'d'+badge+'</div>'
+   +(x.summary?('<div style="color:#9fb0cc;font-size:12px;margin-top:2px">'+fuEsc(x.summary)+'</div>'):'')
+   +'<div style="font-size:11px;color:#7f92b6;margin-top:3px">FROM: '+fuEsc(x.sender||'?')+'</div>'
    +fuBtns(i,x)+'</div>';}).join('');
- var over=d.overdue||0;
+ var over=Math.max(0,Number(d.overdue)||0);
  el.style.display='block';
  el.innerHTML='<div style="font-weight:600;margin-bottom:6px">🔔 Check-in briefing — '+all.length+' open'+(over?(', '+over+' overdue'):'')+'</div>'
   +'<div style="margin-bottom:4px">'+tabHtml+'</div>'
   +(list.length?rows:'<div style="color:#9fb0cc;font-size:12.5px;padding:6px 0">Nothing in '+FUFILTER+'’s box right now.</div>')
-  +'<div style="font-size:11.5px;color:#8aa0c8;margin-top:6px">AI drafts · a person approves &amp; sends. Money out → Irma or Richard only. Sweeps 7am / 1pm / 4pm Pacific.</div>';
+  +'<div style="font-size:11.5px;color:#8aa0c8;margin-top:6px">Saved follow-up records · humans review and send in Outlook. Only humans release payments.</div>';
  var top=all.slice(0,3).map(function(x){return (x.project||'')+', '+Number(x.age_days||0)+' days, '+fuOwner(x);}).join('. ');
  window._briefingSpeech='Check in briefing. '+all.length+' open follow up'+(all.length>1?'s':'')+(over?(', '+over+' overdue'):'')+'. '+top+'.';
-}).catch(function(){var el=document.getElementById('briefing');if(el){el.style.display='block';el.innerHTML='<b>⚠️ Could not load the email board just now.</b> The mail feed did not respond. Click Reload to try again — if it keeps failing, tell Mark (the mail service may need a nudge).';}});}
-try{renderBriefing();}catch(e){}
+}).catch(function(error){
+ if(request!==followupReadId||token!==currentDashboardToken())return;
+ briefingReadMessage(error.status===401||error.status===403?'Email follow-up access was denied. Check your signed-in account and reload.':'The email follow-up list could not load. Reload to retry.');
+});}
+function dashboardAuthReady(token,email){
+ token=token&&token!==SB_ANON?token:null;window.__authToken=token;
+ if(token===dashboardReadToken&&dashboardAuthPromise)return dashboardAuthPromise;
+ dashboardReadToken=token;++projectReadId;++followupReadId;
+ window._projects=[];window._fuAll=[];followupReadToken=null;FUFILTER='All';window.activeProject='All Projects';
+ dashboardAuthPromise=Promise.all([loadDashboardProjects(),renderBriefing()]);
+ return dashboardAuthPromise;
+}
+var previousDashboardAuthReady=window.onAuthReady;
+window.onAuthReady=function(token,email){
+ if(typeof previousDashboardAuthReady==='function'){try{previousDashboardAuthReady(token,email);}catch(error){}}
+ return dashboardAuthReady(token,email);
+};
+dashboardAuthReady(window.__authToken,window.__authEmail);
+/* ---- END AUTHENTICATED FOLLOW-UP READS ---- */
 document.addEventListener('click',function _bfonce(){document.removeEventListener('click',_bfonce);announceBriefing();});
 var _ask=document.getElementById('ask');if(_ask)_ask.addEventListener('keydown',e=>{if(e.key==='Enter')route();});
 document.getElementById('chatin').addEventListener('keydown',e=>{if(e.key==='Enter')chatSend();});
