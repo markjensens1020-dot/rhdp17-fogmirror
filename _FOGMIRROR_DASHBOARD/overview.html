@@ -143,15 +143,15 @@ h5.sec{font-size:10px;letter-spacing:2.2px;color:var(--mut);text-transform:upper
 #docBox .dvbar button:disabled{opacity:.4;cursor:default}
 #docBox iframe{width:100%;height:48vh;border:1px solid var(--edge);border-radius:3px;background:#fff}
 #docBox img{max-width:100%;border-radius:3px}
-/* staged-email editor card (Approve & Send — kept) */
+/* proposed-email editor; the human completes and sends in Outlook */
 .wbmail label{display:block;font-size:9.5px;color:var(--mut);letter-spacing:.8px;text-transform:uppercase;margin:6px 0 2px}
 .wbmail input,.wbmail textarea,.wbmail select{width:100%;background:#0c0a07;color:var(--ink);border:1px solid var(--edge);border-radius:3px;padding:7px 9px;font-size:12px;font-family:inherit;outline:none}
 .wbmail input:focus,.wbmail textarea:focus{border-color:var(--brass)}
 .wbmail textarea{resize:vertical;min-height:90px;line-height:1.5}
 .wbmail .mrow{display:flex;gap:7px;align-items:center;margin-top:9px}
 .wbmail select{width:auto;flex:1}
-.wbsend{background:var(--brass);color:#141004;border:none;border-radius:3px;padding:8px 14px;font-size:12px;font-weight:800;cursor:pointer;font-family:inherit;flex:none}
-.wbsend:hover{background:#d8b46b}
+.wbsend,.wbcopy{background:var(--brass);color:#141004;border:none;border-radius:3px;padding:8px 14px;font-size:12px;font-weight:800;cursor:pointer;font-family:inherit;flex:none}
+.wbsend:hover,.wbcopy:hover{background:#d8b46b}
 .wbsend:disabled{opacity:.5;cursor:default}
 .wbmail .mstate{font-size:11.5px;margin-top:7px;color:var(--mut)}
 .wbmail.sentok{outline:1px solid #3f6e4f}
@@ -195,6 +195,9 @@ h5.sec{font-size:10px;letter-spacing:2.2px;color:var(--mut);text-transform:upper
       <a href="https://outlook.office.com/mail/drafts" target="_blank" style="--tc:#9b7fc0"><span class="ic">📝</span>Drafts</a>
       <a href="https://teams.microsoft.com/" target="_blank" style="--tc:#d98a45"><span class="ic">👥</span>Teams</a>
       <a href="https://outlook.office.com/mail/" target="_blank" style="--tc:#7fb069"><span class="ic">✉️</span>Outlook</a>
+      <a href="https://outlook.office.com/mail/deeplink/compose" target="_blank" rel="noopener" style="--tc:#7fb069"><span class="ic">✍️</span>New Email</a>
+      <a href="https://richardharodraftingand.sharepoint.com/sites/TeamRHDP17/Shared%20Documents" target="_blank" rel="noopener" style="--tc:#5b8bd9"><span class="ic">📁</span>Project Files</a>
+      <a href="https://richardharodraftingand.sharepoint.com/sites/TeamRHDP17/Shared%20Documents/Forms/AllItems.aspx?id=%2Fsites%2FTeamRHDP17%2FShared%20Documents%2F%5FFORMS" target="_blank" rel="noopener" style="--tc:#5b8bd9"><span class="ic">📄</span>Company Forms</a>
       <a href="https://www.google.com" target="_blank" style="--tc:#5b8bd9"><span class="ic">🌐</span>Google</a>
     </div>
     <h5 class="sec" id="procHdr">Processes</h5>
@@ -362,7 +365,7 @@ function ask(msg,voice){if(!msg||busy)return;busy=true;bubble('you','You',msg);s
  fetch(SUPA+"/functions/v1/fog-mirror-chat",{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+tok,'apikey':A},body:JSON.stringify({question:msg,role:role})})
  .then(function(r){return r.json();}).then(function(d){var rep=d.answer||d.error||'(no reply)';bubble('bot',NAMES[role],rep);setState(NAMES[role]+' answered.');
   var em=parseEmailDraft(rep);
-  if(em){var doc=addDoc({kind:'eml',title:em.subject,email:em});chatDocCard(doc);feedAdd('✉ Email staged — read it, then Approve & Send.');}
+  if(em){var doc=addDoc({kind:'eml',title:em.subject,email:em});chatDocCard(doc);feedAdd('✉ Proposed email ready — review it, then open Outlook to send it yourself.');}
   var fm=rep.match(/OPEN FORM:\s*(\.?\/?[\w./-]+\.html)/i);if(fm){openInPanel(fm[1].indexOf('.')===0?fm[1]:'./'+fm[1]);}
   if(voice&&rep){setState(NAMES[role]+' is speaking… (talk to interrupt)');speak(rep).then(function(){busy=false;if(convo)setState('Listening… pause 4 seconds when done.');});}else{busy=false;}})
  .catch(function(e){bubble('bot',NAMES[role],'Could not reach the brain: '+e.message);busy=false;});}
@@ -407,8 +410,7 @@ function renderDocs(){var w=document.getElementById('wb');
  document.getElementById('progCount').textContent=DOCS.length+' staged';}
 function addDoc(d){DOCS.unshift(d);renderDocs();return d;}
 function chatDocCard(d){var wrap=document.createElement('div');wrap.className='dcard';
- var cust=(document.getElementById('custTitle').textContent||'').split(' — ')[0];
- wrap.innerHTML='<div class="tag">'+extTag(d)+'</div><div class="m"><b>'+esc(d.title)+'</b><span>STAGED DRAFT · filed to Customers / '+esc(cust!=='Fog Mirror'?cust:'…')+' / 03_EMAILS</span></div>';
+ wrap.innerHTML='<div class="tag">'+extTag(d)+'</div><div class="m"><b>'+esc(d.title)+'</b><span>PROPOSED TEXT · kept on this page only; copy it before reloading</span></div>';
  var b=document.createElement('button');b.textContent='Open ▾';b.addEventListener('click',function(){openDoc(DOCS.indexOf(d));});
  wrap.appendChild(b);log.appendChild(wrap);
  var rx=document.createElement('div');rx.style.cssText='display:flex;gap:10px;margin:4px 0 0 6px;font-size:13px;opacity:.7';
@@ -437,7 +439,7 @@ function openDoc(i){var d=DOCS[i];if(!d)return;
  if(d.kind==='eml'){_pk.list=null;dvRender(d.title,emailCard(d));}
  else if(d.kind==='img'){showDoc(d.src);}
  else{openInPanel(d.url,d.title);}}
-/* staged email — editable card + [Approve & Send] (Look-Then-Launch, kept verbatim) */
+/* proposed email — editable locally; the human chooses the account and sends in Outlook */
 function parseEmailDraft(t){if(!t)return null;var to=t.match(/(^|\n)TO:[ \t]*(.+)/i),su=t.match(/(^|\n)SUBJECT:[ \t]*(.+)/i);if(!to||!su)return null;
  var cc=t.match(/(^|\n)CC:[ \t]*(.+)/i),fr=t.match(/(^|\n)FROM:[ \t]*(.+)/i);
  var bi=t.search(/(^|\n)BODY:[ \t]*/i);var body='';
@@ -445,32 +447,33 @@ function parseEmailDraft(t){if(!t)return null;var to=t.match(/(^|\n)TO:[ \t]*(.+
  else{var lines=t.split('\n'),k=0;for(var i=0;i<lines.length;i++){if(/^(TO|CC|BCC|FROM|SUBJECT):/i.test(lines[i]))k=i+1;}body=lines.slice(k).join('\n').replace(/^\s+/,'');}
  function addrs(m){return m?m[2].split(/[,;]/).map(function(a){return a.trim();}).filter(function(a){return a.indexOf('@')>0;}):[];}
  if(!addrs(to).length||!body)return null;
- return {to:addrs(to),cc:addrs(cc),from:fr?fr[2].trim():'haroinc@rhdpinc.com',subject:su[2].trim(),body:body};}
+ return {to:addrs(to),cc:addrs(cc),from:fr?fr[2].trim():'',subject:su[2].trim(),body:body};}
 function emailCard(doc){var m=doc.email;var d=document.createElement('div');d.className='wbmail';
- d.innerHTML='<label>To</label><input class="mto" value="'+esc(m.to.join(', '))+'">'+
-  '<label>Cc</label><input class="mcc" value="'+esc((m.cc||[]).join(', '))+'">'+
-  '<label>From (must be @rhdpinc.com — clients get haroinc@)</label><input class="mfrom" value="'+esc(m.from||'haroinc@rhdpinc.com')+'">'+
-  '<label>Subject</label><input class="msub" value="'+esc(m.subject)+'">'+
-  '<label>Body — edit freely; what you see is exactly what sends</label><textarea class="mbody">'+esc(m.body)+'</textarea>'+
-  '<div class="mrow"><select class="mwho"><option value="">Who is approving?</option><option>Mark</option><option>Cassie</option><option>Richard</option><option>Irma</option><option>Jesus</option><option>Farrah</option></select>'+
-  '<button class="wbsend" disabled>Approve &amp; Send</button></div><div class="mstate">'+(doc.sent?'✅ Already sent & verified.':'Staged. Nothing sends until a named human presses the button.')+'</div>';
- var who=d.querySelector('.mwho'),btn=d.querySelector('.wbsend'),st=d.querySelector('.mstate');
- if(doc.sent){btn.disabled=true;who.disabled=true;}
- who.addEventListener('change',function(){btn.disabled=!who.value;});
- btn.addEventListener('click',function(){
-  var to=d.querySelector('.mto').value.split(/[,;]/).map(function(a){return a.trim();}).filter(Boolean);
-  var cc=d.querySelector('.mcc').value.split(/[,;]/).map(function(a){return a.trim();}).filter(Boolean);
-  var from=d.querySelector('.mfrom').value.trim(),sub=d.querySelector('.msub').value.trim(),body=d.querySelector('.mbody').value;
-  if(!to.length||!sub||!body.trim()){st.textContent='⚠ Need To, Subject, and Body.';return;}
-  if(from.indexOf('@rhdpinc.com')<0){st.textContent='⚠ From must be an @rhdpinc.com mailbox (clients get haroinc@).';return;}
-  btn.disabled=true;who.disabled=true;st.textContent='Sending as '+who.value+'… (engine verifies in Sent Items)';feedAdd('Send pressed by '+who.value+': "'+sub+'"');
-  fetch(SUPA+"/functions/v1/fog-mirror-send",{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+A,'apikey':A},
-   body:JSON.stringify({action:'send',approved_by:who.value+' (dashboard button)',from:from,to:to,cc:cc,subject:sub,body:body})})
-  .then(function(r){return r.json();}).then(function(r){
-   if(r&&r.ok&&r.verified){d.classList.add('sentok');doc.sent=true;st.innerHTML='✅ SENT &amp; VERIFIED — in '+esc(r.from)+' Sent Items. Sentry watches for bounces.';feedAdd('✅ Sent & verified: "'+sub+'"');renderDocs();}
-   else if(r&&r.ok){d.classList.add('sentok');doc.sent=true;st.textContent='🕐 Sent (accepted by Microsoft) — verification pending; Sentry confirms within the hour.';feedAdd('🕐 Sent, verifying: "'+sub+'"');renderDocs();}
-   else{btn.disabled=false;who.disabled=false;st.textContent='⚠ '+((r&&(r.error||r.detail))||'send failed — tell Claude');feedAdd('⚠ Send failed: "'+sub+'"');}})
-  .catch(function(e){btn.disabled=false;who.disabled=false;st.textContent='⚠ network problem — tell Claude';});});
+ d.innerHTML='<label>To</label><input class="mto">'+
+  '<label>Cc</label><input class="mcc">'+
+  '<label>Subject</label><input class="msub">'+
+  '<label>Proposed body — edit here, then review in Outlook</label><textarea class="mbody"></textarea>'+
+  '<div class="mrow"><button class="wbcopy">Copy proposed email</button><button class="wbsend">Open in Outlook</button></div>'+
+  '<div class="mstate">Kept on this page only. Choose the sending account in Outlook; you review and send it there.</div>';
+ d.querySelector('.mto').value=(m.to||[]).join(', ');
+ d.querySelector('.mcc').value=(m.cc||[]).join(', ');
+ d.querySelector('.msub').value=m.subject||'';
+ d.querySelector('.mbody').value=m.body||'';
+ var st=d.querySelector('.mstate');
+ function currentEmail(){return {
+  to:d.querySelector('.mto').value.trim(),cc:d.querySelector('.mcc').value.trim(),
+  subject:d.querySelector('.msub').value.trim(),body:d.querySelector('.mbody').value};}
+ d.querySelector('.wbcopy').addEventListener('click',function(){var v=currentEmail();
+  var text='To: '+v.to+(v.cc?'\nCc: '+v.cc:'')+'\nSubject: '+v.subject+'\n\n'+v.body;
+  if(!navigator.clipboard){st.textContent='Select and copy the proposed text above.';return;}
+  navigator.clipboard.writeText(text).then(function(){st.textContent='Copied. Paste into Outlook and review the account and recipients before sending.';},function(){st.textContent='Copy was blocked. Select and copy the proposed text above.';});});
+ d.querySelector('.wbsend').addEventListener('click',function(){var v=currentEmail();
+  if(!v.to||!v.subject||!v.body.trim()){st.textContent='Add To, Subject, and Body before opening this proposed email.';return;}
+  var url='https://outlook.office.com/mail/deeplink/compose?to='+encodeURIComponent(v.to)+
+   '&cc='+encodeURIComponent(v.cc)+'&subject='+encodeURIComponent(v.subject)+'&body='+encodeURIComponent(v.body);
+  window.open(url,'_blank','noopener');
+  st.textContent='Review the sending account, recipients and message in Outlook. You send it there. If no tab opened, allow popups and retry.';
+  feedAdd('Proposed email handed to Outlook for human review: "'+v.subject+'"');});
  return d;}
 
 /* 📸 SCREENSHOT BUTTON — captures the dashboard, lands in the PREVIEW (no download chores) */
