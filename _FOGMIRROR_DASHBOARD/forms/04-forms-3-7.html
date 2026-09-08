@@ -83,6 +83,9 @@ body{font-family:'DM Sans',sans-serif;background:var(--dark);color:var(--text);}
   <span>RHDP17 FORMS 3–7 — APRIL 13, 2026</span>
   <button class="print-btn" onclick="window.print()">PRINT ALL FORMS</button>
 </div>
+<div class="info-box" style="max-width:820px;margin:20px auto;">
+  <strong>Local forms for human review</strong>Fill the fields, then print or download a review copy and file it in the correct project folder. Entries stay on this page until you save a copy. Only humans release payments, edit or send actual emails, or delete records. This page does not notify anyone, file to the cloud, charge a card, or release money. Verify the existing template terms against the signed contract before using them.
+</div>
 
 <!-- ═══════════════════════════════════════ -->
 <!-- FORM 3: SUBCONTRACTOR ONBOARDING       -->
@@ -94,7 +97,7 @@ body{font-family:'DM Sans',sans-serif;background:var(--dark);color:var(--text);}
     <p>Complete this form before any sub starts work. No exceptions — no contract, no site access.</p>
   </div>
 
-  <div class="success" id="s3"><div style="font-size:28pt;margin-bottom:10px;">✅</div><h3>Subcontractor Onboarded!</h3><p>Contract sent for signature. Deposit invoice generated. Calendar updated. Plans sent.</p></div>
+  <div class="success" id="s3"><div style="font-size:28pt;margin-bottom:10px;">✅</div><h3>Review copy requested</h3><p>Check Downloads, then review and file this copy. This page has not sent a contract, created an invoice, updated a calendar, or sent plans.</p></div>
 
   <form onsubmit="sub(event,'s3')">
     <div class="section">
@@ -160,8 +163,8 @@ body{font-family:'DM Sans',sans-serif;background:var(--dark);color:var(--text);}
     </div>
 
     <div class="submit-area">
-      <div class="submit-note"><strong>This generates the contract.</strong>ScheduleBot sends for signature. BookkeeperBot creates deposit invoice. Calendar updated. Plans sent to sub.</div>
-      <div class="btn-row"><button type="button" class="btn btn-sec" onclick="window.print()">🖨️ Print</button><button type="submit" class="btn btn-gold">Generate Contract →</button></div>
+      <div class="submit-note"><strong>Prepare a review copy.</strong>Download or print these entered details. A human reviews the applicable contract, handles signatures, files the copy and arranges any next steps.</div>
+      <div class="btn-row"><button type="button" class="btn btn-sec" onclick="window.print()">🖨️ Print</button><button type="submit" class="btn btn-gold">Download Review Copy</button></div>
     </div>
   </form>
 </div>
@@ -176,7 +179,7 @@ body{font-family:'DM Sans',sans-serif;background:var(--dark);color:var(--text);}
     <p>Subcontractors submit this form when they've completed a milestone and want to be paid. No form = no payment.</p>
   </div>
 
-  <div class="success" id="s4"><div style="font-size:28pt;margin-bottom:10px;">📸</div><h3>Proof Submitted!</h3><p>Richard has been notified for inspection approval. 3-signature authorization request sent to Mark, Richard, and Irma.</p></div>
+  <div class="success" id="s4"><div style="font-size:28pt;margin-bottom:10px;">📸</div><h3>Proof review copy requested</h3><p>Check Downloads. A human must review the supporting evidence and approval; nothing was submitted, notified, or paid.</p></div>
 
   <form onsubmit="sub(event,'s4')">
     <div class="section">
@@ -221,8 +224,8 @@ body{font-family:'DM Sans',sans-serif;background:var(--dark);color:var(--text);}
     </div>
 
     <div class="submit-area">
-      <div class="submit-note"><strong>What happens next:</strong> Richard gets notified for inspection. Once approved, 3-signature payment release is triggered. Payment processed via QuickBooks within 2 business days.</div>
-      <div class="btn-row"><button type="button" class="btn btn-sec" onclick="window.print()">🖨️ Print</button><button type="submit" class="btn btn-gold">Submit Proof →</button></div>
+      <div class="submit-note"><strong>Human review is required.</strong>File the copy with its supporting evidence. Hold payment when evidence or approval is insufficient. Only a human can release payment; this page sends no request and makes no payment.</div>
+      <div class="btn-row"><button type="button" class="btn btn-sec" onclick="window.print()">🖨️ Print</button><button type="submit" class="btn btn-gold">Download Review Copy</button></div>
     </div>
   </form>
 </div>
@@ -238,7 +241,7 @@ body{font-family:'DM Sans',sans-serif;background:var(--dark);color:var(--text);}
   </div>
 
   <form onsubmit="sub(event,'s5')">
-    <div class="success" id="s5"><h3>✅ Admin Log Submitted!</h3><p>Logged to project record in Supabase. Morpheus notified.</p></div>
+    <div class="success" id="s5"><h3>Log review copy requested</h3><p>Check Downloads, then file the reviewed copy in the correct project folder. This page has not updated a project record or notified anyone.</p></div>
 
     <div class="section">
       <div class="section-head"><div class="icon">📊</div><div><h3>Weekly Project Status</h3></div></div>
@@ -284,8 +287,8 @@ body{font-family:'DM Sans',sans-serif;background:var(--dark);color:var(--text);}
     </div>
 
     <div class="submit-area">
-      <div class="submit-note"><strong>Weekly log submitted.</strong> Stored in Supabase project record. Morpheus generates weekly summary for Mark and Richard.</div>
-      <div class="btn-row"><button type="button" class="btn btn-sec" onclick="window.print()">🖨️ Print</button><button type="submit" class="btn btn-gold">Submit Weekly Log →</button></div>
+      <div class="submit-note"><strong>Prepare the weekly log for review.</strong>Download or print a copy, then file it in the correct project folder. No project record is updated and no summary is generated by this page.</div>
+      <div class="btn-row"><button type="button" class="btn btn-sec" onclick="window.print()">🖨️ Print</button><button type="submit" class="btn btn-gold">Download Review Copy</button></div>
     </div>
   </form>
 </div>
@@ -301,7 +304,7 @@ body{font-family:'DM Sans',sans-serif;background:var(--dark);color:var(--text);}
   </div>
 
   <form onsubmit="sub(event,'s6')">
-    <div class="success" id="s6"><h3>✅ Commercial Intake Submitted!</h3><p>PermitBot is checking commercial zoning and fee requirements. Richard will contact you within 24 hours.</p></div>
+    <div class="success" id="s6"><h3>Intake review copy requested</h3><p>Check Downloads. A human must review, file and arrange any follow-up; this page has not submitted the intake or started research.</p></div>
 
     <div class="section">
       <div class="section-head"><div class="icon">🏢</div><div><h3>Business & Property Information</h3></div></div>
@@ -336,8 +339,8 @@ body{font-family:'DM Sans',sans-serif;background:var(--dark);color:var(--text);}
     </div>
 
     <div class="submit-area">
-      <div class="submit-note"><strong>Commercial intake submitted.</strong> PermitBot checks zoning, occupancy, and permit requirements. Richard reviews and sends proposal within 2 business days.</div>
-      <div class="btn-row"><button type="button" class="btn btn-sec" onclick="window.print()">🖨️ Print</button><button type="submit" class="btn btn-gold">Submit Intake →</button></div>
+      <div class="submit-note"><strong>Prepare the intake for review.</strong>Download or print a copy. A human arranges the required research and follow-up; this page does not submit an intake or promise a response date.</div>
+      <div class="btn-row"><button type="button" class="btn btn-sec" onclick="window.print()">🖨️ Print</button><button type="submit" class="btn btn-gold">Download Review Copy</button></div>
     </div>
   </form>
 </div>
@@ -404,19 +407,77 @@ body{font-family:'DM Sans',sans-serif;background:var(--dark);color:var(--text);}
     </div>
 
     <div class="submit-area">
-      <div class="submit-note"><strong>Save this takeoff.</strong>Print it and attach to the project file. Send to BookkeeperBot to generate the materials budget.</div>
-      <div class="btn-row"><button type="button" class="btn btn-sec" onclick="window.print()">🖨️ Print Takeoff</button><button type="submit" class="btn btn-gold">Save to Project →</button></div>
+      <div class="submit-note"><strong>Keep a takeoff review copy.</strong>Download or print the entered measurements and calculated estimate. Review the assumptions and file it in the project folder; no budget or project record is updated here.</div>
+      <div class="btn-row"><button type="button" class="btn btn-sec" onclick="window.print()">🖨️ Print Takeoff</button><button type="submit" class="btn btn-gold">Download Review Copy</button></div>
     </div>
   </form>
 </div>
 
 <script>
+/* Local review copies: preserve current field state, never submit to a service. */
+function copyReviewValues(source, copy) {
+  const fields = source.querySelectorAll('input, textarea, select');
+  const copies = copy.querySelectorAll('input, textarea, select');
+  fields.forEach(function(field, i) {
+    const target = copies[i];
+    if (field.tagName === 'TEXTAREA') target.textContent = field.value;
+    else if (field.tagName === 'SELECT') {
+      Array.from(field.options).forEach(function(option, j) {
+        if (option.selected) target.options[j].setAttribute('selected', '');
+        else target.options[j].removeAttribute('selected');
+      });
+    } else {
+      target.setAttribute('value', field.value);
+      if (field.type === 'checkbox' || field.type === 'radio') {
+        if (field.checked) target.setAttribute('checked', '');
+        else target.removeAttribute('checked');
+      }
+    }
+  });
+}
+function reviewCopyHtml(page, title) {
+  const copy = page.cloneNode(true);
+  copyReviewValues(page, copy);
+  copy.classList.remove('page-break');
+  copy.querySelectorAll('script, button, .success').forEach(function(node) { node.remove(); });
+  copy.querySelectorAll('*').forEach(function(node) {
+    Array.from(node.attributes).forEach(function(attr) {
+      if (/^on/i.test(attr.name)) node.removeAttribute(attr.name);
+    });
+  });
+  copy.querySelectorAll('form').forEach(function(form) { form.setAttribute('onsubmit', 'return false'); });
+  const results = copy.querySelector('#resultsTable');
+  if (results) results.closest('.section').querySelector('.section-head p').textContent = 'Snapshot of the current calculation — use the live form to change measurements and recalculate.';
+  const saved = document.implementation.createHTMLDocument(title + ' — review copy');
+  document.querySelectorAll('style').forEach(function(style) { saved.head.appendChild(style.cloneNode(true)); });
+  const meta = saved.createElement('meta');meta.setAttribute('charset', 'utf-8');saved.head.appendChild(meta);
+  const note = saved.createElement('p');note.className = 'info-box';
+  note.textContent = 'Local review copy created ' + new Date().toISOString() + '. Not submitted or filed to a service. Only humans release payments, edit or send actual emails, and delete records. Verify the signed contract and evidence before use. Use the browser Print command to print or save as PDF.';
+  saved.body.appendChild(note);saved.body.appendChild(copy);
+  return '<!DOCTYPE html>\n' + saved.documentElement.outerHTML;
+}
 function sub(e, id) {
   e.preventDefault();
-  document.getElementById(id).classList.add('show');
-  e.target.style.opacity = '0.4';
-  e.target.style.pointerEvents = 'none';
-  window.scrollTo({top:0,behavior:'smooth'});
+  const form = e.target, page = form.closest('.form-page');
+  let status = document.getElementById(id);
+  if (!status) {
+    status = document.createElement('div');status.id = id;status.className = 'success';
+    form.prepend(status);
+  }
+  try {
+    const title = page.querySelector('.form-num').textContent.trim();
+    const html = reviewCopyHtml(page, title);
+    const blob = new Blob([html], {type:'text/html;charset=utf-8'});
+    const url = URL.createObjectURL(blob), link = document.createElement('a');
+    link.href = url;link.download = 'RHDP17_Form_' + id.replace('s', '') + '_Review_' + new Date().toISOString().slice(0,10) + '.html';
+    document.body.appendChild(link);link.click();link.remove();
+    setTimeout(function() { URL.revokeObjectURL(url); }, 1000);
+    status.textContent = 'Review-copy download requested. Check Downloads and open the copy before filing it. Nothing was submitted, notified, charged or paid.';
+  } catch (error) {
+    status.textContent = 'The review copy could not be downloaded. Your entries remain here; use Print or Save as PDF.';
+  }
+  status.classList.add('show');
+  status.scrollIntoView({block:'nearest'});
 }
 
 function calcLive() {
@@ -479,7 +540,7 @@ function calcLive() {
   document.getElementById('r_total').textContent       = total > 0 ? '$' + Math.round(total).toLocaleString() : '—';
 }
 
-function calcTakeoff(e) { e.preventDefault(); alert('Takeoff saved! Print this page for your project file.'); window.print(); }
+function calcTakeoff(e) { calcLive(); sub(e, 's7'); }
 </script>
 </body>
 </html>
