@@ -284,7 +284,17 @@ document.addEventListener('click',function(e){var a=e.target.closest&&e.target.c
 (function(){var sel=document.getElementById('custSel');
  var lastToken=null,requestId=0,placeholder=sel.getAttribute('placeholder');
  function loadCustomers(token){
-  if(!token||token===A||token===lastToken)return;
+  if(!token||token===A){
+   lastToken=null;++requestId;window._proj=[];document.getElementById('custList').textContent='';
+   sel.value='';sel.removeAttribute('aria-busy');sel.placeholder='Sign in to load customers';
+   document.getElementById('custTitle').textContent='Fog Mirror';
+   var pill=document.getElementById('custPill');pill.textContent='';pill.style.display='none';
+   document.getElementById('procHdr').textContent='Processes';document.getElementById('schedHdr').textContent='Schedule';
+   document.getElementById('waiting').textContent='Sign in and select a customer.';
+   if(typeof PROC!=='undefined'){PROC.forEach(function(p){p.cur=-1;});if(typeof render==='function')render();}
+   return;
+  }
+  if(token===lastToken)return;
   lastToken=token;var currentRequest=++requestId;
   window._proj=[];document.getElementById('custList').textContent='';
   sel.setAttribute('aria-busy','true');sel.placeholder='Loading customers…';
@@ -583,4 +593,3 @@ setInterval(chk,300000);setTimeout(chk,15000);})();
 })();
 </script>
 </body></html>
-STEP 1  ·  THIS IS THE GOOD FILE  ·  PRESS Cmd+A THEN Cmd+C  ·  then tell me
