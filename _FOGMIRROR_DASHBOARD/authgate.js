@@ -67,7 +67,12 @@
     window.signIn=function(){ sb.auth.signInWithOAuth({provider:'azure',options:{scopes:'email openid profile',redirectTo:location.origin+location.pathname}}).catch(function(){ alert('Sign-in could not start. Please try again.'); }); };
     window.signOut=function(){ sb.auth.signOut().catch(function(){}).then(function(){ location.replace(location.pathname); }); };
     function apply(session){
-      if(!session){ showGate(true); var c=document.getElementById('achip'); if(c) c.style.display='none'; return; }
+      if(!session){
+        window.__authToken=null; window.__authEmail=null;
+        showGate(true); var c=document.getElementById('achip'); if(c) c.style.display='none';
+        if(typeof window.onAuthReady==='function'){ try{ window.onAuthReady(null,null); }catch(e){} }
+        return;
+      }
       var email=((session.user&&session.user.email)||'').toLowerCase();
       window.__authToken=session.access_token; window.__authEmail=email;
       showGate(false); showChip(email);
