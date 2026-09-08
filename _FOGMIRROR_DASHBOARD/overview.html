@@ -465,10 +465,11 @@ function emailCard(doc){var m=doc.email;var d=document.createElement('div');d.cl
   '<label>Proposed body — edit here, then review in Outlook</label><textarea class="mbody"></textarea>'+
   '<div class="mrow"><button class="wbcopy">Copy proposed email</button><button class="wbsend">Open in Outlook</button></div>'+
   '<div class="mstate">Kept on this page only. Choose the sending account in Outlook; you review and send it there.</div>';
- d.querySelector('.mto').value=(m.to||[]).join(', ');
- d.querySelector('.mcc').value=(m.cc||[]).join(', ');
- d.querySelector('.msub').value=m.subject||'';
- d.querySelector('.mbody').value=m.body||'';
+ var edits=doc.emailEdits||{to:(m.to||[]).join(', '),cc:(m.cc||[]).join(', '),subject:m.subject||'',body:m.body||''};
+ [['to','.mto'],['cc','.mcc'],['subject','.msub'],['body','.mbody']].forEach(function(field){
+  var input=d.querySelector(field[1]);input.value=edits[field[0]];
+  input.addEventListener('input',function(){edits[field[0]]=input.value;doc.emailEdits=edits;});
+ });
  var st=d.querySelector('.mstate');
  function currentEmail(){return {
   to:d.querySelector('.mto').value.trim(),cc:d.querySelector('.mcc').value.trim(),
