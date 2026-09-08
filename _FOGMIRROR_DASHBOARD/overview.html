@@ -530,13 +530,14 @@ fetch(SUPA+"/functions/v1/fog-mirror-suggest",{method:'POST',headers:{'Content-T
  if(d&&d.ok){s.textContent='✅ In the brain — Mark & Cassie get it within the hour.';feedAdd('💡 Suggestion sent');t.value='';}
  else{s.textContent='⚠ '+(d&&d.error?d.error:'failed — tell Claude');}})
 .catch(function(){b.disabled=false;s.textContent='⚠ network problem — tell Claude';});});})();
-/* SELF-REFRESH — kept. Checks every 5 min; never reloads while someone is typing. */
+/* SELF-REFRESH — checks every 5 min; preserves typing and documents kept on this page. */
 (function(){var cur=null;
 function typing(){var a=document.activeElement;return a&&/INPUT|TEXTAREA/.test(a.tagName)&&(a.value||'').length>0;}
+function pendingDocs(){return typeof DOCS!=='undefined'&&DOCS.length>0;}
 function chk(){fetch(location.pathname+'?vchk='+Date.now(),{method:'HEAD',cache:'no-store'}).then(function(r){
   var e=r.headers.get('etag')||r.headers.get('last-modified')||r.headers.get('content-length');
   if(cur===null){cur=e;return;}
-  if(e&&e!==cur&&!typing()){location.reload();}
+  if(e&&e!==cur&&!typing()&&!pendingDocs()){location.reload();}
 }).catch(function(){});}
 setInterval(chk,300000);setTimeout(chk,15000);})();
 /* ===== DRAGGABLE PANEL DIVIDERS (adapted for #stage/#left/#mid/#right) ===== */
