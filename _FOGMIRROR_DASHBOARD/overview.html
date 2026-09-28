@@ -394,7 +394,7 @@ function ask(msg,voice){if(!msg||busy)return;busy=true;bubble('you','You',msg);s
  .catch(function(e){bubble('bot',NAMES[role],'Could not reach the brain: '+e.message);busy=false;});}
 function autogrow(){txt.style.height='auto';txt.style.height=Math.min(txt.scrollHeight,window.innerHeight*0.42)+'px';}
 txt.addEventListener('input',autogrow);
-function sendTyped(){var m=(txt.value||'').trim();if(!m)return;txt.value='';autogrow();ask(m,false);}
+function sendTyped(){if(dictOn)stopDict();if(convo)stopConvo();var m=(txt.value||'').trim();if(!m)return;if(busy){setState('Please wait for the current reply — your message is still in the box.');return;}txt.value='';autogrow();ask(m,false);}
 document.getElementById('sendB').addEventListener('click',sendTyped);
 txt.addEventListener('keydown',function(e){if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();sendTyped();}});
 var SR=window.SpeechRecognition||window.webkitSpeechRecognition;
@@ -407,11 +407,14 @@ function startConvo(){if(!rec){setState("Voice needs Chrome — typing works.");
 function stopConvo(){convo=false;squig.classList.remove('live');if(silT)clearTimeout(silT);if(rec){try{rec.stop();}catch(_){}}if(player){try{player.pause();}catch(_){}}setState(NAMES[role]+' is on the line.');}
 squig.addEventListener('click',function(){convo?stopConvo():startConvo();});
 var dict=null,dictOn=false,dBase='';var dictBtn=document.getElementById('dictBtn');
+function syncDictControls(){dictBtn.classList[dictOn?'add':'remove']('on');dictBtn.setAttribute('aria-pressed',String(dictOn));var b=document.getElementById('voice-input-button');if(b){b.textContent=dictOn?'🔴 Stop':'🎙 Mic';b.setAttribute('aria-pressed',String(dictOn));}}
+function dictError(error){stopDict();setState(error==='not-allowed'||error==='service-not-allowed'?'Microphone access was denied. Allow it in your browser, then tap Mic to retry.':error==='audio-capture'?'No microphone is available. Check your microphone, then tap Mic to retry.':error==='no-speech'?'No speech was heard. Tap Mic to retry, or type your message.':'Speech recognition could not start or continue. Tap Mic to retry, or type your message.');}
 if(SR){dict=new SR();dict.continuous=true;dict.interimResults=true;dict.lang='en-US';
- dict.onresult=function(e){var s='';for(var k=0;k<e.results.length;k++)s+=e.results[k][0].transcript;txt.value=(dBase+' '+s).trim();autogrow();};
- dict.onend=function(){if(dictOn){try{dBase=txt.value;dict.start();}catch(_){}}};}
-function startDict(){if(!dict)return;if(convo)stopConvo();dictOn=true;dBase=txt.value;dictBtn.classList.add('on');setState('Dictating — tap 🎙 to stop, then ↑.');try{dict.start();}catch(_){}}
-function stopDict(){dictOn=false;dictBtn.classList.remove('on');if(dict){try{dict.stop();}catch(_){}}setState(NAMES[role]+' is on the line.');}
+ dict.onresult=function(e){if(!dictOn)return;var s='';for(var k=0;k<e.results.length;k++)s+=e.results[k][0].transcript;txt.value=(dBase+' '+s).trim();autogrow();};
+ dict.onerror=function(e){if(dictOn)dictError(e.error);};
+ dict.onend=function(){if(dictOn){try{dBase=txt.value;dict.start();}catch(_){dictError('start-failed');}}};}
+function startDict(){if(!dict){setState('Speech recognition is not supported in this browser — typing still works.');return;}if(convo)stopConvo();dictOn=true;dBase=txt.value;syncDictControls();setState('Dictating into the message box — tap Mic to stop, review the text, then press Send.');try{dict.start();}catch(_){dictError('start-failed');}}
+function stopDict(){dictOn=false;syncDictControls();if(dict){try{dict.stop();}catch(_){}}setState(NAMES[role]+' is on the line.');}
 dictBtn.addEventListener('click',function(){dictOn?stopDict():startDict();});
 /* ===== DOCUMENT REGISTRY + PREVIEW PANEL (documents pop up on the right) ===== */
 var FORM_PACKET=[
@@ -609,25 +612,17 @@ setInterval(chk,300000);setTimeout(chk,15000);})();
  document.addEventListener('keydown',function(e){if((e.ctrlKey||e.metaKey)&&e.key==='b'){e.preventDefault();btn.click();}});
  console.log('[SidebarToggle] Initialized (Ctrl+B / Cmd+B to toggle)');
 })();
-/* ===== VOICE CONTROLS (TTS-ready microphone UI) ===== */
+/* ===== VOICE CONTROLS (shared composer dictation and explicit send) ===== */
 (function initializeVoiceControls(){
  var vc=document.createElement('div');vc.id='voice-controls';
  var micBtn=document.createElement('button');micBtn.id='voice-input-button';micBtn.textContent='🎙 Mic';
  var sendBtn=document.createElement('button');sendBtn.id='voice-send-button';sendBtn.textContent='↑ Send';
+ micBtn.title='Dictate into the message box; review the text before sending';sendBtn.title='Send the current message box text to the selected assistant';
  vc.appendChild(micBtn);vc.appendChild(sendBtn);
  document.body.appendChild(vc);
- var rec=window.SpeechRecognition||window.webkitSpeechRecognition;
- if(!rec){console.log('[VoiceControls] SpeechRecognition not available');return;}
- var recognizer=new rec(),listening=false;
- recognizer.continuous=true;recognizer.interimResults=true;
- micBtn.addEventListener('click',function(){listening?stopListening():startListening();});
- sendBtn.addEventListener('click',function(){if(listening)stopAndSend();});
- recognizer.onresult=function(e){console.log('[VoiceControls] Result');};
- recognizer.onerror=function(e){console.log('[VoiceControls] Error: '+e.error);};
- function startListening(){listening=true;micBtn.textContent='🔴 Stop';try{recognizer.start();}catch(e){}}
- function stopListening(){listening=false;micBtn.textContent='🎙 Mic';try{recognizer.stop();}catch(e){}}
- function stopAndSend(){stopListening();console.log('[VoiceControls] Send triggered');sendBtn.textContent='✓ Sent';setTimeout(function(){sendBtn.textContent='↑ Send';},1500);}
- console.log('[VoiceControls] Initialized');
+ micBtn.addEventListener('click',function(){txt.focus();dictBtn.click();});
+ sendBtn.addEventListener('click',function(){document.getElementById('sendB').click();});
+ syncDictControls();
 })();
 </script>
 </body></html>
