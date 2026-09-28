@@ -89,7 +89,6 @@ test('copy preserves edited text and does not open or alter a mailbox', async ()
 
 test('the served overview links the verified company library and original forms without embedding them', () => {
   for (const href of [
-    'https://outlook.office.com/mail/deeplink/compose',
     'https://richardharodraftingand.sharepoint.com/sites/TeamRHDP17/Shared%20Documents',
     'https://richardharodraftingand.sharepoint.com/sites/TeamRHDP17/Shared%20Documents/Forms/AllItems.aspx?id=%2Fsites%2FTeamRHDP17%2FShared%20Documents%2F%5FFORMS'
   ]) {

@@ -148,10 +148,10 @@ h5.sec{font-size:10px;letter-spacing:2.2px;color:var(--mut);text-transform:upper
 .wbmail input,.wbmail textarea,.wbmail select{width:100%;background:#0c0a07;color:var(--ink);border:1px solid var(--edge);border-radius:3px;padding:7px 9px;font-size:12px;font-family:inherit;outline:none}
 .wbmail input:focus,.wbmail textarea:focus{border-color:var(--brass)}
 .wbmail textarea{resize:vertical;min-height:90px;line-height:1.5}
-.wbmail .mrow{display:flex;gap:7px;align-items:center;margin-top:9px}
+.wbmail .mrow{display:flex;flex-wrap:wrap;gap:7px;align-items:center;margin-top:9px}
 .wbmail select{width:auto;flex:1}
-.wbsend,.wbcopy{background:var(--brass);color:#141004;border:none;border-radius:3px;padding:8px 14px;font-size:12px;font-weight:800;cursor:pointer;font-family:inherit;flex:none}
-.wbsend:hover,.wbcopy:hover{background:#d8b46b}
+.wbsend,.wbcopy,.wbreview{background:var(--brass);color:#141004;border:none;border-radius:3px;padding:8px 14px;font-size:12px;font-weight:800;cursor:pointer;font-family:inherit;flex:none}
+.wbsend:hover,.wbcopy:hover,.wbreview:hover{background:#d8b46b}
 .wbsend:disabled{opacity:.5;cursor:default}
 .wbmail .mstate{font-size:11.5px;margin-top:7px;color:var(--mut)}
 .wbmail.sentok{outline:1px solid #3f6e4f}
@@ -195,7 +195,7 @@ h5.sec{font-size:10px;letter-spacing:2.2px;color:var(--mut);text-transform:upper
       <a href="https://outlook.office.com/mail/drafts" target="_blank" style="--tc:#9b7fc0"><span class="ic">📝</span>Drafts</a>
       <a href="https://teams.microsoft.com/" target="_blank" style="--tc:#d98a45"><span class="ic">👥</span>Teams</a>
       <a href="https://outlook.office.com/mail/" target="_blank" style="--tc:#7fb069"><span class="ic">✉️</span>Outlook</a>
-      <a href="https://outlook.office.com/mail/deeplink/compose" target="_blank" rel="noopener" style="--tc:#7fb069"><span class="ic">✍️</span>New Email</a>
+      <a href="#docBox" id="newEmail" style="--tc:#7fb069"><span class="ic">✍️</span>New Email</a>
       <a href="https://richardharodraftingand.sharepoint.com/sites/TeamRHDP17/Shared%20Documents" target="_blank" rel="noopener" style="--tc:#5b8bd9"><span class="ic">📁</span>Project Files</a>
       <a href="https://richardharodraftingand.sharepoint.com/sites/TeamRHDP17/Shared%20Documents/Forms/AllItems.aspx?id=%2Fsites%2FTeamRHDP17%2FShared%20Documents%2F%5FFORMS" target="_blank" rel="noopener" style="--tc:#5b8bd9"><span class="ic">📄</span>Company Forms</a>
       <a href="https://www.google.com" target="_blank" style="--tc:#5b8bd9"><span class="ic">🌐</span>Google</a>
@@ -321,7 +321,15 @@ document.addEventListener('click',function(e){var a=e.target.closest&&e.target.c
   return loadCustomers(token);
  };
  if(window.__authToken)loadCustomers(window.__authToken);
- sel.addEventListener('change',function(){var r=(window._proj||[]).filter(function(p){return p.name.toLowerCase().indexOf(sel.value.toLowerCase())>=0;})[0];if(r){
+ var selectedCustomer=null;
+ function selectCustomer(exactOnly){
+  var query=sel.value.trim().toLowerCase();if(!query)return false;
+  var projects=window._proj||[];
+  var r=projects.filter(function(p){return p.name.trim().toLowerCase()===query;})[0];
+  if(!r&&!exactOnly){var matches=projects.filter(function(p){return p.name.toLowerCase().indexOf(query)>=0;});if(matches.length===1)r=matches[0];}
+  if(!r)return false;
+  if(r===selectedCustomer)return true;
+  selectedCustomer=r;
   PROC[0].cur=Math.max(0,Math.min(PROC[0].steps.length-1,Math.round((r.pct||0)/100*(PROC[0].steps.length-1))));
   if((r.pct||0)>=75){if(PROC[2].cur<0)PROC[2].cur=0;if(PROC[1].cur<0)PROC[1].cur=0;if(PROC[3].cur<0)PROC[3].cur=0;
    feedAdd(r.name+': Design finishing — Construction prep, Sub Bids, and Selection Board ramp together.');}
@@ -333,7 +341,12 @@ document.addEventListener('click',function(e){var a=e.target.closest&&e.target.c
   var w=document.getElementById('waiting');
   w.innerHTML=(r.waiting&&r.waiting.length?r.waiting:[{who:'Nothing on file',when:''}]).map?'':'';
   w.innerHTML=(Array.isArray(r.waiting)&&r.waiting.length)?r.waiting.map(function(x){return '<div class="wrow"><b style="font-size:12px">'+esc(x.who||'')+'</b><span>'+esc(x.when||'')+'</span></div>';}).join(''):'<div class="wrow"><b style="font-size:12px">'+esc(r.name)+'</b><span>'+esc(r.status||'status in tracker')+'</span></div>';
-  feedAdd('Loaded '+r.name+' — Design '+(r.pct||0)+'%');}});
+  feedAdd('Loaded '+r.name+' — Design '+(r.pct||0)+'%');
+  return true;
+ }
+ sel.addEventListener('input',function(){selectCustomer(true);});
+ sel.addEventListener('change',function(){selectCustomer(false);});
+ sel.addEventListener('keydown',function(e){if(e.key==='Enter'&&selectCustomer(false))e.preventDefault();});
 })();
 /* sliding panels — kept, persisted */
 function pane(id,btn,key){var el=document.getElementById(id),b=document.getElementById(btn);
@@ -449,6 +462,13 @@ function openDoc(i){var d=DOCS[i];if(!d)return;
  if(d.kind==='eml'){_pk.list=null;dvRender(d.title,emailCard(d));}
  else if(d.kind==='img'){showDoc(d.src);}
  else{openInPanel(d.url,d.title);}}
+var newEmailLink=document.getElementById('newEmail');
+if(newEmailLink)newEmailLink.addEventListener('click',function(e){
+ e.preventDefault();
+ var draft=addDoc({kind:'eml',title:'New proposed email',email:{to:[],cc:[],subject:'',body:''}});
+ openDoc(DOCS.indexOf(draft));
+ document.getElementById('docBox').querySelector('.mto').focus();
+});
 /* proposed email — editable locally; the human chooses the account and sends in Outlook */
 function parseEmailDraft(t){if(!t)return null;var to=t.match(/(^|\n)TO:[ \t]*(.+)/i),su=t.match(/(^|\n)SUBJECT:[ \t]*(.+)/i);if(!to||!su)return null;
  var cc=t.match(/(^|\n)CC:[ \t]*(.+)/i),fr=t.match(/(^|\n)FROM:[ \t]*(.+)/i);
@@ -463,7 +483,7 @@ function emailCard(doc){var m=doc.email;var d=document.createElement('div');d.cl
   '<label>Cc</label><input class="mcc">'+
   '<label>Subject</label><input class="msub">'+
   '<label>Proposed body — edit here, then review in Outlook</label><textarea class="mbody"></textarea>'+
-  '<div class="mrow"><button class="wbcopy">Copy proposed email</button><button class="wbsend">Open in Outlook</button></div>'+
+  '<div class="mrow"><button class="wbcopy">Copy proposed email</button><button class="wbreview">Download Review Copy</button><button class="wbsend">Open in Outlook</button></div>'+
   '<div class="mstate">Kept on this page only. Choose the sending account in Outlook; you review and send it there.</div>';
  var edits=doc.emailEdits||{to:(m.to||[]).join(', '),cc:(m.cc||[]).join(', '),subject:m.subject||'',body:m.body||''};
  [['to','.mto'],['cc','.mcc'],['subject','.msub'],['body','.mbody']].forEach(function(field){
@@ -478,6 +498,22 @@ function emailCard(doc){var m=doc.email;var d=document.createElement('div');d.cl
   var text='To: '+v.to+(v.cc?'\nCc: '+v.cc:'')+'\nSubject: '+v.subject+'\n\n'+v.body;
   if(!navigator.clipboard){st.textContent='Select and copy the proposed text above.';return;}
   navigator.clipboard.writeText(text).then(function(){st.textContent='Copied. Paste into Outlook and review the account and recipients before sending.';},function(){st.textContent='Copy was blocked. Select and copy the proposed text above.';});});
+ d.querySelector('.wbreview').addEventListener('click',function(){var url=null,link=null;
+  function reviewText(value){return String(value).replace(/[&<>"'\r]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;','\r':'&#13;'}[c];});}
+  try{
+   var fields=[['to','To','.mto'],['cc','Cc','.mcc'],['subject','Subject','.msub'],['body','Body','.mbody']];
+   var html='<!DOCTYPE html>\n<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">'+
+    '<title>RHDP17 — email review copy</title><style>body{max-width:800px;margin:32px auto;padding:0 20px;font:16px/1.5 system-ui,sans-serif;color:#111;background:#fff}h1{font-size:24px}h2{font-size:15px;margin:22px 0 6px}.value{white-space:pre-wrap;overflow-wrap:anywhere;min-height:1.5em;border:1px solid #ccc;padding:10px}p{color:#444}</style></head><body>'+
+    '<h1>DRAFT — NOT SENT</h1><p>Local review copy. This is not an Outlook draft and is not saved to a shared service. Attachments are not included. Review the sending account, recipients, message and attachments in Outlook before sending.</p>'+
+    fields.map(function(field){return '<section><h2>'+field[1]+'</h2><div class="value" data-email-field="'+field[0]+'">'+reviewText(d.querySelector(field[2]).value)+'</div></section>';}).join('')+
+    '</body></html>';
+   url=URL.createObjectURL(new Blob([html],{type:'text/html;charset=utf-8'}));
+   link=document.createElement('a');link.href=url;link.download='RHDP17_Email_Review_'+new Date().toISOString().slice(0,10)+'.html';
+   document.body.appendChild(link);link.click();
+   st.textContent='Review-copy download requested. Check Downloads and reopen the copy. Nothing was sent or saved to Outlook; your edits remain here.';
+  }catch(error){st.textContent='The review copy could not be downloaded. Your edits remain here; use Copy proposed email or review in Outlook.';}
+  finally{if(link)link.remove();if(url)setTimeout(function(){URL.revokeObjectURL(url);},1000);}
+ });
  d.querySelector('.wbsend').addEventListener('click',function(){var v=currentEmail();
   if(!v.to||!v.subject||!v.body.trim()){st.textContent='Add To, Subject, and Body before opening this proposed email.';return;}
   var url='https://outlook.office.com/mail/deeplink/compose?to='+encodeURIComponent(v.to)+
